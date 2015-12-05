@@ -2,11 +2,9 @@ import java.awt.BasicStroke;
 
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.Image;
 import java.awt.RenderingHints;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -14,16 +12,9 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionListener;
 import java.awt.geom.GeneralPath;
-import java.awt.image.BufferedImage;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.util.LinkedList;
 
 import javax.swing.BoxLayout;
-import javax.swing.DefaultComboBoxModel;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -51,12 +42,12 @@ import javax.swing.text.StyleConstants;
 public class EndUserGUI extends JPanel implements ActionListener{
 
 	private static final long serialVersionUID = 2270760135813536905L;
-	private static LinkedList<Map> maps = new LinkedList<Map>();
-	private static LinkedList<Node> currentStartNodes = new LinkedList<Node>();
-	private static LinkedList<Edge> currentStartEdges = new LinkedList<Edge>();
-	private static LinkedList<Node> currentEndNodes = new LinkedList<Node>();
-	private static LinkedList<Map> mapsForPaths = new LinkedList<Map>();
-	private static LinkedList<Node> nodesInMap = new LinkedList<Node>();
+	private LinkedList<Map> maps = new LinkedList<Map>();
+	private LinkedList<Node> currentStartNodes = new LinkedList<Node>();
+	//private LinkedList<Edge> currentStartEdges = new LinkedList<Edge>();
+	private LinkedList<Node> currentEndNodes = new LinkedList<Node>();
+	private LinkedList<Map> mapsForPaths = new LinkedList<Map>();
+	private LinkedList<Node> nodesInMap = new LinkedList<Node>();
 
 	//private static LinkedList<Edge> currentEndEdges = new LinkedList<Edge>();
 	private String[] startRooms;
@@ -94,10 +85,8 @@ public class EndUserGUI extends JPanel implements ActionListener{
 	//Combo Boxes on the GUI
 	private JComboBox<String> startBuildingSEL;
 	private XComboBox startRoomSEL = new XComboBox();
-	private boolean startRoomSELLaunched = false;
 	private JComboBox<String> endBuildingSEL;
 	private XComboBox endRoomSEL = new XComboBox();
-	private boolean endRoomSELLaunched = false;
 	//private JComboBox startFloorSEL;
 
 	//Buttons on the UI
@@ -139,68 +128,22 @@ public class EndUserGUI extends JPanel implements ActionListener{
 
 	private String emailDirections;
 	private int totalDistance;
-	private double averageWalk;
 
 	/**
 	 * Create the application.
 	 */
 	public EndUserGUI(){
+		Serialize serialize = new Serialize();
+		maps = (LinkedList<Map>) serialize.deSerialize("MapList");
 		initialize();
 	}
-
-	//Launch the application. 
-
-	@SuppressWarnings("unchecked")
-	public static void main(String[] args) {
-		maps = (LinkedList<Map>) deserialize("MapList");
-		EventQueue.invokeLater(new Runnable() {
-			EndUserGUI window = new EndUserGUI();
-			public void run() {
-				try {
-					window.frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
+	
+	public void setMaps(LinkedList<Map> maps){
+		this.maps = maps;
 	}
-
-	// saves Map object "m" in a file named "s"
-	public void serialize(String s, LinkedList<Map> maplist){
-
-		try {
-			FileOutputStream fileOut = new FileOutputStream(s + ".ser");
-			ObjectOutputStream out = new ObjectOutputStream(fileOut);
-			out.writeObject(maplist);
-			out.close();
-			fileOut.close();
-			System.out.println("Serialized data is saved in " + s + ".ser");
-		} catch(IOException i){
-			i.printStackTrace();
-		}
-	}
-
-	// loads the map stored in file name "s"
-	public static Object deserialize(String s){
-		Object m = null;
-		try
-		{
-			FileInputStream fileIn = new FileInputStream(s + ".ser");
-			ObjectInputStream in = new ObjectInputStream(fileIn);
-			m = in.readObject();
-			in.close();
-			fileIn.close();
-		}catch(IOException i)
-		{
-			i.printStackTrace();
-
-		}catch(ClassNotFoundException c)
-		{
-			System.out.println("Map class not found");
-			c.printStackTrace();
-
-		}
-		return m;
+	
+	public JFrame getFrame(){
+		return frame;
 	}
 	/**
 	 * Initialize the contents of the frame.
@@ -255,7 +198,7 @@ public class EndUserGUI extends JPanel implements ActionListener{
 		uiPanel.add(buildingEnd);
 		uiPanel.add(roomEnd);
 
-		startRoomSEL.setModel(new DefaultComboBoxModel(new String[]{}));
+		//startRoomSEL.setModel(new DefaultComboBoxModel(new String[]{}));
 		startRoomSEL.setBounds(983, 50, 210, 29);
 		startRoomSEL.setEditable(false);
 		startRoomSEL.setVisible(true);
@@ -279,8 +222,6 @@ public class EndUserGUI extends JPanel implements ActionListener{
 				//currentMapFile = maps.get(maps.size()-1).getImage();
 				updatePath = false;
 				mapNumber.setText("");
-				startRoomSELLaunched = false;
-				endRoomSELLaunched = false;
 				repaint();
 				revalidate();
 				int indexOfCurrentMap;
@@ -293,7 +234,7 @@ public class EndUserGUI extends JPanel implements ActionListener{
 				}
 				currentStartNodes = maps.get(indexOfCurrentMap).getNodes();
                 startRooms = new String[currentStartNodes.size()];
-				currentStartEdges = maps.get(indexOfCurrentMap).getEdges();
+				//currentStartEdges = maps.get(indexOfCurrentMap).getEdges();
 				currentMapFile = maps.get(indexOfCurrentMap).getImage();
 				currentlyShownMap = maps.get(indexOfCurrentMap);
 				arrowCounter = 0;
@@ -315,7 +256,7 @@ public class EndUserGUI extends JPanel implements ActionListener{
 				startBuildingSEL.addItem(maps.get(i).getMapName());
 		}
 
-		endRoomSEL.setModel(new DefaultComboBoxModel(new String[]{}));
+		//endRoomSEL.setModel(new DefaultComboBoxModel(new String[]{}));
 		endRoomSEL.setBounds(983, 116, 210, 29);
 		endRoomSEL.setEditable(false);
 		endRoomSEL.setVisible(true);
@@ -651,13 +592,17 @@ public class EndUserGUI extends JPanel implements ActionListener{
 					System.out.println("Click " + x + "..."+ y);
 					if(!startClicked){
 						startNode = findClosestNode(x,y);
+						if(startNode != null){
 						System.out.println("Closest start node has x = " + startNode.getX() + " and y = "+ startNode.getY());
 						startClicked = true;
+						}
 					}
 					else if(!endClicked){
 						endNode = findClosestNode(x,y);
+						if(endNode != null){
 						System.out.println("Closest end node has x = " + endNode.getX() + " and y = "+ endNode.getY());
 						endClicked = true;
+						}
 					}
 					else{
 						System.out.println("Start and end nodes have already been selected");
@@ -685,8 +630,10 @@ public class EndUserGUI extends JPanel implements ActionListener{
 		@Override
 		public void paintComponent(Graphics g) {
 			super.paintComponent(g);
-			g.drawImage(currentMapFile.getImage(), 0, 0, this);
-			repaint();
+			if(currentMapFile != null){
+				g.drawImage(currentMapFile.getImage(), 0, 0, this);
+			}
+ 			repaint();
 			revalidate();
 
 

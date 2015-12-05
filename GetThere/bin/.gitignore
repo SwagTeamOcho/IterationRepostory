@@ -8,6 +8,7 @@
 /DevGUI$8.class
 /DevGUI$MouseEvents$1.class
 /DevGUI$MouseEvents.class
+/DevGUI.class
 /Djikstra.class
 /EMailDialogue$1.class
 /EMailDialogue.class
@@ -15,7 +16,6 @@
 /EndUserGUI$1.class
 /EndUserGUI$10.class
 /EndUserGUI$11.class
-/EndUserGUI$12.class
 /EndUserGUI$2.class
 /EndUserGUI$3.class
 /EndUserGUI$4.class
@@ -29,6 +29,8 @@
 /EndUserGUI$XComboBox$1.class
 /EndUserGUI$XComboBox.class
 /EndUserGUI.class
+/EndUserMain$1.class
+/EndUserMain.class
 /Map.class
 /NoPathException.class
 /Node.class
@@ -40,4 +42,5 @@
 /SelectMap.class
 /SendEmail$1.class
 /SendEmail.class
+/Serialize.class
 /TestNodes.class
