@@ -13,6 +13,15 @@ import java.awt.event.MouseAdapter;
 import java.awt.*;
 import java.awt.geom.Line2D;
 
+
+import javax.swing.BoxLayout;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JComponent;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import javax.swing.*;
 
 import java.util.*;
@@ -24,6 +33,9 @@ import java.io.FileOutputStream;
 import java.io.File;
 
 import java.awt.image.BufferedImage;
+import java.beans.*;
+
+
 
 ///**
 //* Created by Lumbini on 11/7/2015.
@@ -49,6 +61,10 @@ public class DevGUI extends JPanel{
 	private ImageIcon tempMapFile;
 	private NodeType currentType;
 	private Node currentNode;
+	
+	
+// //error1	
+	private Map selectedMap;
 
 	String outputVar = "src/output.txt";
 	String inputVar = "src/output.txt";
@@ -96,6 +112,9 @@ public class DevGUI extends JPanel{
 			}
 			*/
 		}
+		
+		System.out.println(maps);
+
 
 
 		EventQueue.invokeLater(new Runnable() {
@@ -176,6 +195,42 @@ public class DevGUI extends JPanel{
 		uiPanel.add(buildingStart);
 
 		//Construct Combo boxes to select start point
+		
+		JComboBox petList = new JComboBox<>(maps.toArray());
+		
+		petList.setBounds(762, 400, 132, 29);
+		petList.setVisible(true);
+//		petList.setSelectedIndex(0);
+		petList.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e) {
+				JComboBox cb1 = (JComboBox)e.getSource();
+				selectedMap = (Map)cb1.getSelectedItem();
+				System.out.println();
+				System.out.println(selectedMap);
+				System.out.println(selectedMap.getNodes());
+				currentMapFile = selectedMap.getImage();
+				currentStartNodes = selectedMap.getNodes();
+				currentStartEdges = selectedMap.getEdges();
+				
+//				petList.removeAllItems();
+//				for(int dd = 0; maps.size()<dd; dd++)
+//				{
+//				      petList.addItem(maps.get(dd));
+//				}
+				
+				
+				
+				uiPanel.repaint();
+				frame.repaint();
+				
+							}
+		});
+
+		
+		uiPanel.add(petList);
+		
+
+		
 		currentMapList = new LinkedList<String>();
 		startBuildingSEL = new JComboBox<String>();
 		startBuildingSEL.setBounds(762, 46, 132, 29);
@@ -191,9 +246,9 @@ public class DevGUI extends JPanel{
 						break;
 				}
 				currentMapName = maps.get(indexOfCurrentMap).getMapName();
-				currentStartNodes = maps.get(indexOfCurrentMap).getNodes();
-				currentStartEdges = maps.get(indexOfCurrentMap).getEdges();
-				currentMapFile = maps.get(indexOfCurrentMap).getImage();
+//				currentStartNodes = maps.get(indexOfCurrentMap).getNodes();
+//				currentStartEdges = maps.get(indexOfCurrentMap).getEdges();
+//				currentMapFile = maps.get(indexOfCurrentMap).getImage();
 				for(int i = 0; i < currentStartNodes.size(); ++i){
 					startRooms[i] = currentStartNodes.get(i).getName();
 				}
@@ -329,6 +384,7 @@ public class DevGUI extends JPanel{
 					startBuildingSEL.setVisible(true);
 					uiPanel.repaint();
 					uiPanel.revalidate();
+					
 				}
 			});
 
@@ -347,11 +403,18 @@ public class DevGUI extends JPanel{
 
 					} else if (response == JOptionPane.YES_OPTION) {
 						System.out.println("Yes button clicked");
-						for(int i = 0; i < maps.size(); ++i){
-							if(currentMapName == maps.get(i).getMapName()){
-								maps.remove(i);
-							}
-						}
+						
+//						for(int i = 0; i < maps.size(); ++i){
+//							if(currentMapName == maps.get(i).getMapName()){
+//								maps.remove(i);
+//							}
+						
+//						}
+						System.out.println(maps);
+						System.out.println(selectedMap);
+						
+						System.out.println(maps.remove(selectedMap));
+						
 						updateMap = true;
 						serialize("MapList", maps);
 
@@ -364,6 +427,8 @@ public class DevGUI extends JPanel{
 
 		uiPanel.setVisible(true);
 		frame.setVisible(true);
+		
+		
 	}
 
 	public class MouseEvents extends JComponent implements MouseMotionListener{
@@ -558,6 +623,9 @@ public class DevGUI extends JPanel{
 				g.drawImage(currentMapFile.getImage(), 0, 0, this);
 			}
 			
+		//	if(selectedMap.getImage() != null)
+		//	g.drawImage(selectedMap.getImage(), 0, 0, this);
+			
 			if(createMapLink){
 				if (tempMapFile != null) {
 					g.drawImage(tempMapFile.getImage(), 0, 0, this);
@@ -576,30 +644,56 @@ public class DevGUI extends JPanel{
 				
 				switch ((NodeType)currentStartNodes.get(i).getType()){
 					case NOTYPE:
-						g.setColor(Color.RED);
+						g.setColor(Color.BLACK);
 						break;
 					case MBATHROOM:
-						g.setColor(Color.YELLOW);
+						g.setColor(Color.CYAN);
 						break;
 					case FBATHROOM:
-						g.setColor(Color.YELLOW);
+						g.setColor(Color.PINK);
+						break;
+					case BLUETOWER:
+						g.setColor(Color.BLUE);
 						break;
 					case ELEVATOR:
 						g.setColor(Color.GREEN);
 						break;
 					case STAIRS:
+						g.setColor(Color.RED);
+						break;
+					case FOOD:
+						g.setColor(Color.YELLOW);
+						break;
+					case EMERGEXIT:
+						g.setColor(Color.RED);
+						break;
+					case LECTUREHALL:
+						g.setColor(Color.GRAY);
+						break;
+					case OFFICE:
+						g.setColor(Color.LIGHT_GRAY);
+						break;
+					case DOOR:
 						g.setColor(Color.ORANGE);
 						break;
+					case ROOM:
+						g.setColor(Color.DARK_GRAY);
+						break;		
+					
 					
 					}
-				
+	
+		//	System.out.println(currentStartNodes.get(i));
 				
 				((Graphics2D)g).fill(new Rectangle (currentStartNodes.get(i).getX()-SquareWidth/2, 
 													currentStartNodes.get(i).getY()-SquareWidth/2,
 													SquareWidth, SquareWidth));
+			
+		//	g.drawString("Node: " + i , currentStartNodes.get(i).getX(),currentStartNodes.get(i).getY());
+			g.setColor(Color.BLACK);
 			}
 			
-			g.setColor(Color.BLACK);
+			
 			for (int i = 0; i < currentStartEdges.size(); i++){
 				
 			if(!isPortal(currentStartEdges.get(i).getNode1())||!isPortal(currentStartEdges.get(i).getNode2()))
@@ -607,8 +701,11 @@ public class DevGUI extends JPanel{
 														currentStartEdges.get(i).getNode1().getY(),
 														currentStartEdges.get(i).getNode2().getX(),
 														currentStartEdges.get(i).getNode2().getY() ));
+			
+			
 														
-			 }
+			// System.out.println("Weight: "+currentStartEdges.get(i).getWeight() +"\n Map Scale: " + maps.get(indexOfCurrentMap).getScale());
+			}
 		}
 		public boolean isPortal(Node n)
 		{
@@ -724,10 +821,10 @@ public class DevGUI extends JPanel{
 			int x = evt.getX();
 			int y = evt.getY();
 
-//			if(nodeIndex >= 0) {
-//				currentStartNodes.get(nodeIndex).setX(x);
-//				currentStartNodes.get(nodeIndex).setY(y);
-//			}
+			if(nodeIndex >= 0) {
+				currentStartNodes.get(nodeIndex).setX(x);
+				currentStartNodes.get(nodeIndex).setY(y);
+			}
 		}
 	}
 	public Boolean getDeveloperMode(){
