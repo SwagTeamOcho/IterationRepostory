@@ -64,7 +64,7 @@ public class EndUserGUI extends JPanel implements ActionListener{
 	//	private String buildingSelectedSTART;   //track which building is selected to start in.
 	//	private String buildingSelectedEND;
 	//private String currentMapName;
-	private static BufferedImage currentMapFile;
+	private static ImageIcon currentMapFile;
 
 	private boolean startClicked = false;
 	private boolean endClicked = false;
@@ -138,6 +138,8 @@ public class EndUserGUI extends JPanel implements ActionListener{
 	private Icon bathroomIcon;
 
 	private String emailDirections;
+	private int totalDistance;
+	private double averageWalk;
 
 	/**
 	 * Create the application.
@@ -585,7 +587,13 @@ public class EndUserGUI extends JPanel implements ActionListener{
 //					emailDirections = "From: " + startNode.getMapName() + " " + startNode.getName() + "\n" + "to "
 //                            + Node.getMapName() + ", " + endRoomSEL.getSelectedItem() + "\n" + "\n" +
 					emailDirections = pathCalc.gpsInstructions(pathCalc.navigate(startNode, endNode));
-					directions.setText(emailDirections);
+					if (listPath != null){
+					totalDistance = Djikstra.getDistance(listPath);
+					}
+					directions.setText("From: " + startNode.getMapName() + ", " + startNode.getName() + "\n" + "to " 
+										+ endNode.getMapName() + ", " + endRoomSEL.getSelectedItem() + "\n" + "\n" 
+										+ "Total Distance to Destination: " + totalDistance  + " ft" + "\n"+ "Time to Destination: " +
+										(double)totalDistance/4.11 +"mins" + "\n" + emailDirections);
 					System.out.println("check List: " + listPath.size());
 					repaint();
 					revalidate();
@@ -677,7 +685,7 @@ public class EndUserGUI extends JPanel implements ActionListener{
 		@Override
 		public void paintComponent(Graphics g) {
 			super.paintComponent(g);
-			g.drawImage(currentMapFile, 0, 0, this);
+			g.drawImage(currentMapFile.getImage(), 0, 0, this);
 			repaint();
 			revalidate();
 
