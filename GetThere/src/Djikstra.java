@@ -259,9 +259,7 @@ public class Djikstra  {
 				result += counter + ". " +"Take a hard right and ";
 				result += "walk " + nextCost + " ft" + "\n";
 			}
-			
-			
-			
+
 		}
 			}	
 		}
