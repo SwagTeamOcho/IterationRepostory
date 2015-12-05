@@ -13,15 +13,6 @@ import java.awt.event.MouseAdapter;
 import java.awt.*;
 import java.awt.geom.Line2D;
 
-
-import javax.swing.BoxLayout;
-import javax.swing.JButton;
-import javax.swing.JComboBox;
-import javax.swing.JComponent;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
 import javax.swing.*;
 
 import java.util.*;
@@ -46,16 +37,16 @@ public class DevGUI extends JPanel{
 	 * 
 	 */
 	private static final long serialVersionUID = 2270760135813536905L;
-	public static LinkedList<Map> maps = new LinkedList<Map>();
-	private static LinkedList<Node> currentStartNodes = new LinkedList<Node>();
-	private static LinkedList<Edge> currentStartEdges = new LinkedList<Edge>();
+	public static LinkedList<Map> maps = new LinkedList<>();
+	private static LinkedList<Node> currentStartNodes = new LinkedList<>();
+	private static LinkedList<Edge> currentStartEdges = new LinkedList<>();
 	private String[] startRooms = new String[1000];
 	private String buildingSelectedSTART;   //track which building is selected to start in.
 	private String currentMapName;
 	private SelectMap loadMap;
 	static DevGUI window;
-	private BufferedImage currentMapFile;
-	private BufferedImage tempMapFile;
+	private ImageIcon currentMapFile;
+	private ImageIcon tempMapFile;
 	private NodeType currentType;
 	private Node currentNode;
 
@@ -94,15 +85,17 @@ public class DevGUI extends JPanel{
 	public static void main(String[] args) {
 		
 		if(new File("MapList.ser").canRead()){
-			maps.addAll((LinkedList<Map>) deserialize("MapList"));}
-		
-		
-		for(int c = 1; c < 8; c++){
-			if(new File("MapList"+c+".ser").canRead()){
-				maps.addAll((LinkedList<Map>) deserialize("MapList"+c));}
-			
+			System.out.println("maplist exists");
+			maps.addAll((LinkedList<Map>) deserialize("MapList"));
+		} else {
+			/*
+			for(int c = 1; c < 8; c++){
+				if(new File("MapList"+c+".ser").canRead()) {
+					maps.addAll((LinkedList<Map>) deserialize("MapList"+c));
+				}
+			}
+			*/
 		}
-
 
 
 		EventQueue.invokeLater(new Runnable() {
@@ -561,10 +554,14 @@ public class DevGUI extends JPanel{
 		public void paintComponent(Graphics g) {
 			super.paintComponent(g);
 
-			g.drawImage(currentMapFile, 0, 0, this);
+			if (currentMapFile != null) {
+				g.drawImage(currentMapFile.getImage(), 0, 0, this);
+			}
+			
 			if(createMapLink){
-				g.drawImage(tempMapFile, 0, 0, this);
-				
+				if (tempMapFile != null) {
+					g.drawImage(tempMapFile.getImage(), 0, 0, this);
+				}
 			}
 	
 
@@ -611,8 +608,7 @@ public class DevGUI extends JPanel{
 														currentStartEdges.get(i).getNode2().getX(),
 														currentStartEdges.get(i).getNode2().getY() ));
 														
-			 System.out.println("Weight: "+currentStartEdges.get(i).getWeight() +"\n Map Scale: " + maps.get(indexOfCurrentMap).getScale());
-			}
+			 }
 		}
 		public boolean isPortal(Node n)
 		{
@@ -714,7 +710,7 @@ public class DevGUI extends JPanel{
 
 				setToolTipText("Node: " + getNodeIndex(x, y) 
 				+ " Name: " + fullName);
-				show();
+				setVisible(true);
 			}
 			else{
 				setCursor(Cursor.getDefaultCursor());

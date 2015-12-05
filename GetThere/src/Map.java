@@ -7,6 +7,8 @@ import java.io.Serializable;
 import java.util.LinkedList;
 
 import javax.imageio.ImageIO;
+import javax.management.RuntimeErrorException;
+import javax.swing.ImageIcon;
 
 public class Map implements Serializable{
 	
@@ -14,7 +16,7 @@ public class Map implements Serializable{
 	 * 
 	 */
 	private static final long serialVersionUID = -8156376045776386768L;
-	private transient BufferedImage mapImage;
+	private ImageIcon mapImage;
 	private LinkedList<Node> nodes;
 	private LinkedList<Edge> edges;
 	private String mapName;
@@ -24,34 +26,28 @@ public class Map implements Serializable{
 		BufferedImage img = null;
 		try {
 		    img = ImageIO.read(new File(mapPath));
-		} catch (IOException e) {}
-		this.mapImage = img;
+		} catch (IOException e) {
+			e.printStackTrace();
+			throw new RuntimeException(e);
+		}
+		this.mapImage = new ImageIcon(img, "map");
 		this.mapName = mapName;
 		nodes = new LinkedList<Node>();
 		edges = new LinkedList<Edge>();
 		this.scale = s;
 	} 
 		
-	public Map(BufferedImage img, String mapName){
-		this.mapImage = img;
+	public Map(BufferedImage img, String mapName) {
+		if (img == null) {
+			throw new RuntimeException("ehh");
+		}
+		this.mapImage = new ImageIcon(img, "map");
 		this.mapName = mapName;
 		nodes = new LinkedList<Node>();
 		edges = new LinkedList<Edge>();
 	} 
 	
-	private void writeObject(ObjectOutputStream out)throws IOException{
-        out.defaultWriteObject();
-        //write buff with imageIO to out
-        ImageIO.write(mapImage, "png", out);
-    }
-
-    private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException{
-        in.defaultReadObject();
-        //read buff with imageIO from in
-        mapImage = ImageIO.read(in);
-    }
-	
-	public BufferedImage getImage(){
+	public ImageIcon getImage(){
 		return this.mapImage;
 	}
 	
