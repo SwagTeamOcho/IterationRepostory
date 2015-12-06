@@ -664,17 +664,6 @@ public class EndUserGUI extends JPanel implements ActionListener{
 			repaint();
 			revalidate();
 
-			//g.drawImage(mapImage, 0, 0, this);
-
-			//			for (int i = 0; i < currentStartNodes.size(); i++){
-			//				((Graphics2D)g).draw(new Rectangle (currentStartNodes.get(i).getX()-SquareWidth/2, currentStartNodes.get(i).getY()-SquareWidth/2, SquareWidth, SquareWidth));
-			//			}
-			//
-			//			for (int i = 0; i < currentStartEdges.size(); i++){
-			//				((Graphics2D)g).draw(new Line2D.Double(currentStartEdges.get(i).getNode1().getX(), currentStartEdges.get(i).getNode1().getY(),currentStartEdges.get(i).getNode2().getX(),currentStartEdges.get(i).getNode2().getY() ));
-			//			}
-			//			
-
 			Graphics2D g2d = (Graphics2D) g;
 			g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
 					RenderingHints.VALUE_ANTIALIAS_ON);
@@ -698,13 +687,6 @@ public class EndUserGUI extends JPanel implements ActionListener{
 					else{
 						path.moveTo(listPath.get(i).getX(), listPath.get(i).getY());
 					}
-//					if(mapsForPaths.get(arrowCounter).getNodes().contains(listPath.get(i-1)) != 
-//							mapsForPaths.get(arrowCounter).getNodes().contains(listPath.get(i))){
-//						g.setColor(Color.BLACK);
-//						g.fillOval(listPath.get(i-1).getX()-(CircleDiam+3)/2, listPath.get(i-1).getY()-(CircleDiam+3)/2, CircleDiam+3, CircleDiam+3);
-//						g.setColor(Color.WHITE);
-//						g.fillOval(listPath.get(i-1).getX()-CircleDiam/2, listPath.get(i-1).getY()-CircleDiam/2, CircleDiam, CircleDiam);
-//					}
 				}
 
 				g2d.setColor(Color.BLACK);
@@ -730,12 +712,7 @@ public class EndUserGUI extends JPanel implements ActionListener{
 				repaint();
 				revalidate();
 			}
-//			if ((hovered != null) && (endNode != null) && (currentlyShownMap.getNodes().contains(endNode))){
-//				g.setColor(Color.BLACK);
-//				g.fillOval(endNode.getX()-(CircleDiam+3)/2, endNode.getY()-(CircleDiam+3)/2, CircleDiam+3, CircleDiam+3);
-//				g.setColor(Color.RED);
-//				g.fillOval(endNode.getX()-CircleDiam/2, endNode.getY()-CircleDiam/2, CircleDiam, CircleDiam);
-//			}
+			
 			if(startClicked && (startNode != null) && (currentlyShownMap.getNodes().contains(startNode))){
 
 				g.setColor(Color.BLACK);
@@ -779,88 +756,6 @@ public class EndUserGUI extends JPanel implements ActionListener{
 		// TODO Auto-generated method stub
 
 	}
-
-//	public class XComboBox extends JComboBox<String> {
-//		
-//		private static final long serialVersionUID = 83;
-//		private ListSelectionListener listener;
-//
-//		public XComboBox() {
-//			uninstall();
-//			install();
-//		}
-//
-//		@Override
-//		public void updateUI() {
-//			uninstall();
-//			super.updateUI();
-//			install();
-//		}
-//
-//		private void uninstall() {
-//			if (listener == null) return;
-//			getPopupList().removeListSelectionListener(listener);
-//			listener = null;
-//		}
-//
-//		protected void install() {
-//			listener = new ListSelectionListener() {
-//				@Override
-//				public void valueChanged(ListSelectionEvent e) {
-//
-//					if (e.getValueIsAdjusting()) return;
-//
-//					JList list = getPopupList();
-//					hovered = getNodeByName(String.valueOf(list.getSelectedValue()), currentlyShownMap.getNodes());
-//					if (hovered != null){
-//						//System.out.println("--> " + hovered.getX() + "---" + hovered.getY());
-//						System.out.println(getPopupName());
-//						if(!startHoverFlag){
-//							startHoverFlag = true;
-//							return;
-//							}
-//						if(!endHoverFlag){
-//								endHoverFlag = true;
-//								return;
-//								}
-//						
-//						if(getPopupName().equals("Start")){
-//							startClicked = true;
-//							startNode = hovered;
-//							System.out.println("START SELECTED");
-//						}
-//						else if(getPopupName().equals("End")){
-//							endClicked = true;
-//							endNode = hovered;
-//							System.out.println("END SELECTED");
-//						}
-//					}
-//				
-//		}
-//
-//				private Node getNodeByName(String name, LinkedList<Node> nodes) {
-//					for(int i = 0; i < nodes.size(); i++){
-//						if(nodes.get(i).getName().equals(name)){
-//							return nodes.get(i);
-//						}
-//					}
-//					return null;
-//				}
-//			};
-//			getPopupList().addListSelectionListener(listener);
-//		}
-//
-//		private JList getPopupList() {
-//			ComboPopup popup = (ComboPopup) getUI().getAccessibleChild(this, 0);
-//			return popup.getList();
-//
-//		}
-//
-//		private String getPopupName() {
-//			JComboBox jcb = (JComboBox) getUI().getAccessibleChild(this, 0).getAccessibleContext().getAccessibleParent();
-//			return jcb.getName();
-//		}
-//	}
 	
 	private int IDCount;
 	public void fixIDs(LinkedList<Map> mapList){
