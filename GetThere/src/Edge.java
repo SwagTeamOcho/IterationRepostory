@@ -34,4 +34,7 @@ public class Edge implements Serializable{
 	public int getWeight(){
 		return this.weight;
 	}
+	public void updateWeight(int newWeight){
+		this.weight = newWeight;
+	}
 }

@@ -50,7 +50,7 @@ public class DevGUI extends JPanel{
   */
  private static final long serialVersionUID = 2270760135813536905L;
  public static LinkedList<Map> maps = new LinkedList<>();
- private static LinkedList<Node> currentStartNodes = new LinkedList<>();
+ private static LinkedList<Node> nodesOnCurrentMap = new LinkedList<>();
  private static LinkedList<Edge> currentStartEdges = new LinkedList<>();
  private String[] startRooms = new String[1000];
  private String buildingSelectedSTART;   //track which building is selected to start in.
@@ -195,6 +195,7 @@ public class DevGUI extends JPanel{
   uiPanel.add(buildingStart);
 
   //Construct Combo boxes to select start point
+
   
   JComboBox dropDown = new JComboBox<>(maps.toArray());
   
@@ -209,7 +210,7 @@ public class DevGUI extends JPanel{
     System.out.println(selectedMap);
     System.out.println(selectedMap.getNodes());
     currentMapFile = selectedMap.getImage();
-    currentStartNodes = selectedMap.getNodes();
+    nodesOnCurrentMap = selectedMap.getNodes();
     currentStartEdges = selectedMap.getEdges();
     
 //    dropDown.removeAllItems();
@@ -217,18 +218,14 @@ public class DevGUI extends JPanel{
 //    {
 //          dropDown.addItem(maps.get(dd));
 //    }
-    
-    
-    
     uiPanel.repaint();
     frame.repaint();
     
        }
   });
-
-  
   uiPanel.add(dropDown);
   
+
 
   
   currentMapList = new LinkedList<String>();
@@ -246,11 +243,11 @@ public class DevGUI extends JPanel{
       break;
     }
     currentMapName = maps.get(indexOfCurrentMap).getMapName();
-//    currentStartNodes = maps.get(indexOfCurrentMap).getNodes();
+//    nodesOnCurrentMap = maps.get(indexOfCurrentMap).getNodes();
 //    currentStartEdges = maps.get(indexOfCurrentMap).getEdges();
 //    currentMapFile = maps.get(indexOfCurrentMap).getImage();
-    for(int i = 0; i < currentStartNodes.size(); ++i){
-     startRooms[i] = currentStartNodes.get(i).getName();
+    for(int i = 0; i < nodesOnCurrentMap.size(); ++i){
+     startRooms[i] = nodesOnCurrentMap.get(i).getName();
     }
     System.out.println("Updating maps");
     uiPanel.repaint();
@@ -365,15 +362,17 @@ public class DevGUI extends JPanel{
    btnExport.addActionListener(new ActionListener() {
     public void actionPerformed(ActionEvent e){
      System.out.println("Export Pushed");
-     m1.produceNodes();
-     m1.produceEdges();
+
      serialize("MapList", maps);
      if(updateMap){
       
+      
+      
       for (int i = 0; i < maps.size(); i++) {
        if(maps.get(i).getMapName() != null){
-        if(!currentMapList.contains(maps.get(i).getMapName())){
-         startBuildingSEL.addItem(maps.get(i).getMapName());
+        if(!currentMapList.contains(maps.get(i).getMapName()))
+        {
+         dropDown.addItem(maps.get(i).getMapName());
          currentMapList.add(maps.get(i).getMapName());
         }
        }
@@ -413,9 +412,18 @@ public class DevGUI extends JPanel{
       System.out.println(maps);
       System.out.println(selectedMap);
       
+      dropDown.removeItem(selectedMap);
+      
       System.out.println(maps.remove(selectedMap));
       
+      
+      
       updateMap = true;
+      
+      
+      
+      
+      
       serialize("MapList", maps);
 
      } else if (response == JOptionPane.CLOSED_OPTION) {
@@ -462,7 +470,7 @@ public class DevGUI extends JPanel{
       if (nodeIndex < 0){ // not inside a square
        Node newNode = new Node(x, y);
        newNode.setMapName(currentMapName);
-       currentStartNodes.add(newNode);
+       nodesOnCurrentMap.add(newNode);
        
       }
      }
@@ -482,20 +490,20 @@ public class DevGUI extends JPanel{
         if(selectedValue != null){
          switch((String)selectedValue){
          case "No Type":
-          currentStartNodes.add(new Node(x, y, nodeName, NodeType.NOTYPE));
-          currentStartNodes.get(currentStartNodes.size() - 1).setMapName(currentMapName);
+          nodesOnCurrentMap.add(new Node(x, y, nodeName, NodeType.NOTYPE));
+          nodesOnCurrentMap.get(nodesOnCurrentMap.size() - 1).setMapName(currentMapName);
           break;
          case "Men's Bathroom":
-          currentStartNodes.add(new Node(x, y, nodeName, NodeType.MBATHROOM));
-          currentStartNodes.get(currentStartNodes.size() - 1).setMapName(currentMapName);
+          nodesOnCurrentMap.add(new Node(x, y, nodeName, NodeType.MBATHROOM));
+          nodesOnCurrentMap.get(nodesOnCurrentMap.size() - 1).setMapName(currentMapName);
           break;
          case "Women's Bathroom":
-          currentStartNodes.add(new Node(x, y, nodeName, NodeType.FBATHROOM));
-          currentStartNodes.get(currentStartNodes.size() - 1).setMapName(currentMapName);
+          nodesOnCurrentMap.add(new Node(x, y, nodeName, NodeType.FBATHROOM));
+          nodesOnCurrentMap.get(nodesOnCurrentMap.size() - 1).setMapName(currentMapName);
           break;
          case "Blue Tower":
-          currentStartNodes.add(new Node(x, y, nodeName, NodeType.BLUETOWER));
-          currentStartNodes.get(currentStartNodes.size() - 1).setMapName(currentMapName);
+          nodesOnCurrentMap.add(new Node(x, y, nodeName, NodeType.BLUETOWER));
+          nodesOnCurrentMap.get(nodesOnCurrentMap.size() - 1).setMapName(currentMapName);
           break;
          case "Elevator":
           makeLink(x, y, nodeName, NodeType.ELEVATOR);
@@ -504,30 +512,30 @@ public class DevGUI extends JPanel{
           makeLink(x, y, nodeName, NodeType.STAIRS);
           break;
          case "Food":
-          currentStartNodes.add(new Node(x, y, nodeName, NodeType.FOOD));
-          currentStartNodes.get(currentStartNodes.size() - 1).setMapName(currentMapName);
+          nodesOnCurrentMap.add(new Node(x, y, nodeName, NodeType.FOOD));
+          nodesOnCurrentMap.get(nodesOnCurrentMap.size() - 1).setMapName(currentMapName);
           break;
          case "Emergency Exit":
           makeLink(x, y, nodeName, NodeType.EMERGEXIT);
           break;
          case "Lecture Hall":
-          currentStartNodes.add(new Node(x, y, nodeName, NodeType.LECTUREHALL));
-          currentStartNodes.get(currentStartNodes.size() - 1).setMapName(currentMapName);
+          nodesOnCurrentMap.add(new Node(x, y, nodeName, NodeType.LECTUREHALL));
+          nodesOnCurrentMap.get(nodesOnCurrentMap.size() - 1).setMapName(currentMapName);
           break;
          case "Office":
-          currentStartNodes.add(new Node(x, y, nodeName, NodeType.OFFICE));
-          currentStartNodes.get(currentStartNodes.size() - 1).setMapName(currentMapName);
+          nodesOnCurrentMap.add(new Node(x, y, nodeName, NodeType.OFFICE));
+          nodesOnCurrentMap.get(nodesOnCurrentMap.size() - 1).setMapName(currentMapName);
           break;
          case "Door":
           makeLink(x, y, nodeName, NodeType.DOOR);
           break;
          case "Room":
-          currentStartNodes.add(new Node(x, y, nodeName, NodeType.ROOM));
-          currentStartNodes.get(currentStartNodes.size() - 1).setMapName(currentMapName);
+          nodesOnCurrentMap.add(new Node(x, y, nodeName, NodeType.ROOM));
+          nodesOnCurrentMap.get(nodesOnCurrentMap.size() - 1).setMapName(currentMapName);
           break;
          default:
-          currentStartNodes.add(new Node(x, y, nodeName, NodeType.NOTYPE));
-          currentStartNodes.get(currentStartNodes.size() - 1).setMapName(currentMapName);
+          nodesOnCurrentMap.add(new Node(x, y, nodeName, NodeType.NOTYPE));
+          nodesOnCurrentMap.get(nodesOnCurrentMap.size() - 1).setMapName(currentMapName);
          }
         }
        }
@@ -538,7 +546,7 @@ public class DevGUI extends JPanel{
        Node newNode = new Node(x, y, nodeName, currentType);
        newNode.setMapName(currentMapName);
        newNode.setName(newNode.getName());
-       currentStartNodes.add(newNode);
+       nodesOnCurrentMap.add(newNode);
        Edge newEdge = new Edge(currentNode, newNode, 0);
        currentStartEdges.add(newEdge);
        for(int k = 0; k < maps.size(); k++){
@@ -560,9 +568,9 @@ public class DevGUI extends JPanel{
        count++;
       } else if(count > 0 && nodeIndex >= 0){
        System.out.println(nodeIndex);
-       currentStartEdges.add(new Edge(currentStartNodes.get(staringEdgeIndex), 
-         currentStartNodes.get(nodeIndex),
-         (int) calcDistance(currentStartNodes.get(staringEdgeIndex), currentStartNodes.get(nodeIndex), maps.get(indexOfCurrentMap).getScale())));
+       currentStartEdges.add(new Edge(nodesOnCurrentMap.get(staringEdgeIndex), 
+         nodesOnCurrentMap.get(nodeIndex),
+         (int) calcDistance(nodesOnCurrentMap.get(staringEdgeIndex), nodesOnCurrentMap.get(nodeIndex), maps.get(indexOfCurrentMap).getScale())));
        count = 0;
       }
      }
@@ -570,14 +578,14 @@ public class DevGUI extends JPanel{
 
       LinkedList<Edge> tempList = new LinkedList<Edge>();
       for (int i = 0; i < currentStartEdges.size(); i++){
-       if(currentStartEdges.get(i).getNode1().equals(currentStartNodes.get(nodeIndex))||
-         currentStartEdges.get(i).getNode2().equals(currentStartNodes.get(nodeIndex)))
+       if(currentStartEdges.get(i).getNode1().equals(nodesOnCurrentMap.get(nodeIndex))||
+         currentStartEdges.get(i).getNode2().equals(nodesOnCurrentMap.get(nodeIndex)))
        {
         tempList.add(currentStartEdges.get(i));
        }
       }
       currentStartEdges.removeAll(tempList);
-      currentStartNodes.remove(nodeIndex);
+      nodesOnCurrentMap.remove(nodeIndex);
      }
      repaint();
     }
@@ -587,33 +595,25 @@ public class DevGUI extends JPanel{
   }
   
   public void makeLink(int x, int y, String nodeName, NodeType type){
-   int i;
-   currentType = type;
-   String[] mapNames = new String[currentMapList.size()];
-   for(i = 0; i < mapNames.length; i++){
-    mapNames[i] = currentMapList.get(i);
-   }
-   Object selectedMap = JOptionPane.showInputDialog(null, 
+   Object[] mapNames = maps.toArray();
+   
+   Object connectingMap = JOptionPane.showInputDialog(null, 
          "Choose a map to connect to",
          "Input",
          JOptionPane.INFORMATION_MESSAGE, null,
          mapNames, mapNames[1]);
-   String tempMapName = (String) selectedMap; 
-   for (i = 0; i <maps.size(); i++){
-    if(tempMapName.equals(maps.get(i).getMapName())){
-     tempMapFile = maps.get(i).getImage();
-     break;
-    }
-   }
+
    Node linkNode = new Node(x, y, nodeName, type);
+  
+   
    linkNode.setMapName(currentMapName);
    currentNode = linkNode;
-   currentStartNodes.add(linkNode);
+   nodesOnCurrentMap.add(linkNode);
    createMapLink = true;
    currentMapName = tempMapName;
-   currentStartNodes = maps.get(i).getNodes();
-   currentStartEdges = maps.get(i).getEdges();
-   currentMapFile = maps.get(i).getImage();
+   nodesOnCurrentMap = maps.get(connectingMap).getNodes();
+   currentStartEdges = maps.get(connectingMap).getEdges();
+   currentMapFile = maps.get(connectingMap).getImage();
   }
   @Override
   public void paintComponent(Graphics g) {
@@ -622,6 +622,10 @@ public class DevGUI extends JPanel{
    if (currentMapFile != null) {
     g.drawImage(currentMapFile.getImage(), 0, 0, this);
    }
+   else
+  {
+    g.drawString("Select a map or load a new map to begin", 300,300);
+  }
    
   // if(selectedMap.getImage() != null)
   // g.drawImage(selectedMap.getImage(), 0, 0, this);
@@ -635,14 +639,14 @@ public class DevGUI extends JPanel{
 
    
 
-   for (int i = 0; i < currentStartNodes.size(); i++){
+   for (int i = 0; i < nodesOnCurrentMap.size(); i++){
     
     
-    if(currentStartNodes.get(i).getType() == null)
-    currentStartNodes.get(i).setType(NodeType.NOTYPE);
+//    if(nodesOnCurrentMap.get(i).getType() == null)
+//    nodesOnCurrentMap.get(i).setType(NodeType.NOTYPE);
     
     
-    switch ((NodeType)currentStartNodes.get(i).getType()){
+    switch ((NodeType)nodesOnCurrentMap.get(i).getType()){
      case NOTYPE:
       g.setColor(Color.BLACK);
       break;
@@ -683,20 +687,29 @@ public class DevGUI extends JPanel{
      
      }
  
-  // System.out.println(currentStartNodes.get(i));
+  // System.out.println(nodesOnCurrentMap.get(i));
     
-    ((Graphics2D)g).fill(new Rectangle (currentStartNodes.get(i).getX()-SquareWidth/2, 
-             currentStartNodes.get(i).getY()-SquareWidth/2,
+    ((Graphics2D)g).fill(new Rectangle (nodesOnCurrentMap.get(i).getX()-SquareWidth/2, 
+             nodesOnCurrentMap.get(i).getY()-SquareWidth/2,
              SquareWidth, SquareWidth));
    
-  // g.drawString("Node: " + i , currentStartNodes.get(i).getX(),currentStartNodes.get(i).getY());
+  // g.drawString("Node: " + i , nodesOnCurrentMap.get(i).getX(),nodesOnCurrentMap.get(i).getY());
    g.setColor(Color.BLACK);
    }
+  
+  
    
    
    for (int i = 0; i < currentStartEdges.size(); i++){
+    if(!(isPortal(currentStartEdges.get(i).getNode1())&&isPortal(currentStartEdges.get(i).getNode2())))
+    {
+      currentStartEdges.get(i).updateWeight((int)calcDistance(currentStartEdges.get(i).getNode1(), currentStartEdges.get(i).getNode2(), selectedMap.getScale()));
+    }
     
-   if(!isPortal(currentStartEdges.get(i).getNode1())||!isPortal(currentStartEdges.get(i).getNode2()))
+    
+    
+    
+ //  if(!isPortal(currentStartEdges.get(i).getNode1())||!isPortal(currentStartEdges.get(i).getNode2()))
     ((Graphics2D)g).draw(new Line2D.Double(currentStartEdges.get(i).getNode1().getX(), 
               currentStartEdges.get(i).getNode1().getY(),
               currentStartEdges.get(i).getNode2().getX(),
@@ -721,52 +734,21 @@ public class DevGUI extends JPanel{
     return false;
   }
 
-  public double calcDistance(int x1, int y1, int x2, int y2)
-  {
-   return Math.sqrt((x1-x2)*(x1-x2) + (y1-y2)*(y1-y2));
-  }
-
-  public double calcDistance(int x1, int y1, int x2, int y2, int scale)
-  {
-   return (Math.sqrt((x1-x2)*(x1-x2) + (y1-y2)*(y1-y2))) * scale;
-  }
-
-  public double calcDistance(Node n1, Node n2)
-  {
-   return (Math.sqrt((n1.getX()-n2.getX())*(n1.getX()-n2.getX()) + (n1.getY()-n2.getY())*(n1.getY()-n2.getY())));
-  }
   
   public double calcDistance(Node n1, Node n2, double scale)
   {
    return (Math.sqrt((n1.getX()-n2.getX())*(n1.getX()-n2.getX()) + (n1.getY()-n2.getY())*(n1.getY()-n2.getY())))/scale;
   }
 
-  public void produceNodes(){
-   nodes = "";
-   for (int i = 0; i < currentStartNodes.size(); i++){
-    nodes = nodes +"\nX: " + currentStartNodes.get(i).getX() + "  Y: " + currentStartNodes.get(i).getY();
-   }
-   System.out.print(nodes);
-  }
 
 
-  public void produceEdges(){
-   for (int i = 0; i < currentStartEdges.size(); i++){
-    System.out.println("\nNode n"+ i + " = new Node(" + 
-      currentStartEdges.get(i).getNode1().getX() + ", " +  
-      currentStartEdges.get(i).getNode1().getY() + " );");
-    System.out.println("Node n"+ i + " = new Node(" + 
-      currentStartEdges.get(i).getNode2().getX() + ", " +  
-      currentStartEdges.get(i).getNode2().getY() + " );");
-   }
-  }
 
   public void removeEdgesToNode(int nodeIndex)
   {
    for (int i = 0; i < currentStartEdges.size(); i++)
    {
-    if(currentStartEdges.get(i).getNode1().equals(currentStartNodes.get(nodeIndex))||
-      currentStartEdges.get(i).getNode2().equals(currentStartNodes.get(nodeIndex)))
+    if(currentStartEdges.get(i).getNode1().equals(nodesOnCurrentMap.get(nodeIndex))||
+      currentStartEdges.get(i).getNode2().equals(nodesOnCurrentMap.get(nodeIndex)))
     {
      currentStartEdges.remove(currentStartEdges.get(i));
     }
@@ -778,10 +760,10 @@ public class DevGUI extends JPanel{
   public int getNodeIndex(int x, int y)
   {
    int thres = 10;
-   for (int i = 0; i < currentStartNodes.size(); i++)
+   for (int i = 0; i < nodesOnCurrentMap.size(); i++)
    {
-    if((currentStartNodes.get(i).getX() > x-thres)&&(currentStartNodes.get(i).getX() < x+thres) 
-      && (currentStartNodes.get(i).getY() > y-thres)&&(currentStartNodes.get(i).getY() < y+thres))
+    if((nodesOnCurrentMap.get(i).getX() > x-thres)&&(nodesOnCurrentMap.get(i).getX() < x+thres) 
+      && (nodesOnCurrentMap.get(i).getY() > y-thres)&&(nodesOnCurrentMap.get(i).getY() < y+thres))
      return i;
 
    }
@@ -799,7 +781,7 @@ public class DevGUI extends JPanel{
 
    if (getNodeIndex(x, y) >= 0){
     setCursor(Cursor.getPredefinedCursor(Cursor.CROSSHAIR_CURSOR));
-    String fullName = currentStartNodes.get(getNodeIndex(x, y)).getName();
+    String fullName = nodesOnCurrentMap.get(getNodeIndex(x, y)).getName();
     int a = fullName.indexOf(".") ;
     if(a != -1){
      fullName = fullName.substring(a+1, fullName.length()-1);
@@ -822,8 +804,8 @@ public class DevGUI extends JPanel{
    int y = evt.getY();
 
    if(nodeIndex >= 0) {
-    currentStartNodes.get(nodeIndex).setX(x);
-    currentStartNodes.get(nodeIndex).setY(y);
+    nodesOnCurrentMap.get(nodeIndex).setX(x);
+    nodesOnCurrentMap.get(nodeIndex).setY(y);
    }
   }
  }
