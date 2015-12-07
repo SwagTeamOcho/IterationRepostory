@@ -603,17 +603,43 @@ public class DevGUI extends JPanel{
          JOptionPane.INFORMATION_MESSAGE, null,
          mapNames, mapNames[1]);
 
-   Node linkNode = new Node(x, y, nodeName, type);
+
   
-   
-   linkNode.setMapName(currentMapName);
-   currentNode = linkNode;
-   nodesOnCurrentMap.add(linkNode);
-   createMapLink = true;
-   currentMapName = tempMapName;
-   nodesOnCurrentMap = maps.get(connectingMap).getNodes();
-   currentStartEdges = maps.get(connectingMap).getEdges();
-   currentMapFile = maps.get(connectingMap).getImage();
+  System.out.println("First map: " + selectedMap);
+  System.out.println("Second map: " + connectingMap);
+  
+  int indexInListOfMaps = maps.indexOf(connectingMap);
+  
+  
+  
+  
+
+//   linkNode.setMapName(currentMapName);
+//   currentNode = linkNode;
+//   nodesOnCurrentMap.add(linkNode);
+//   createMapLink = true;
+//   currentMapName = ((Map)connectingMap).getMapName();
+//   nodesOnCurrentMap = ((Map)connectingMap).getNodes();
+//   currentStartEdges = ((Map)connectingMap).getEdges();
+//   currentMapFile = ((Map)connectingMap).getImage();
+currentType = type;
+String tempMapName = ((Map)connectingMap).getMapName(); 
+tempMapFile = maps.get(indexInListOfMaps).getImage();
+Node linkNode = new Node(x, y, nodeName, type);
+linkNode.setMapName(currentMapName);
+currentNode = linkNode;
+nodesOnCurrentMap.add(linkNode);
+createMapLink = true;
+currentMapName = tempMapName;
+nodesOnCurrentMap = maps.get(indexInListOfMaps).getNodes();
+currentStartEdges = maps.get(indexInListOfMaps).getEdges();
+currentMapFile = maps.get(indexInListOfMaps).getImage();
+
+
+
+
+  repaint();
+  revalidate();
   }
   @Override
   public void paintComponent(Graphics g) {
@@ -642,8 +668,11 @@ public class DevGUI extends JPanel{
    for (int i = 0; i < nodesOnCurrentMap.size(); i++){
     
     
-//    if(nodesOnCurrentMap.get(i).getType() == null)
-//    nodesOnCurrentMap.get(i).setType(NodeType.NOTYPE);
+    if(nodesOnCurrentMap.get(i).getType() == null)
+    {
+     System.out.println("The following node was null: " + nodesOnCurrentMap.get(i));
+    nodesOnCurrentMap.get(i).setType(NodeType.NOTYPE);
+    }
     
     
     switch ((NodeType)nodesOnCurrentMap.get(i).getType()){
