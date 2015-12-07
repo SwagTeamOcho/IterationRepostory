@@ -337,17 +337,20 @@ public class DevGUI extends JPanel{
      serialize("MapList", maps);
      if(updateMap){
       
-      dropDown.removeAllItems();
+  
      
-    
+    dropDown.addItem(maps.getLast());
+//      
+//      for (int i = 0; i < maps.size(); i++) 
+//        {
+//         
+//         if(dropDown.getSelectedIndex()<0)
+//         dropDown.addItem(maps.get(i));
+//      //   
+//        
+//       
+//      }
       
-      for (int i = 0; i < maps.size(); i++) 
-        {
-         dropDown.addItem(maps.get(i));
-      //   currentMapList.add(maps.get(i).getMapName());
-        
-       
-      }
       updateMap = false;
      }
   
