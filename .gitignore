@@ -15,6 +15,7 @@ local.properties
 .DS_Store
 javax.mail.jar
 .DS_Store
+*.ser
 
 # Eclipse Core
 .project
