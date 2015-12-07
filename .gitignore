@@ -12,6 +12,8 @@ local.properties
 .loadpath
 *.class
 .idea
+javax.mail.jar
+.DS_Store
 
 # Eclipse Core
 .project
