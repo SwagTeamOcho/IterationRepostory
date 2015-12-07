@@ -323,35 +323,6 @@ public class DevGUI extends JPanel{
    });
    
   
-//   //Construct button and add action listener
-//   JButton btnSetScale= new JButton("Set Scale");
-//   btnSetScale.setBounds(762, 256, 132, 29);
-//   uiPanel.add(btnSetScale);
-//   btnSetScale.addActionListener(new ActionListener() {
-//    public void actionPerformed(ActionEvent e){
-//     
-//     
-//     
-//     System.out.println("Set Scale Pushed");
-//
-//    }
-//   });
-   
-   
-//   SpinnerNumberModel model = new SpinnerNumberModel(1.0, 0.1, 1.4, .01);
-//   final JSpinner spinner = new JSpinner(model);
-//   spinner.setPreferredSize(new Dimension(45, spinner.getPreferredSize().height));
-//   spinner.addChangeListener(new ChangeListener()
-//   {
-//    public void stateChanged(ChangeEvent e)
-//    {
-//     float scale = ((Double)spinner.getValue()).floatValue();
-//     System.out.print(scale);
-//    }
-//   });
-// 
-//   uiPanel.add(new JLabel("scale"));
-//   uiPanel.add(spinner);
  
    
 
@@ -722,7 +693,9 @@ currentMapFile = maps.get(indexInListOfMaps).getImage();
              nodesOnCurrentMap.get(i).getY()-SquareWidth/2,
              SquareWidth, SquareWidth));
    
-  // g.drawString("Node: " + i , nodesOnCurrentMap.get(i).getX(),nodesOnCurrentMap.get(i).getY());
+   if(isPortal(nodesOnCurrentMap.get(i)))
+     g.drawString(nodesOnCurrentMap.get(i).getName(), nodesOnCurrentMap.get(i).getX(),nodesOnCurrentMap.get(i).getY());
+    
    g.setColor(Color.BLACK);
    }
   
