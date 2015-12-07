@@ -46,9 +46,21 @@ public class SelectMap extends JFrame {
     
     importButton.addActionListener(new ActionListener() {
       public void actionPerformed(ActionEvent ae) {
-        Map newMap = new Map(filePath, mapName.getText(), Double.parseDouble(scale.getText()) );
-        DevGUI.maps.add(newMap);
-        System.out.println("TEST");       
+        
+        try {
+          double formatedText = Double.parseDouble(scale.getText()) ;
+          Map newMap = new Map(filePath, mapName.getText(), formatedText);
+          DevGUI.maps.add(newMap);
+          System.out.println("TEST");  
+            
+           } catch (Exception z) { 
+
+         scale.setText("");
+         return;
+      }
+        
+        
+            
       }
     });
 
