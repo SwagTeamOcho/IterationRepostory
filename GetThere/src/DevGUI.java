@@ -51,7 +51,7 @@ public class DevGUI extends JPanel{
  private static final long serialVersionUID = 2270760135813536905L;
  public static LinkedList<Map> maps = new LinkedList<>();
  private static LinkedList<Node> nodesOnCurrentMap = new LinkedList<>();
- private static LinkedList<Edge> currentStartEdges = new LinkedList<>();
+ private static LinkedList<Edge> edgesOnCurrentMap = new LinkedList<>();
  private String[] startRooms = new String[1000];
  private String buildingSelectedSTART;   //track which building is selected to start in.
  private String currentMapName;
@@ -197,7 +197,7 @@ public class DevGUI extends JPanel{
   //Construct Combo boxes to select start point
 
   
-  JComboBox dropDown = new JComboBox<>(maps.toArray());
+  JComboBox dropDown = new JComboBox(maps.toArray());
   
   dropDown.setBounds(762, 46, 132, 29);
   dropDown.setVisible(true);
@@ -211,13 +211,8 @@ public class DevGUI extends JPanel{
     System.out.println(selectedMap.getNodes());
     currentMapFile = selectedMap.getImage();
     nodesOnCurrentMap = selectedMap.getNodes();
-    currentStartEdges = selectedMap.getEdges();
+    edgesOnCurrentMap = selectedMap.getEdges();
     
-//    dropDown.removeAllItems();
-//    for(int dd = 0; maps.size()<dd; dd++)
-//    {
-//          dropDown.addItem(maps.get(dd));
-//    }
     uiPanel.repaint();
     frame.repaint();
     
@@ -226,44 +221,6 @@ public class DevGUI extends JPanel{
   uiPanel.add(dropDown);
   
 
-
-  
-//  currentMapList = new LinkedList<String>();
-//  startBuildingSEL = new JComboBox<String>();
-//  startBuildingSEL.setBounds(762, 46, 132, 29);
-//  startBuildingSEL.setEditable(false);
-//  startBuildingSEL.setVisible(true);
-//  startBuildingSEL.addActionListener(new ActionListener(){
-//   public void actionPerformed(ActionEvent e) {
-//    @SuppressWarnings("rawtypes")
-//    JComboBox cb = (JComboBox)e.getSource();
-//    buildingSelectedSTART = (String)cb.getSelectedItem();
-//    for(indexOfCurrentMap = 0; indexOfCurrentMap < maps.size(); ++indexOfCurrentMap){
-//     if(buildingSelectedSTART.equals(maps.get(indexOfCurrentMap).getMapName()))
-//      break;
-//    }
-//    currentMapName = maps.get(indexOfCurrentMap).getMapName();
-////    nodesOnCurrentMap = maps.get(indexOfCurrentMap).getNodes();
-////    currentStartEdges = maps.get(indexOfCurrentMap).getEdges();
-////    currentMapFile = maps.get(indexOfCurrentMap).getImage();
-//    for(int i = 0; i < nodesOnCurrentMap.size(); ++i){
-//     startRooms[i] = nodesOnCurrentMap.get(i).getName();
-//    }
-//    System.out.println("Updating maps");
-//    uiPanel.repaint();
-//    frame.repaint();
-//   }
-//  });
-//
-//  for (int i = 0; i < maps.size(); i++) {
-//   if(maps.get(i).getMapName() != null){
-//    startBuildingSEL.addItem(maps.get(i).getMapName());
-//    currentMapList.add(maps.get(i).getMapName());
-//   }
-//  }
-//
-//  //Add Combo Boxes to UIPanel
-//  uiPanel.add(startBuildingSEL);
 
   if(developerMode)
   {
@@ -340,16 +297,7 @@ public class DevGUI extends JPanel{
   
      
     dropDown.addItem(maps.getLast());
-//      
-//      for (int i = 0; i < maps.size(); i++) 
-//        {
-//         
-//         if(dropDown.getSelectedIndex()<0)
-//         dropDown.addItem(maps.get(i));
-//      //   
-//        
-//       
-//      }
+
       
       updateMap = false;
      }
@@ -375,13 +323,7 @@ public class DevGUI extends JPanel{
 
      } else if (response == JOptionPane.YES_OPTION) {
       System.out.println("Yes button clicked");
-      
-//      for(int i = 0; i < maps.size(); ++i){
-//       if(currentMapName == maps.get(i).getMapName()){
-//        maps.remove(i);
-//       }
-      
-//      }
+
       System.out.println(maps);
       System.out.println(selectedMap);
       
@@ -521,7 +463,7 @@ public class DevGUI extends JPanel{
        newNode.setName(newNode.getName());
        nodesOnCurrentMap.add(newNode);
        Edge newEdge = new Edge(currentNode, newNode, 0);
-       currentStartEdges.add(newEdge);
+       edgesOnCurrentMap.add(newEdge);
        for(int k = 0; k < maps.size(); k++){
         for(int j = 0; j < maps.get(k).getNodes().size(); j++){
          if(maps.get(k).getNodes().get(j).equals(currentNode)){
@@ -541,7 +483,7 @@ public class DevGUI extends JPanel{
        count++;
       } else if(count > 0 && nodeIndex >= 0){
        System.out.println(nodeIndex);
-       currentStartEdges.add(new Edge(nodesOnCurrentMap.get(staringEdgeIndex), 
+       edgesOnCurrentMap.add(new Edge(nodesOnCurrentMap.get(staringEdgeIndex), 
          nodesOnCurrentMap.get(nodeIndex),
          (int) calcDistance(nodesOnCurrentMap.get(staringEdgeIndex), nodesOnCurrentMap.get(nodeIndex), maps.get(indexOfCurrentMap).getScale())));
        count = 0;
@@ -550,14 +492,14 @@ public class DevGUI extends JPanel{
      if (evt.getClickCount() >= 2 && (createNodes || createSpecial)) {
 
       LinkedList<Edge> tempList = new LinkedList<Edge>();
-      for (int i = 0; i < currentStartEdges.size(); i++){
-       if(currentStartEdges.get(i).getNode1().equals(nodesOnCurrentMap.get(nodeIndex))||
-         currentStartEdges.get(i).getNode2().equals(nodesOnCurrentMap.get(nodeIndex)))
+      for (int i = 0; i < edgesOnCurrentMap.size(); i++){
+       if(edgesOnCurrentMap.get(i).getNode1().equals(nodesOnCurrentMap.get(nodeIndex))||
+         edgesOnCurrentMap.get(i).getNode2().equals(nodesOnCurrentMap.get(nodeIndex)))
        {
-        tempList.add(currentStartEdges.get(i));
+        tempList.add(edgesOnCurrentMap.get(i));
        }
       }
-      currentStartEdges.removeAll(tempList);
+      edgesOnCurrentMap.removeAll(tempList);
       nodesOnCurrentMap.remove(nodeIndex);
      }
      repaint();
@@ -570,6 +512,7 @@ public class DevGUI extends JPanel{
   public void makeLink(int x, int y, String nodeName, NodeType type){
    Object[] mapNames = maps.toArray();
    
+
    Object connectingMap = JOptionPane.showInputDialog(null, 
          "Choose a map to connect to",
          "Input",
@@ -596,47 +539,6 @@ public class DevGUI extends JPanel{
   maps.get(maps.indexOf(connectingMap)).getEdges().add(new Edge(linkNode1, linkNode2, 0));
   
   
-  
-  
-  
-  
-  
-  
-
-//   linkNode.setMapName(currentMapName);
-//   currentNode = linkNode;
-//   nodesOnCurrentMap.add(linkNode);
-//   createMapLink = true;
-//   currentMapName = ((Map)connectingMap).getMapName();
-//   nodesOnCurrentMap = ((Map)connectingMap).getNodes();
-//   currentStartEdges = ((Map)connectingMap).getEdges();
-//   currentMapFile = ((Map)connectingMap).getImage();
-
-/*
-currentType = type;
-String currentMapName = selectedMap.getMapName();
-String tempMapName = ((Map)connectingMap).getMapName();
-System.out.println(tempMapName);
-System.out.println(maps.get(indexInListOfMaps).getMapName());
-System.out.println(currentMapName);
-
-tempMapFile = maps.get(indexInListOfMaps).getImage();
-Node linkNode = new Node(x, y, nodeName, type);
-linkNode.setMapName(currentMapName);
-
-currentNode = linkNode;
-nodesOnCurrentMap.add(linkNode);
-createMapLink = true;
-currentMapName = tempMapName;
-nodesOnCurrentMap = maps.get(indexInListOfMaps).getNodes();
-currentStartEdges = maps.get(indexInListOfMaps).getEdges();
-currentMapFile = maps.get(indexInListOfMaps).getImage();
-*/
-
-
-
-
-
   repaint();
   revalidate();
   }
@@ -738,11 +640,11 @@ currentMapFile = maps.get(indexInListOfMaps).getImage();
     
    
    
-   for (int i = 0; i < currentStartEdges.size(); i++){
-   // if(!(isPortal(currentStartEdges.get(i).getNode1())&&isPortal(currentStartEdges.get(i).getNode2())))
-   if(currentStartEdges.get(i).getNode1().getMapName() == currentStartEdges.get(i).getNode2().getMapName())
+   for (int i = 0; i < edgesOnCurrentMap.size(); i++){
+   // if(!(isPortal(edgesOnCurrentMap.get(i).getNode1())&&isPortal(edgesOnCurrentMap.get(i).getNode2())))
+   if(edgesOnCurrentMap.get(i).getNode1().getMapName() == edgesOnCurrentMap.get(i).getNode2().getMapName())
     {
-      currentStartEdges.get(i).updateWeight((int)calcDistance(currentStartEdges.get(i).getNode1(), currentStartEdges.get(i).getNode2(), selectedMap.getScale()));
+      edgesOnCurrentMap.get(i).updateWeight((int)calcDistance(edgesOnCurrentMap.get(i).getNode1(), edgesOnCurrentMap.get(i).getNode2(), selectedMap.getScale()));
     }
     else
      g.setColor(Color.RED);
@@ -750,16 +652,16 @@ currentMapFile = maps.get(indexInListOfMaps).getImage();
     
 
     
-   if(!isPortal(currentStartEdges.get(i).getNode1())||!isPortal(currentStartEdges.get(i).getNode2()))
-    ((Graphics2D)g).draw(new Line2D.Double(currentStartEdges.get(i).getNode1().getX(), 
-              currentStartEdges.get(i).getNode1().getY(),
-              currentStartEdges.get(i).getNode2().getX(),
-              currentStartEdges.get(i).getNode2().getY() ));
+   if(!isPortal(edgesOnCurrentMap.get(i).getNode1())||!isPortal(edgesOnCurrentMap.get(i).getNode2()))
+    ((Graphics2D)g).draw(new Line2D.Double(edgesOnCurrentMap.get(i).getNode1().getX(), 
+              edgesOnCurrentMap.get(i).getNode1().getY(),
+              edgesOnCurrentMap.get(i).getNode2().getX(),
+              edgesOnCurrentMap.get(i).getNode2().getY() ));
    
    
     
       g.setColor(Color.BLACK);         
-    System.out.println(currentStartEdges.get(i));
+    System.out.println(edgesOnCurrentMap.get(i));
    }
   
   System.out.println("\n");
@@ -789,12 +691,12 @@ currentMapFile = maps.get(indexInListOfMaps).getImage();
 
   public void removeEdgesToNode(int nodeIndex)
   {
-   for (int i = 0; i < currentStartEdges.size(); i++)
+   for (int i = 0; i < edgesOnCurrentMap.size(); i++)
    {
-    if(currentStartEdges.get(i).getNode1().equals(nodesOnCurrentMap.get(nodeIndex))||
-      currentStartEdges.get(i).getNode2().equals(nodesOnCurrentMap.get(nodeIndex)))
+    if(edgesOnCurrentMap.get(i).getNode1().equals(nodesOnCurrentMap.get(nodeIndex))||
+      edgesOnCurrentMap.get(i).getNode2().equals(nodesOnCurrentMap.get(nodeIndex)))
     {
-     currentStartEdges.remove(currentStartEdges.get(i));
+     edgesOnCurrentMap.remove(edgesOnCurrentMap.get(i));
     }
    }
 
