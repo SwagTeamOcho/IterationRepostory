@@ -734,6 +734,8 @@ currentMapFile = maps.get(indexInListOfMaps).getImage();
     {
       currentStartEdges.get(i).updateWeight((int)calcDistance(currentStartEdges.get(i).getNode1(), currentStartEdges.get(i).getNode2(), selectedMap.getScale()));
     }
+    else
+     g.setColor(Color.RED);
     
     
     
@@ -745,8 +747,9 @@ currentMapFile = maps.get(indexInListOfMaps).getImage();
               currentStartEdges.get(i).getNode2().getY() ));
    
    
-              
-   // System.out.println("Weight: "+currentStartEdges.get(i).getWeight() +"\n Map Scale: " + maps.get(indexOfCurrentMap).getScale());
+    
+      g.setColor(Color.BLACK);         
+    System.out.println("Weight: "+currentStartEdges.get(i).getWeight() +"\n Map Scale: " + maps.get(indexOfCurrentMap).getScale());
    }
   }
   public boolean isPortal(Node n)
