@@ -1,0 +1,17 @@
+Node1x 657 Node1y 257 Node2x 610 Node2y 245 Weight 48
+Nodex 610 Nodey 245 Node2x 581 Node2y 247 Weight 29
+Nodex 581 Nodey 247 Node2x 583 Node2y 215 Weight 32
+Nodex 583 Nodey 215 Node2x 580 Node2y 171 Weight 44
+Nodex 580 Nodey 171 Node2x 575 Node2y 139 Weight 32
+Nodex 575 Nodey 139 Node2x 520 Node2y 142 Weight 55
+Nodex 520 Nodey 142 Node2x 470 Node2y 137 Weight 50
+Nodex 470 Nodey 137 Node2x 418 Node2y 139 Weight 52
+Nodex 418 Nodey 139 Node2x 378 Node2y 139 Weight 40
+Nodex 378 Nodey 139 Node2x 334 Node2y 139 Weight 44
+Nodex 334 Nodey 139 Node2x 335 Node2y 71 Weight 68
+Nodex 335 Nodey 71 Node2x 330 Node2y 20 Weight 51
+Nodex 334 Nodey 139 Node2x 313 Node2y 141 Weight 21
+Nodex 280 Nodey 141 Node2x 280 Node2y 141 Weight 0
+Nodex 227 Nodey 140 Node2x 227 Node2y 140 Weight 0
+Nodex 227 Nodey 140 Node2x 313 Node2y 141 Weight 86
+Nodex 187 Nodey 137 Node2x 187 Node2y 137 Weight 0
