@@ -97,7 +97,7 @@ public class EndUserGUI extends JPanel implements ActionListener{
 	private Node startNode;
 	private Node endNode;
 	private LinkedList<Node> listPath = new LinkedList<Node>();
-	private Djikstra pathCalc;
+	private Djikstra pathCalc = new Djikstra();
 
 	//List of buildings to be shown to the user
 	private String buildingSelectedSTART;	//track which building is selected to start in.
@@ -465,18 +465,30 @@ public class EndUserGUI extends JPanel implements ActionListener{
 			{
 				String[] bathroomTypes = {"Female", "Male"};
 				Object selectedValue = JOptionPane.showInputDialog(null, "Bathroom Type", "Select Gender",
+<<<<<<< HEAD
 						JOptionPane.INFORMATION_MESSAGE, bathroomIconBIG,bathroomTypes, bathroomTypes[0]);
 				if(selectedValue != null){
 					switch((String) selectedValue){
 					case "Female":
 
+=======
+						JOptionPane.INFORMATION_MESSAGE, bathroomIcon, bathroomTypes, bathroomTypes[0]);
+				if(selectedValue != null){
+					switch((String) selectedValue){
+					case "Female":
+						
+>>>>>>> 491ccf99e9532a7c142318e82145cd38e3453565
 						if(listPath != null && startNode != null){
 							listPath = pathCalc.nearestSpecialNode(startNode, NodeType.FBATHROOM);
 							updatePath = true;
 						}
 						break;
 					case "Male":
+<<<<<<< HEAD
 
+=======
+						
+>>>>>>> 491ccf99e9532a7c142318e82145cd38e3453565
 						if(listPath != null && startNode != null){
 							listPath = pathCalc.nearestSpecialNode(startNode, NodeType.MBATHROOM);
 							updatePath = true;
@@ -510,7 +522,7 @@ public class EndUserGUI extends JPanel implements ActionListener{
 				updatePath = true;
 				uiPanel.setVisible(true);
 				frame.setVisible(true);
-				pathCalc = new Djikstra();
+				//pathCalc = new Djikstra();
 				if(!startClicked && !endClicked){
 					for (i = 0; i < currentStartNodes.size(); i++){
 						if(startRoomSEL.getSelectedItem() == currentStartNodes.get(i).getName())
@@ -697,19 +709,23 @@ public class EndUserGUI extends JPanel implements ActionListener{
 				g2d.setStroke(new BasicStroke(2));
 				g2d.setColor(Color.BLUE);
 				g2d.draw(path);
-
-				if(mapsForPaths.get(arrowCounter).getNodes().contains(startNode)){
-					g.setColor(Color.BLACK);
-					g.fillOval(startNode.getX()-(CircleDiam+3)/2, startNode.getY()-(CircleDiam+3)/2, CircleDiam+3, CircleDiam+3);
-					g.setColor(Color.GREEN);
-					g.fillOval(startNode.getX()-CircleDiam/2, startNode.getY()-CircleDiam/2, CircleDiam, CircleDiam);
-				}
-
-				if(mapsForPaths.get(arrowCounter).getNodes().contains(endNode)){
-					g.setColor(Color.BLACK);
-					g.fillOval(endNode.getX()-(CircleDiam+3)/2, endNode.getY()-(CircleDiam+3)/2, CircleDiam+3, CircleDiam+3);
-					g.setColor(Color.RED);
-					g.fillOval(endNode.getX()-CircleDiam/2, endNode.getY()-CircleDiam/2, CircleDiam, CircleDiam);
+				
+				endNode = listPath.get(listPath.size() - 1);
+				
+				if(mapsForPaths != null){
+					if(mapsForPaths.get(arrowCounter).getNodes().contains(startNode)){
+						g.setColor(Color.BLACK);
+						g.fillOval(startNode.getX()-(CircleDiam+3)/2, startNode.getY()-(CircleDiam+3)/2, CircleDiam+3, CircleDiam+3);
+						g.setColor(Color.GREEN);
+						g.fillOval(startNode.getX()-CircleDiam/2, startNode.getY()-CircleDiam/2, CircleDiam, CircleDiam);
+					}
+	
+					if(mapsForPaths.get(arrowCounter).getNodes().contains(endNode)){
+						g.setColor(Color.BLACK);
+						g.fillOval(endNode.getX()-(CircleDiam+3)/2, endNode.getY()-(CircleDiam+3)/2, CircleDiam+3, CircleDiam+3);
+						g.setColor(Color.RED);
+						g.fillOval(endNode.getX()-CircleDiam/2, endNode.getY()-CircleDiam/2, CircleDiam, CircleDiam);
+					}
 				}
 
 				repaint();
