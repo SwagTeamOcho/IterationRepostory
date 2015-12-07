@@ -37,4 +37,9 @@ public class Edge implements Serializable{
 	public void updateWeight(int newWeight){
 		this.weight = newWeight;
 	}
+	
+	@Override
+	 public String toString() {
+		return ("Edge between:   " + this.node1 +" <--" + weight + "--> " + this.node2);
+	 }
 }

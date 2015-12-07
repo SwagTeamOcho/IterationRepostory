@@ -199,7 +199,7 @@ public class DevGUI extends JPanel{
   
   JComboBox dropDown = new JComboBox<>(maps.toArray());
   
-  dropDown.setBounds(762, 400, 132, 29);
+  dropDown.setBounds(762, 46, 132, 29);
   dropDown.setVisible(true);
 //  dropDown.setSelectedIndex(0);
   dropDown.addActionListener(new ActionListener(){
@@ -228,42 +228,42 @@ public class DevGUI extends JPanel{
 
 
   
-  currentMapList = new LinkedList<String>();
-  startBuildingSEL = new JComboBox<String>();
-  startBuildingSEL.setBounds(762, 46, 132, 29);
-  startBuildingSEL.setEditable(false);
-  startBuildingSEL.setVisible(true);
-  startBuildingSEL.addActionListener(new ActionListener(){
-   public void actionPerformed(ActionEvent e) {
-    @SuppressWarnings("rawtypes")
-    JComboBox cb = (JComboBox)e.getSource();
-    buildingSelectedSTART = (String)cb.getSelectedItem();
-    for(indexOfCurrentMap = 0; indexOfCurrentMap < maps.size(); ++indexOfCurrentMap){
-     if(buildingSelectedSTART.equals(maps.get(indexOfCurrentMap).getMapName()))
-      break;
-    }
-    currentMapName = maps.get(indexOfCurrentMap).getMapName();
-//    nodesOnCurrentMap = maps.get(indexOfCurrentMap).getNodes();
-//    currentStartEdges = maps.get(indexOfCurrentMap).getEdges();
-//    currentMapFile = maps.get(indexOfCurrentMap).getImage();
-    for(int i = 0; i < nodesOnCurrentMap.size(); ++i){
-     startRooms[i] = nodesOnCurrentMap.get(i).getName();
-    }
-    System.out.println("Updating maps");
-    uiPanel.repaint();
-    frame.repaint();
-   }
-  });
-
-  for (int i = 0; i < maps.size(); i++) {
-   if(maps.get(i).getMapName() != null){
-    startBuildingSEL.addItem(maps.get(i).getMapName());
-    currentMapList.add(maps.get(i).getMapName());
-   }
-  }
-
-  //Add Combo Boxes to UIPanel
-  uiPanel.add(startBuildingSEL);
+//  currentMapList = new LinkedList<String>();
+//  startBuildingSEL = new JComboBox<String>();
+//  startBuildingSEL.setBounds(762, 46, 132, 29);
+//  startBuildingSEL.setEditable(false);
+//  startBuildingSEL.setVisible(true);
+//  startBuildingSEL.addActionListener(new ActionListener(){
+//   public void actionPerformed(ActionEvent e) {
+//    @SuppressWarnings("rawtypes")
+//    JComboBox cb = (JComboBox)e.getSource();
+//    buildingSelectedSTART = (String)cb.getSelectedItem();
+//    for(indexOfCurrentMap = 0; indexOfCurrentMap < maps.size(); ++indexOfCurrentMap){
+//     if(buildingSelectedSTART.equals(maps.get(indexOfCurrentMap).getMapName()))
+//      break;
+//    }
+//    currentMapName = maps.get(indexOfCurrentMap).getMapName();
+////    nodesOnCurrentMap = maps.get(indexOfCurrentMap).getNodes();
+////    currentStartEdges = maps.get(indexOfCurrentMap).getEdges();
+////    currentMapFile = maps.get(indexOfCurrentMap).getImage();
+//    for(int i = 0; i < nodesOnCurrentMap.size(); ++i){
+//     startRooms[i] = nodesOnCurrentMap.get(i).getName();
+//    }
+//    System.out.println("Updating maps");
+//    uiPanel.repaint();
+//    frame.repaint();
+//   }
+//  });
+//
+//  for (int i = 0; i < maps.size(); i++) {
+//   if(maps.get(i).getMapName() != null){
+//    startBuildingSEL.addItem(maps.get(i).getMapName());
+//    currentMapList.add(maps.get(i).getMapName());
+//   }
+//  }
+//
+//  //Add Combo Boxes to UIPanel
+//  uiPanel.add(startBuildingSEL);
 
   if(developerMode)
   {
@@ -350,8 +350,7 @@ public class DevGUI extends JPanel{
       }
       updateMap = false;
      }
-     uiPanel.add(startBuildingSEL);
-     startBuildingSEL.setVisible(true);
+  
      uiPanel.repaint();
      uiPanel.revalidate();
      
@@ -572,7 +571,7 @@ public class DevGUI extends JPanel{
          "Choose a map to connect to",
          "Input",
          JOptionPane.INFORMATION_MESSAGE, null,
-         mapNames, mapNames[1]);
+         mapNames, mapNames[0]);
 
 
   
@@ -722,7 +721,7 @@ currentMapFile = maps.get(indexInListOfMaps).getImage();
    
     
       g.setColor(Color.BLACK);         
-    System.out.println("Weight: "+currentStartEdges.get(i).getWeight() +"\n Map Scale: " + maps.get(indexOfCurrentMap).getScale());
+    System.out.println(currentStartEdges.get(i));
    }
   }
   public boolean isPortal(Node n)
