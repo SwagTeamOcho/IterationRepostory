@@ -680,6 +680,8 @@ public class EndUserGUI extends JPanel implements ActionListener{
 					return result;
 				}});
 			addMouseMotionListener(this);
+			
+		
 		}
 
 		@Override
@@ -781,6 +783,8 @@ public class EndUserGUI extends JPanel implements ActionListener{
 				g.setColor(Color.RED);
 				g.fillOval(endNode.getX()-CircleDiam/2, endNode.getY()-CircleDiam/2, CircleDiam, CircleDiam);
 			}
+			
+			
 
 		}
 

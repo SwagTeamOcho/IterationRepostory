@@ -152,6 +152,6 @@ public class Node implements Serializable{
  
  @Override
  public String toString() {
-  return ("Name: " + this.name + ", X:" + this.x +", Y:" + this.y + ", Type: " + this.type); 
+  return ("Name: " + this.name + ",\t X:" + this.x +",\t Y:" + this.y + ",\t Type: " + this.type +  ",\t Map: " +this.mapName); 
  }
 }

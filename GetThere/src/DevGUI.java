@@ -337,16 +337,16 @@ public class DevGUI extends JPanel{
      serialize("MapList", maps);
      if(updateMap){
       
+      dropDown.removeAllItems();
+     
+    
       
-      
-      for (int i = 0; i < maps.size(); i++) {
-       if(maps.get(i).getMapName() != null){
-        if(!currentMapList.contains(maps.get(i).getMapName()))
+      for (int i = 0; i < maps.size(); i++) 
         {
-         dropDown.addItem(maps.get(i).getMapName());
-         currentMapList.add(maps.get(i).getMapName());
-        }
-       }
+         dropDown.addItem(maps.get(i));
+      //   currentMapList.add(maps.get(i).getMapName());
+        
+       
       }
       updateMap = false;
      }
@@ -439,7 +439,7 @@ public class DevGUI extends JPanel{
      if(createNodes){
       if (nodeIndex < 0){ // not inside a square
        Node newNode = new Node(x, y);
-       newNode.setMapName(currentMapName);
+       newNode.setMapName(selectedMap.getMapName());
        nodesOnCurrentMap.add(newNode);
        
       }
@@ -580,6 +580,22 @@ public class DevGUI extends JPanel{
   
   int indexInListOfMaps = maps.indexOf(connectingMap);
   
+  Node linkNode1 = new Node(x, y, nodeName, type);
+  linkNode1.setMapName(selectedMap.getMapName());
+  
+  Node linkNode2 = new Node(x, y, nodeName, type);
+  linkNode2.setMapName(((Map)connectingMap).getMapName());
+  
+  maps.get(maps.indexOf(selectedMap)).getNodes().add(linkNode1);
+   maps.get(maps.indexOf(connectingMap)).getNodes().add(linkNode2);
+  
+  maps.get(maps.indexOf(selectedMap)).getEdges().add(new Edge(linkNode1, linkNode2, 0));
+  maps.get(maps.indexOf(connectingMap)).getEdges().add(new Edge(linkNode1, linkNode2, 0));
+  
+  
+  
+  
+  
   
   
   
@@ -592,11 +608,19 @@ public class DevGUI extends JPanel{
 //   nodesOnCurrentMap = ((Map)connectingMap).getNodes();
 //   currentStartEdges = ((Map)connectingMap).getEdges();
 //   currentMapFile = ((Map)connectingMap).getImage();
+
+/*
 currentType = type;
-String tempMapName = ((Map)connectingMap).getMapName(); 
+String currentMapName = selectedMap.getMapName();
+String tempMapName = ((Map)connectingMap).getMapName();
+System.out.println(tempMapName);
+System.out.println(maps.get(indexInListOfMaps).getMapName());
+System.out.println(currentMapName);
+
 tempMapFile = maps.get(indexInListOfMaps).getImage();
 Node linkNode = new Node(x, y, nodeName, type);
 linkNode.setMapName(currentMapName);
+
 currentNode = linkNode;
 nodesOnCurrentMap.add(linkNode);
 createMapLink = true;
@@ -604,6 +628,8 @@ currentMapName = tempMapName;
 nodesOnCurrentMap = maps.get(indexInListOfMaps).getNodes();
 currentStartEdges = maps.get(indexInListOfMaps).getEdges();
 currentMapFile = maps.get(indexInListOfMaps).getImage();
+*/
+
 
 
 
@@ -642,6 +668,12 @@ currentMapFile = maps.get(indexInListOfMaps).getImage();
     {
      System.out.println("The following node was null: " + nodesOnCurrentMap.get(i));
     nodesOnCurrentMap.get(i).setType(NodeType.NOTYPE);
+    }
+    
+    if(nodesOnCurrentMap.get(i).getMapName() == null)
+    {
+     System.out.println("The following map was null: " + nodesOnCurrentMap.get(i));
+     nodesOnCurrentMap.get(i).setMapName(selectedMap.getMapName());
     }
     
     
@@ -687,6 +719,8 @@ currentMapFile = maps.get(indexInListOfMaps).getImage();
      }
  
   // System.out.println(nodesOnCurrentMap.get(i));
+  
+   
     
     ((Graphics2D)g).fill(new Rectangle (nodesOnCurrentMap.get(i).getX()-SquareWidth/2, 
              nodesOnCurrentMap.get(i).getY()-SquareWidth/2,
@@ -698,11 +732,12 @@ currentMapFile = maps.get(indexInListOfMaps).getImage();
    g.setColor(Color.BLACK);
    }
   
-  
+    
    
    
    for (int i = 0; i < currentStartEdges.size(); i++){
-    if(!(isPortal(currentStartEdges.get(i).getNode1())&&isPortal(currentStartEdges.get(i).getNode2())))
+   // if(!(isPortal(currentStartEdges.get(i).getNode1())&&isPortal(currentStartEdges.get(i).getNode2())))
+   if(currentStartEdges.get(i).getNode1().getMapName() == currentStartEdges.get(i).getNode2().getMapName())
     {
       currentStartEdges.get(i).updateWeight((int)calcDistance(currentStartEdges.get(i).getNode1(), currentStartEdges.get(i).getNode2(), selectedMap.getScale()));
     }
@@ -710,9 +745,9 @@ currentMapFile = maps.get(indexInListOfMaps).getImage();
      g.setColor(Color.RED);
     
     
+
     
-    
- //  if(!isPortal(currentStartEdges.get(i).getNode1())||!isPortal(currentStartEdges.get(i).getNode2()))
+   if(!isPortal(currentStartEdges.get(i).getNode1())||!isPortal(currentStartEdges.get(i).getNode2()))
     ((Graphics2D)g).draw(new Line2D.Double(currentStartEdges.get(i).getNode1().getX(), 
               currentStartEdges.get(i).getNode1().getY(),
               currentStartEdges.get(i).getNode2().getX(),
@@ -723,6 +758,8 @@ currentMapFile = maps.get(indexInListOfMaps).getImage();
       g.setColor(Color.BLACK);         
     System.out.println(currentStartEdges.get(i));
    }
+  
+  System.out.println("\n");
   }
   public boolean isPortal(Node n)
   {
