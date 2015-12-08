@@ -763,8 +763,13 @@ public class EndUserGUI extends JPanel implements ActionListener{
 			if(nearHistoricalNode(x, y) != null){
 				// + nearHistoricalNode(x, y).getName() + 
 				URL url = getClass().getResource("/historicalimages/" + nearHistoricalNode(x, y).getName() + ".jpg");
+				if(url == null){
+					url = getClass().getResource("/historicalimages/default.jpg");
+				}
 				String tt = "<html><body><img src='" + url + "'></body></html>";
 				setToolTipText(tt);
+			} else{
+				setToolTipText(null);
 			}
 
 		}
