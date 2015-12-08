@@ -12,6 +12,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionListener;
 import java.awt.geom.GeneralPath;
+import java.net.URL;
 import java.util.LinkedList;
 
 import javax.swing.BoxLayout;
@@ -124,6 +125,8 @@ public class EndUserGUI extends JPanel implements ActionListener{
 
 	private String emailDirections;
 	private int totalDistance;
+	
+	private LinkedList<Node> historicalNodes;
 
 	/**
 	 * Create the application.
@@ -262,6 +265,14 @@ public class EndUserGUI extends JPanel implements ActionListener{
 				currentlyShownMap = maps.get(indexOfCurrentMap);
 				arrowCounter = 0;
 				mapsForPaths = null;
+				
+				historicalNodes = new LinkedList<>();
+				for(int m = 0; m < currentStartNodes.size(); m++){
+					if(currentStartNodes.get(m).getType() == NodeType.HISTORICAL){
+						historicalNodes.add(currentStartNodes.get(m));
+					}
+				}
+				
 				startRoomSEL.removeAllItems();
 				startRoomSEL.setMap(maps.get(indexOfCurrentMap));
 				for(int i = 0; i < currentStartNodes.size(); ++i){
@@ -306,6 +317,14 @@ public class EndUserGUI extends JPanel implements ActionListener{
 				endRooms = new String[currentEndNodes.size()];
 				currentMapFile = maps.get(indexOfCurrentMap).getImage();
 				currentlyShownMap = maps.get(indexOfCurrentMap);
+				
+				historicalNodes = new LinkedList<>();
+				for(int m = 0; m < currentEndNodes.size(); m++){
+					if(currentEndNodes.get(m).getType() == NodeType.HISTORICAL){
+						historicalNodes.add(currentEndNodes.get(m));
+					}
+				}
+				
 				endRoomSEL.removeAllItems();
 				endRoomSEL.setMap(maps.get(indexOfCurrentMap));
 				arrowCounter = 0;
@@ -765,8 +784,20 @@ public class EndUserGUI extends JPanel implements ActionListener{
 
 		@Override
 		public void mouseMoved(MouseEvent e) {
-			// TODO Auto-generated method stub
-			//System.out.println("X: " + x + " Y: " +y);
+			int x = e.getX();
+			int y = e.getY();
+			
+			if(nearHistoricalNode(x, y) != null){
+				// + nearHistoricalNode(x, y).getName() + 
+				URL url = getClass().getResource("/historicalimages/" + nearHistoricalNode(x, y).getName() + ".jpg");
+				if(url == null){
+					url = getClass().getResource("/historicalimages/default.jpg");
+				}
+				String tt = "<html><body><img src='" + url + "'></body></html>";
+				setToolTipText(tt);
+			} else{
+				setToolTipText(null);
+			}
 
 		}
 		public void mousePressed(MouseEvent e) {
@@ -794,5 +825,13 @@ public class EndUserGUI extends JPanel implements ActionListener{
 			}
 		}
 	}
-
+	
+	public Node nearHistoricalNode(int x, int y){
+		for(int i = 0; i < historicalNodes.size(); i++){
+			if(((x - historicalNodes.get(i).getX()) < 6) && ((y - historicalNodes.get(i).getY()) < 6)){
+				return historicalNodes.get(i);
+			}
+		}
+		return null;
+	}
 }
