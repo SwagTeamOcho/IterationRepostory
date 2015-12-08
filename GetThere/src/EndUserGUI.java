@@ -125,7 +125,7 @@ public class EndUserGUI extends JPanel implements ActionListener{
 	private JButton history;
 	private JButton transport;
 	private Icon transportIcon;
-	private JButton nearestBathroom;
+	private JComboBox<Object> nearestLocation;
 	private Icon bathroomIcon;
 
 	private JButton tutorial;
@@ -503,15 +503,14 @@ public class EndUserGUI extends JPanel implements ActionListener{
 				}
 			}
 		});
-
-		bathroomIcon = new ImageIcon("IconImages/bathroomIcon.png");
+		Object[] nearestSpots = {new ImageIcon("IconImages/bathroomIcon.png"), new ImageIcon("IconImages/blueTowerIcon.png")};
+		bathroomIcon = new ImageIcon("");
 		Icon bathroomIconBIG = new ImageIcon("IconImages/bathroomIconBIG.png");
-		nearestBathroom = new JButton();
-		nearestBathroom.setToolTipText("Find nearest Bathroom");
-		nearestBathroom.setIcon(bathroomIcon);
-		nearestBathroom.setBounds(1017, 632, 40, 40);
-		uiPanel.add(nearestBathroom);
-		nearestBathroom.addActionListener(new ActionListener() {
+		nearestLocation = new JComboBox<Object>(nearestSpots);
+		nearestLocation.setToolTipText("Find nearest Location");
+		nearestLocation.setBounds(1017, 632, 40, 40);
+		uiPanel.add(nearestLocation);
+		nearestLocation.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e)
 			{
 				String[] bathroomTypes = {"Female", "Male"};
