@@ -505,7 +505,6 @@ public class DevGUI extends JPanel{
 						}
 					}
 					if (evt.getClickCount() >= 2 && (createNodes || createSpecial)) {
-
 						LinkedList<Edge> tempList = new LinkedList<Edge>();
 						for (int i = 0; i < currentStartEdges.size(); i++){
 							if(currentStartEdges.get(i).getNode1().equals(currentStartNodes.get(nodeIndex))||
@@ -527,32 +526,100 @@ public class DevGUI extends JPanel{
 		public void makeLink(int x, int y, String nodeName, NodeType type){
 			int i;
 			currentType = type;
+			String tempMapName;
 			String[] mapNames = new String[currentMapList.size()];
 			for(i = 0; i < mapNames.length; i++){
 				mapNames[i] = currentMapList.get(i);
 			}
-			Object selectedMap = JOptionPane.showInputDialog(null, 
-									"Choose a map to connect to",
-									"Input",
-									JOptionPane.INFORMATION_MESSAGE, null,
-									mapNames, mapNames[1]);
-			String tempMapName = (String) selectedMap;	
-			for (i = 0; i <maps.size(); i++){
-				if(tempMapName.equals(maps.get(i).getMapName())){
-					tempMapFile = maps.get(i).getImage();
-					break;
+			if(type == NodeType.ELEVATOR &&(JOptionPane.showConfirmDialog(
+				    frame,
+				    "Would you like to connect to an existing node?",
+				    "Node Connection",
+				    JOptionPane.YES_NO_OPTION)
+					== JOptionPane.YES_OPTION)){
+				Object selectedMap = JOptionPane.showInputDialog(null, 
+						"Choose a map to connect to",
+						"Input",
+						JOptionPane.INFORMATION_MESSAGE, null,
+						mapNames, mapNames[1]);
+					tempMapName = (String) selectedMap;	
+				for (i = 0; i <maps.size(); i++){
+					if(tempMapName.equals(maps.get(i).getMapName())){
+						tempMapFile = maps.get(i).getImage();
+						break;
+					}
+				}
+				for(indexOfCurrentMap = 0; indexOfCurrentMap < maps.size(); ++indexOfCurrentMap){
+					if(tempMapName.equals(maps.get(indexOfCurrentMap).getMapName()))
+						break;
+				}
+				LinkedList<Node> possibleNodes = new LinkedList<Node>();
+				possibleNodes = maps.get(indexOfCurrentMap).getNodes();
+				int c = 0;
+				for(int d = 0; d < possibleNodes.size(); ++d){
+					if(possibleNodes.get(d).getType().equals(NodeType.ELEVATOR))
+						c++;
+				}
+				String[] nodeSelect = new String[c];
+				int k = 0;
+				for(int j = 0; j < possibleNodes.size(); ++j){
+					if(possibleNodes.get(j).getType().equals(NodeType.ELEVATOR)){
+						nodeSelect[k] = (possibleNodes.get(j).getName());
+						k++;
+					}
+				}
+				String s = (String)JOptionPane.showInputDialog(
+				                    frame,
+				                    "Choose Node to connect to \n",
+				                    "Choose Node",
+				                    JOptionPane.PLAIN_MESSAGE,
+				                    null, 
+				                    nodeSelect,
+				                    null);
+				for(int n = 0; n < possibleNodes.size(); ++n){
+					if(possibleNodes.get(n).getName().equals(s)){
+						currentNode = possibleNodes.get(n);
+					}
+				}
+				createMapLink = true;
+				for(indexOfCurrentMap = 0; indexOfCurrentMap < maps.size(); ++indexOfCurrentMap){
+					if(currentMapName.equals(maps.get(indexOfCurrentMap).getMapName()))
+						break;
+				}
+				i = indexOfCurrentMap;
+				currentStartNodes = maps.get(i).getNodes();
+				currentStartEdges = maps.get(i).getEdges();
+				currentMapFile = maps.get(i).getImage();
+			}
+			
+			else{
+					Object selectedMap = JOptionPane.showInputDialog(null, 
+								"Choose a map to connect to",
+								"Input",
+								JOptionPane.INFORMATION_MESSAGE, null,
+								mapNames, mapNames[1]);
+						tempMapName = (String) selectedMap;	
+						for (i = 0; i <maps.size(); i++){
+							if(tempMapName.equals(maps.get(i).getMapName())){
+								tempMapFile = maps.get(i).getImage();
+								break;
+							}
+							for(indexOfCurrentMap = 0; indexOfCurrentMap < maps.size(); ++indexOfCurrentMap){
+								if(tempMapName.equals(maps.get(indexOfCurrentMap).getMapName()))
+									break;
+							}
+						}
+					Node linkNode = new Node(x, y, nodeName, type);
+					linkNode.setMapName(currentMapName);
+					currentNode = linkNode;
+					currentStartNodes.add(linkNode);
+					createMapLink = true;
+					currentMapName = tempMapName;
+					currentStartNodes = maps.get(i).getNodes();
+					currentStartEdges = maps.get(i).getEdges();
+					currentMapFile = maps.get(i).getImage();
 				}
 			}
-			Node linkNode = new Node(x, y, nodeName, type);
-			linkNode.setMapName(currentMapName);
-			currentNode = linkNode;
-			currentStartNodes.add(linkNode);
-			createMapLink = true;
-			currentMapName = tempMapName;
-			currentStartNodes = maps.get(i).getNodes();
-			currentStartEdges = maps.get(i).getEdges();
-			currentMapFile = maps.get(i).getImage();
-		}
 		@Override
 		public void paintComponent(Graphics g) {
 			super.paintComponent(g);
