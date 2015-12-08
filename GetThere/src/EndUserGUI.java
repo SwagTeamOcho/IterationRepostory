@@ -14,15 +14,12 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionListener;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.GeneralPath;
-<<<<<<< HEAD
 import java.io.File;
 import java.io.FileOutputStream;
-=======
 import java.awt.image.BufferedImage;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
->>>>>>> 5dbf8ba31fc229c7364d6cf15f8a16ded4355ebe
 import java.util.LinkedList;
 
 import javax.swing.*;
