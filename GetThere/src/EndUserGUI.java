@@ -16,6 +16,8 @@ import java.awt.geom.AffineTransform;
 import java.awt.geom.GeneralPath;
 import java.awt.image.BufferedImage;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.LinkedList;
 
 import javax.swing.*;
@@ -98,6 +100,9 @@ public class EndUserGUI extends JPanel implements ActionListener{
 	private JComboBox<String> endBuildingSEL;
 	private XComboBox endRoomSEL;
 	//private JComboBox startFloorSEL;
+	
+	private ArrayList<String> sortedStartRooms = new ArrayList<String>();
+	private ArrayList<String> sortedEndRooms = new ArrayList<String>();
 
 	//Buttons on the UI
 	private JButton searchButton;
@@ -339,9 +344,12 @@ public class EndUserGUI extends JPanel implements ActionListener{
 				for(int i = 0; i < currentStartNodes.size(); ++i){
 					startRooms[i] = currentStartNodes.get(i).getName();
 					if(startRooms[i] != "" && currentStartNodes.get(i).getType() != NodeType.NOTYPE)
-						startRoomSEL.addItem(startRooms[i]);
+						sortedStartRooms.add(startRooms[i]);
 				}
-				
+				Collections.sort(sortedStartRooms);
+				for(int i = 0; i < sortedStartRooms.size(); i++){
+					startRoomSEL.addItem(sortedStartRooms.get(i));
+				}
 				mapPanel.setImage(currentlyShownMap.getImage());
 				mapPanel.add(graph);
 				zoom = new ImageZoom(mapPanel);
@@ -404,9 +412,12 @@ public class EndUserGUI extends JPanel implements ActionListener{
 				for(int i = 0; i < currentEndNodes.size(); i++){
 					endRooms[i] = currentEndNodes.get(i).getName();
 					if(endRooms[i] != "" && currentEndNodes.get(i).getType() != NodeType.NOTYPE)
-						endRoomSEL.addItem(endRooms[i]);
+						sortedEndRooms.add(endRooms[i]);
 				}
-				//endHoverFlag = false;
+				Collections.sort(sortedEndRooms);
+				for(int i = 0; i < sortedEndRooms.size(); i++){
+					endRoomSEL.addItem(sortedEndRooms.get(i));
+				}
 				uiPanel.repaint();
 				frame.repaint();
 			}
