@@ -540,17 +540,14 @@ public class EndUserGUI extends JPanel implements ActionListener{
 				        doc.addAuthor("GetThere");
 				        doc.addTitle("This is title");
 				        doc.open();
-				
-				        Paragraph para1 = new Paragraph();
-				        para1.add("Here are your direction maps");
-				
-				        doc.add(para1);
 				         
 				        //adding a local image and aligned RIGHT
 				        for(int i = 0; i < totalMaps; i++) {
 				        	new PanelCapture(mapPanel);
 					        Image image = Image.getInstance("Screen.png");
-					        //image.scaleAbsolute(200, 150);
+				            doc.setPageSize(image);
+				            doc.newPage();
+				            image.setAbsolutePosition(0, 0);
 					        doc.add(image);
 					        if(i!=totalMaps-1){
 					        	rightArrow.getModel().setArmed(true);

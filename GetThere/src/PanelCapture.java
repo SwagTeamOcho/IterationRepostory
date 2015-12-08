@@ -15,7 +15,7 @@ public class PanelCapture {
 	}
 
 	public BufferedImage saveImage() {
-	    BufferedImage img = new BufferedImage(this.panel.getWidth()/2, this.panel.getHeight()/2, BufferedImage.TYPE_INT_RGB);
+	    BufferedImage img = new BufferedImage(this.panel.getWidth(), this.panel.getHeight(), BufferedImage.TYPE_INT_RGB);
 	    this.panel.paint(img.getGraphics());
 	    try {
 	        ImageIO.write(img, "png", new File("Screen.png"));
