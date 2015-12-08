@@ -29,10 +29,13 @@ public class EMailDialogue extends JDialog{
     
     String message;
     
-    public EMailDialogue(JFrame parent, String message) {
+    String[] attachments;
+    
+    public EMailDialogue(JFrame parent, String message, String[] attachments) {
     	super(parent);
     	
     	this.message = message;
+    	this.attachments = attachments;
     	
     	setup();
     }
@@ -85,7 +88,7 @@ public class EMailDialogue extends JDialog{
     
     private void sendEmailAction(ActionEvent e) {
     	try{
-    		String[] files = new String[0];
+    		String[] files = this.attachments;
         	SendEmail email = new SendEmail(addressField.getText(), this.message, files);
         	System.out.println(addressField.getText());
         	email.sendMessage();
