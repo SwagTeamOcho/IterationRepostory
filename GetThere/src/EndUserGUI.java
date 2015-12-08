@@ -1,6 +1,5 @@
 import java.awt.BasicStroke;
 
-
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -13,8 +12,12 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionListener;
+import java.awt.geom.AffineTransform;
 import java.awt.geom.GeneralPath;
+import java.awt.image.BufferedImage;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.LinkedList;
 
 import javax.swing.*;
@@ -32,6 +35,13 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextPane;
 import javax.swing.ScrollPaneConstants;
+
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+import javax.swing.plaf.basic.ComboPopup;
+
 import javax.swing.text.StyleConstants;
 
 ///**
@@ -67,9 +77,9 @@ public class EndUserGUI extends JPanel implements ActionListener{
 
 	private JFrame frame;		//Creates the main frame for the GUI
 	private JPanel uiPanel;		//Panel to hold the interface buttons
-	private JPanel mapPanel;	//Panel to hold the map
+	private ImagePanel mapPanel;	//Panel to hold the map
 	//private Image mapImage;		
-
+	private ImageZoom zoom;
 	//Represents the map to be chosen
 	//private Image pathImage;	//Image that draws the path on the map
 
@@ -90,6 +100,9 @@ public class EndUserGUI extends JPanel implements ActionListener{
 	private JComboBox<String> endBuildingSEL;
 	private XComboBox endRoomSEL;
 	//private JComboBox startFloorSEL;
+	
+	private ArrayList<String> sortedStartRooms = new ArrayList<String>();
+	private ArrayList<String> sortedEndRooms = new ArrayList<String>();
 
 	//Buttons on the UI
 	private JButton searchButton;
@@ -137,6 +150,7 @@ public class EndUserGUI extends JPanel implements ActionListener{
 	
 	private LinkedList<Node> historicalNodes;
 
+	private JScrollPane scrollMapPanel;
 	/**
 	 * Create the application.
 	 */
@@ -179,12 +193,34 @@ public class EndUserGUI extends JPanel implements ActionListener{
 	public void setEndNode(Node node){
 		endNode = node;
 	}
+	
+	
+	public void clear(){
+		updatePath = false;
+        startClicked = false;
+        endClicked = false;
+        endNode = null;
+        directions.setText("");
+        mapsForPaths = null;
+        mapNumber.setText("");
+        mapPanel.setStartNode(null);
+        mapPanel.setEndNode(null);
+        mapPanel.setPath(null);
+	}
 	/**
 	 * Initialize the contents of the frame.
 	 */
+	
+	
 	private void initialize() {
 
+<<<<<<< HEAD
 		clearScene();
+=======
+		MyGraphics graph = new MyGraphics();
+		
+		
+>>>>>>> 5dbf8ba31fc229c7364d6cf15f8a16ded4355ebe
 		//Frame operations
 		frame = new JFrame();
 		frame.setBounds(100, 100, 1200, 700);
@@ -194,7 +230,6 @@ public class EndUserGUI extends JPanel implements ActionListener{
 		frame.setResizable(false);
 		frame.setVisible(true);
 
-		System.out.println(maps.get(maps.size()-1).getMapName());
 		//Panel Operations
 		uiPanel = new JPanel();
 		frame.getContentPane().add(uiPanel);
@@ -205,10 +240,31 @@ public class EndUserGUI extends JPanel implements ActionListener{
 		tutView.setSize(1194,672);
 		uiPanel.add(tutView);
 
-		mapPanel = new JPanel();
-		mapPanel.setBounds(5, 5, 750, 620);
-		uiPanel.add(mapPanel);
-		mapPanel.add(new MyGraphics());
+		mapPanel = new ImagePanel();
+		mapPanel.add(graph);
+		scrollMapPanel = new JScrollPane(mapPanel);
+		scrollMapPanel.setBounds(5, 5, 750, 620);
+		zoom = new ImageZoom(mapPanel);
+		//uiPanel.add(zoom.getUIPanel());
+		//uiPanel.add(mapPanel);
+		
+		scrollMapPanel.getViewport().addChangeListener(new ChangeListener(){
+			
+
+			@Override
+			public void stateChanged(ChangeEvent e) {
+				
+				
+				
+			}
+		});
+		uiPanel.add(scrollMapPanel);
+		
+		
+		//scrollMapPanel.add(graph);
+		
+		revalidate();
+		repaint();
 
 		//Creating Labels
 		startPoint = new JLabel("FROM");
@@ -291,9 +347,22 @@ public class EndUserGUI extends JPanel implements ActionListener{
 				for(int i = 0; i < currentStartNodes.size(); ++i){
 					startRooms[i] = currentStartNodes.get(i).getName();
 					if(startRooms[i] != "" && currentStartNodes.get(i).getType() != NodeType.NOTYPE)
-						startRoomSEL.addItem(startRooms[i]);
+						sortedStartRooms.add(startRooms[i]);
 				}
-				//startHoverFlag = false;
+				Collections.sort(sortedStartRooms);
+				for(int i = 0; i < sortedStartRooms.size(); i++){
+					startRoomSEL.addItem(sortedStartRooms.get(i));
+				}
+				mapPanel.setImage(currentlyShownMap.getImage());
+				mapPanel.add(graph);
+				zoom = new ImageZoom(mapPanel);
+				JLabel scaleLabel = new JLabel("Scale");
+				scaleLabel.setBounds(680, 630, 50, 30);
+				uiPanel.add(scaleLabel);
+				uiPanel.add(zoom.getZoomingSpinner());
+				uiPanel.add(zoom.getZoomInButton());
+				uiPanel.add(zoom.getZoomOutButton());
+				uiPanel.add(scrollMapPanel);
 				uiPanel.repaint();
 				frame.repaint();
 			}
@@ -346,9 +415,12 @@ public class EndUserGUI extends JPanel implements ActionListener{
 				for(int i = 0; i < currentEndNodes.size(); i++){
 					endRooms[i] = currentEndNodes.get(i).getName();
 					if(endRooms[i] != "" && currentEndNodes.get(i).getType() != NodeType.NOTYPE)
-						endRoomSEL.addItem(endRooms[i]);
+						sortedEndRooms.add(endRooms[i]);
 				}
-				//endHoverFlag = false;
+				Collections.sort(sortedEndRooms);
+				for(int i = 0; i < sortedEndRooms.size(); i++){
+					endRoomSEL.addItem(sortedEndRooms.get(i));
+				}
 				uiPanel.repaint();
 				frame.repaint();
 			}
@@ -392,20 +464,16 @@ public class EndUserGUI extends JPanel implements ActionListener{
 		uiPanel.add(searchButton);
 
 		clearButton = new JButton ("Clear");
-		clearButton.setBounds(853, 150, 132, 30);
-		uiPanel.add(clearButton);
-		clearButton.addActionListener(new ActionListener()  {
-			public void actionPerformed(ActionEvent e)
-			{
-				updatePath = false;
-				startClicked = false;
-				endClicked = false;
-				endNode = null;
-				directions.setText("");
-				mapsForPaths = null;
-				mapNumber.setText("");
-			}
-		});
+        clearButton.setBounds(853, 150, 132, 30);
+        uiPanel.add(clearButton);
+        clearButton.addActionListener(new ActionListener()  {
+            public void actionPerformed(ActionEvent e)
+            {
+                clear();
+            }
+        });
+
+        
 
 		leftArrow = new JButton("<<");
 		leftArrow.setBounds(275, 630, 80, 29);
@@ -579,13 +647,34 @@ public class EndUserGUI extends JPanel implements ActionListener{
 					updatePath = false;
 				}
 				if(updatePath && startNode != null && endNode != null){
-					System.out.println(startBuildingSEL.getSelectedItem());
-					System.out.println(floor);
 					listPath = pathCalc.navigate(startNode, endNode);
 					mapsForPaths = new LinkedList<Map>();
+<<<<<<< HEAD
 					System.out.println(listPath.size());
 					findMapsForPaths();
 					
+=======
+					for (i = 0; i < listPath.size(); i++){
+						for (int j = 0; j < maps.size(); j++){
+							nodesInMap = maps.get(j).getNodes();
+							for(int k = 0; k<nodesInMap.size(); k++){
+								if(listPath.get(i) == nodesInMap.get(k)){
+									if(!mapsForPaths.contains(maps.get(j))){
+										mapsForPaths.add(maps.get(j));
+									}
+								}
+							}
+						}
+						currentMapFile = mapsForPaths.getFirst().getImage();
+						currentlyShownMap = mapsForPaths.getFirst();
+						totalMaps = mapsForPaths.size();
+
+						if(mapsForPaths.size() > 1){
+							rightArrow.setEnabled(true);
+							mapNumber.setText(String.valueOf(1) + " of " + String.valueOf(totalMaps));
+						}
+					}
+>>>>>>> 5dbf8ba31fc229c7364d6cf15f8a16ded4355ebe
 					//					emailDirections = "From: " + startNode.getMapName() + " " + startNode.getName() + "\n" + "to "
 					//                            + Node.getMapName() + ", " + endRoomSEL.getSelectedItem() + "\n" + "\n" +
 					emailDirections = pathCalc.gpsInstructions(pathCalc.navigate(startNode, endNode));
@@ -593,10 +682,9 @@ public class EndUserGUI extends JPanel implements ActionListener{
 						totalDistance = Djikstra.getDistance(listPath);
 					}
 					directions.setText("From: " + startNode.getMapName() + ", " + startNode.getName() + "\n" + "to " 
-							+ endNode.getMapName() + ", " + endRoomSEL.getSelectedItem() + "\n" + "\n" 
-							+ "Total Distance to Destination: " + totalDistance  + " ft" + "\n"+ "Time to Destination: " +
-							(double)totalDistance/4.11 +"mins" + "\n" + emailDirections);
-					System.out.println("check List: " + listPath.size());
+										+ endNode.getMapName() + ", " + endRoomSEL.getSelectedItem() + "\n" + "\n" 
+										+ "Total Distance to Destination: " + totalDistance  + " ft" + "\n"+ "Time to Destination: " +
+										(double)totalDistance/4.11 +"mins" + "\n" + emailDirections);
 					repaint();
 					revalidate();
 				}
@@ -636,7 +724,11 @@ public class EndUserGUI extends JPanel implements ActionListener{
 		});
 		uiPanel.setVisible(true);
 		frame.setVisible(true);
+<<<<<<< HEAD
 		
+=======
+		clear();
+>>>>>>> 5dbf8ba31fc229c7364d6cf15f8a16ded4355ebe
 	}
 	
 	public void clearScene(){
@@ -674,36 +766,31 @@ public class EndUserGUI extends JPanel implements ActionListener{
 	public class MyGraphics extends JComponent implements MouseMotionListener{
 
 		private static final long serialVersionUID = 1L;
-		private static final int CircleDiam = 10;
+		private static final int SquareWidth = 5;
+		
 
 		MyGraphics() {
 			setPreferredSize(new Dimension(760, 666));
 			addMouseMotionListener(this);
+			
+
 			addMouseListener(new MouseAdapter(){
+				
+				
 				public void mouseClicked(MouseEvent evt) {
 					int x = evt.getX();
 					int y = evt.getY();
-					System.out.println("Click " + x + "..."+ y);
+					repaint();
 					if(!startClicked){
 						startNode = findClosestNode(x,y);
-						if(startNode != null){
-							System.out.println("Closest start node has x = " + startNode.getX() + " and y = "+ startNode.getY());
-							startClicked = true;
-						}
+						startClicked = true;
 					}
 					else if(!endClicked){
 						endNode = findClosestNode(x,y);
-						if(endNode != null){
-							System.out.println("Closest end node has x = " + endNode.getX() + " and y = "+ endNode.getY());
-							endClicked = true;
-						}
+						endClicked = true;
 					}
-					else{
-						System.out.println("Start and end nodes have already been selected");
-					}
-
 				}
-
+				
 				private Node findClosestNode(int x, int y) {
 					double shortestDistance = Double.MAX_VALUE;
 					double previousShortestDistance;
@@ -719,24 +806,31 @@ public class EndUserGUI extends JPanel implements ActionListener{
 					return result;
 				}});
 			addMouseMotionListener(this);
+			
 		}
 
 		@Override
 		public void paintComponent(Graphics g) {
 			super.paintComponent(g);
-			if(currentMapFile != null){
-				g.drawImage(currentMapFile.getImage(), 0, 0, this);
-			}
-			repaint();
-			revalidate();
+			
 
+			
+			
+			//g.drawImage(currentMapFile.getImage(), 0, 0, this);
+			if(currentlyShownMap != null){
+			
+			mapPanel.setImage(currentlyShownMap.getImage());
+			
+			uiPanel.setVisible(true);
+			frame.setVisible(true);
+			}
 
 			GeneralPath path = null;
 
 			repaint();
 			revalidate();
-
 			Graphics2D g2d = (Graphics2D) g;
+			AffineTransform at = new AffineTransform();
 			g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
 					RenderingHints.VALUE_ANTIALIAS_ON);
 			BasicStroke s = new BasicStroke(
@@ -744,67 +838,67 @@ public class EndUserGUI extends JPanel implements ActionListener{
 					BasicStroke.CAP_ROUND, 
 					BasicStroke.JOIN_ROUND);
 			g2d.setStroke(s);
+			double scale =  mapPanel.getScale();
+			
 
+			int w = mapPanel.getWidth();
+	        int h = mapPanel.getHeight();
+	        BufferedImage image = mapPanel.getImage();
+	        if(image != null){
+	        int imageWidth = image.getWidth();
+	        int imageHeight = image.getHeight();
+	        double x = (w - scale * imageWidth)/2;
+	        double y = (h - scale * imageHeight)/2;
+	        at = AffineTransform.getTranslateInstance(0,0);
+	        at.scale(scale, scale);
+	       
+	        }
+			repaint();
+			revalidate();
 			if (path==null && updatePath == true && listPath.size() > 0) {
 				removeAll();
 				int i;
 				path = new GeneralPath();
-				path.moveTo(listPath.getFirst().getX(), listPath.getFirst().getY()); 
+				path.moveTo(listPath.getFirst().getX(), listPath.getFirst().getY());; 
 				for (i=1; i<listPath.size(); i++){
 					if(currentlyShownMap.getNodes().contains(listPath.get(i-1)) && 
 							currentlyShownMap.getNodes().contains(listPath.get(i))){
 						path.lineTo(listPath.get(i).getX(),listPath.get(i).getY());
-						g2d.draw(path);
+						//path.transform(at);
+						//g2d.draw(path);
 					}
 					else{
+						//path.transform(at);
 						path.moveTo(listPath.get(i).getX(), listPath.get(i).getY());
 					}
 				}
-
-				g2d.setColor(Color.BLACK);
-				g2d.draw(path);
-				g2d.setStroke(new BasicStroke(2));
-				g2d.setColor(Color.BLUE);
-				g2d.draw(path);
+				mapPanel.setPath(path);
 
 				endNode = listPath.get(listPath.size() - 1);
-
+				
 				if(mapsForPaths != null){
 					if(mapsForPaths.get(arrowCounter).getNodes().contains(startNode)){
-						g.setColor(Color.BLACK);
-						g.fillOval(startNode.getX()-(CircleDiam+3)/2, startNode.getY()-(CircleDiam+3)/2, CircleDiam+3, CircleDiam+3);
-						g.setColor(Color.GREEN);
-						g.fillOval(startNode.getX()-CircleDiam/2, startNode.getY()-CircleDiam/2, CircleDiam, CircleDiam);
+						mapPanel.setStartNode(startNode);
+						
 					}
-
+	
 					if(mapsForPaths.get(arrowCounter).getNodes().contains(endNode)){
-						g.setColor(Color.BLACK);
-						g.fillOval(endNode.getX()-(CircleDiam+3)/2, endNode.getY()-(CircleDiam+3)/2, CircleDiam+3, CircleDiam+3);
-						g.setColor(Color.RED);
-						g.fillOval(endNode.getX()-CircleDiam/2, endNode.getY()-CircleDiam/2, CircleDiam, CircleDiam);
+					mapPanel.setEndNode(endNode);
 					}
 				}
 
 				repaint();
 				revalidate();
 			}
-
 			if(startClicked && (startNode != null) && (currentlyShownMap.getNodes().contains(startNode))){
-
-				g.setColor(Color.BLACK);
-				g.fillOval(startNode.getX()-(CircleDiam+3)/2, startNode.getY()-(CircleDiam+3)/2, CircleDiam+3, CircleDiam+3);
-				g.setColor(Color.GREEN);
-				g.fillOval(startNode.getX()-CircleDiam/2, startNode.getY()-CircleDiam/2, CircleDiam, CircleDiam);
+				mapPanel.setStartNode(startNode);
 
 			}
 			if(endClicked && (endNode != null) && (currentlyShownMap.getNodes().contains(endNode))){
-				g.setColor(Color.BLACK);
-				g.fillOval(endNode.getX()-(CircleDiam+3)/2, endNode.getY()-(CircleDiam+3)/2, CircleDiam+3, CircleDiam+3);
-				g.setColor(Color.RED);
-				g.fillOval(endNode.getX()-CircleDiam/2, endNode.getY()-CircleDiam/2, CircleDiam, CircleDiam);
+				mapPanel.setEndNode(endNode);
 			}
-
 		}
+		
 
 		@Override
 		public void mouseDragged(MouseEvent e) {
@@ -833,7 +927,6 @@ public class EndUserGUI extends JPanel implements ActionListener{
 		public void mousePressed(MouseEvent e) {
 			int x = e.getX();
 			int y = e.getY();
-			System.out.println("X: " + x + " Y: " +y);
 		}
 
 
