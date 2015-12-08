@@ -456,25 +456,7 @@ public class DevGUI extends JPanel{
        }
       }
      }
-     if(createMapLink){
-      if (nodeIndex < 0){ // not inside a square
-       Node newNode = new Node(x, y, nodeName, currentType);
-       newNode.setMapName(currentMapName);
-       newNode.setName(newNode.getName());
-       nodesOnCurrentMap.add(newNode);
-       Edge newEdge = new Edge(currentNode, newNode, 0);
-       edgesOnCurrentMap.add(newEdge);
-       for(int k = 0; k < maps.size(); k++){
-        for(int j = 0; j < maps.get(k).getNodes().size(); j++){
-         if(maps.get(k).getNodes().get(j).equals(currentNode)){
-          maps.get(k).getEdges().add(newEdge);
-          break;
-         }
-        }
-       }
-       createMapLink = false;
-      }
-     }
+
      if(createEdges){
 
       if(count == 0 && nodeIndex >= 0){
