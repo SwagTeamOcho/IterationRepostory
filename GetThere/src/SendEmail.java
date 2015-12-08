@@ -39,7 +39,7 @@ public class SendEmail {
     	this.userName = "wpigetthere@gmail.com";
     	this.password = "softenglife888$$%";
     	this.subject = "Your GetThere Directions";
-    	this.message = "Here are your directions \n" + message;
+    	this.message = "Here are your directions: \n" + message;
         this.properties = new Properties();
         this.toAddress = toAddress;
         this.attachFiles = attachFiles;
