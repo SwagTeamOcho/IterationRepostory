@@ -172,6 +172,7 @@ public class EndUserGUI extends JPanel implements ActionListener{
 	 */
 	private void initialize() {
 
+		clearScene();
 		//Frame operations
 		frame = new JFrame();
 		frame.setBounds(100, 100, 1200, 700);
@@ -465,7 +466,7 @@ public class EndUserGUI extends JPanel implements ActionListener{
 			{
 				String[] bathroomTypes = {"Female", "Male"};
 				Object selectedValue = JOptionPane.showInputDialog(null, "Bathroom Type", "Select Gender",
-						JOptionPane.INFORMATION_MESSAGE, bathroomIcon, bathroomTypes, bathroomTypes[0]);
+						JOptionPane.INFORMATION_MESSAGE, bathroomIconBIG, bathroomTypes, bathroomTypes[0]);
 				if(selectedValue != null){
 					switch((String) selectedValue){
 					case "Female":
@@ -473,12 +474,15 @@ public class EndUserGUI extends JPanel implements ActionListener{
 						if(listPath != null && startNode != null){
 							listPath = pathCalc.nearestSpecialNode(startNode, NodeType.FBATHROOM);
 							updatePath = true;
+							findMapsForPaths();
 						}
 						break;
 					case "Male":
 						if(listPath != null && startNode != null){
 							listPath = pathCalc.nearestSpecialNode(startNode, NodeType.MBATHROOM);
 							updatePath = true;
+							findMapsForPaths();
+
 						}
 						break;
 					default:
@@ -510,6 +514,7 @@ public class EndUserGUI extends JPanel implements ActionListener{
 				uiPanel.setVisible(true);
 				frame.setVisible(true);
 				//pathCalc = new Djikstra();
+				
 				if(!startClicked && !endClicked){
 					for (i = 0; i < currentStartNodes.size(); i++){
 						if(startRoomSEL.getSelectedItem() == currentStartNodes.get(i).getName())
@@ -530,26 +535,8 @@ public class EndUserGUI extends JPanel implements ActionListener{
 					listPath = pathCalc.navigate(startNode, endNode);
 					mapsForPaths = new LinkedList<Map>();
 					System.out.println(listPath.size());
-					for (i = 0; i < listPath.size(); i++){
-						for (int j = 0; j < maps.size(); j++){
-							nodesInMap = maps.get(j).getNodes();
-							for(int k = 0; k<nodesInMap.size(); k++){
-								if(listPath.get(i) == nodesInMap.get(k)){
-									if(!mapsForPaths.contains(maps.get(j))){
-										mapsForPaths.add(maps.get(j));
-									}
-								}
-							}
-						}
-						currentMapFile = mapsForPaths.getFirst().getImage();
-						currentlyShownMap = mapsForPaths.getFirst();
-						totalMaps = mapsForPaths.size();
-
-						if(mapsForPaths.size() > 1){
-							rightArrow.setEnabled(true);
-							mapNumber.setText(String.valueOf(1) + " of " + String.valueOf(totalMaps));
-						}
-					}
+					findMapsForPaths();
+					
 					//					emailDirections = "From: " + startNode.getMapName() + " " + startNode.getName() + "\n" + "to "
 					//                            + Node.getMapName() + ", " + endRoomSEL.getSelectedItem() + "\n" + "\n" +
 					emailDirections = pathCalc.gpsInstructions(pathCalc.navigate(startNode, endNode));
@@ -566,7 +553,8 @@ public class EndUserGUI extends JPanel implements ActionListener{
 				}
 			}
 		});
-
+		
+		
 		leftArrow.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
 				if(mapsForPaths!= null){
@@ -599,8 +587,41 @@ public class EndUserGUI extends JPanel implements ActionListener{
 		});
 		uiPanel.setVisible(true);
 		frame.setVisible(true);
+		
 	}
+	
+	public void clearScene(){
+		updatePath = false;
+		startClicked = false;
+		endClicked = false;
+		endNode = null;
+		startNode = null;
+	}
+	public void findMapsForPaths(){
+		for (int i = 0; i < listPath.size(); i++){
+			for (int j = 0; j < maps.size(); j++){
+				nodesInMap = maps.get(j).getNodes();
+				for(int k = 0; k<nodesInMap.size(); k++){
+					if(listPath.get(i) == nodesInMap.get(k)){
+						if(mapsForPaths == null){
+							mapsForPaths.add(maps.get(j));
+						}else if (mapsForPaths !=null && !mapsForPaths.contains(maps.get(j))){
+							mapsForPaths.add(maps.get(j));
+						}
+					}
+				}
+			}
+			currentMapFile = mapsForPaths.getFirst().getImage();
+			currentlyShownMap = mapsForPaths.getFirst();
+			totalMaps = mapsForPaths.size();
 
+			if(mapsForPaths.size() > 1){
+				rightArrow.setEnabled(true);
+				mapNumber.setText(String.valueOf(1) + " of " + String.valueOf(totalMaps));
+			}
+		}
+	}
+	
 	public class MyGraphics extends JComponent implements MouseMotionListener{
 
 		private static final long serialVersionUID = 1L;
