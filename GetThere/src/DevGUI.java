@@ -76,6 +76,7 @@ public class DevGUI extends JPanel{
  boolean createMapLink = false;
  int indexOfCurrentMap;
  private LinkedList<String> currentMapList;
+ private static Serialize serialize;
 
  public boolean developerMode = true;
 
@@ -99,8 +100,7 @@ public class DevGUI extends JPanel{
  @SuppressWarnings("unchecked")
  public static void main(String[] args) {
  
-  Serialize serialize = new Serialize();
-  serialize.deSerialize("MapList");
+  serialize = new Serialize();
   
   
   
@@ -109,18 +109,10 @@ public class DevGUI extends JPanel{
   
   if(new File("MapList.ser").canRead()){
    System.out.println("maplist exists");
-   maps.addAll((LinkedList<Map>) deserialize("MapList"));
-  } else {
-   /*
-   for(int c = 1; c < 8; c++){
-    if(new File("MapList"+c+".ser").canRead()) {
-     maps.addAll((LinkedList<Map>) deserialize("MapList"+c));
-    }
-   }
-   */
-  }
-  
-  System.out.println(maps);
+   maps.addAll((LinkedList<Map>) serialize.deSerialize("MapList"));
+  } 
+    
+
 
 
 
@@ -136,37 +128,7 @@ public class DevGUI extends JPanel{
   });
  }
 
- // saves Map object "m" in a file named "s"
- public void serialize(String s, LinkedList<Map> maplist){
-  try {
-   FileOutputStream fileOut = new FileOutputStream(s + ".ser");
-   ObjectOutputStream out = new ObjectOutputStream(fileOut);
-   out.writeObject(maplist);
-   out.close();
-   fileOut.close();
-   System.out.println("Serialized data is saved in " + s + ".ser");
-  } catch(IOException i){
-   i.printStackTrace();
-  }
- }
 
- // loads the map stored in file name "s"
- public static Object deserialize(String s){
-  Object m = null;
-  try {
-   FileInputStream fileIn = new FileInputStream(s + ".ser");
-   ObjectInputStream in = new ObjectInputStream(fileIn);
-   m = in.readObject();
-   in.close();
-   fileIn.close();
-  } catch(IOException i){
-   i.printStackTrace();
-  } catch(ClassNotFoundException c){
-   System.out.println("Map class not found");
-   c.printStackTrace();
-  }
-  return m;
- }
 
  /**
   * Initialize the contents of the frame.
@@ -298,7 +260,7 @@ public class DevGUI extends JPanel{
     public void actionPerformed(ActionEvent e){
      System.out.println("Export Pushed");
 
-     serialize("MapList", maps);
+     serialize.doSerialize("MapList", maps);
      if(updateMap){
       
   
@@ -346,7 +308,7 @@ public class DevGUI extends JPanel{
       
       
       
-      serialize("MapList", maps);
+      serialize.doSerialize("MapList", maps);
 
      } else if (response == JOptionPane.CLOSED_OPTION) {
       System.out.println("JOptionPane closed");
