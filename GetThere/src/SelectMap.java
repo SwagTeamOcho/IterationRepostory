@@ -6,6 +6,7 @@ import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
 import javax.swing.*;
+import javax.swing.filechooser.*;
 
 public class SelectMap extends JFrame {
 	/**
@@ -34,7 +35,11 @@ public class SelectMap extends JFrame {
     openButton.addActionListener(new ActionListener() {
       public void actionPerformed(ActionEvent ae) {
         JFileChooser chooser = new JFileChooser();
-        chooser.setMultiSelectionEnabled(true);
+        FileNameExtensionFilter filter = new FileNameExtensionFilter("JPG Images", "jpg");
+        chooser.setFileFilter(filter);
+        chooser.setAcceptAllFileFilterUsed(false);
+        chooser.setFileHidingEnabled(true);
+        chooser.setMultiSelectionEnabled(false);
         int option = chooser.showOpenDialog(SelectMap.this);
         if (option == JFileChooser.APPROVE_OPTION) {
           File sf = chooser.getSelectedFile();
@@ -47,9 +52,21 @@ public class SelectMap extends JFrame {
     
     importButton.addActionListener(new ActionListener() {
       public void actionPerformed(ActionEvent ae) {
-        Map newMap = new Map(filePath, mapName.getText(), Double.parseDouble(scale.getText()) );
-        DevGUI.maps.add(newMap);
-        System.out.println("TEST");       
+        
+        try {
+          double formatedText = Double.parseDouble(scale.getText()) ;
+          Map newMap = new Map(filePath, mapName.getText(), formatedText);
+          DevGUI.maps.add(newMap);
+          System.out.println("TEST");  
+            
+           } catch (Exception z) { 
+
+         scale.setText("");
+         return;
+      }
+        
+        
+            
       }
     });
 
