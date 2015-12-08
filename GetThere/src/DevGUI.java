@@ -66,8 +66,7 @@ public class DevGUI extends JPanel{
 // //error1 
  private Map selectedMap;
 
- String outputVar = "src/output.txt";
- String inputVar = "src/output.txt";
+
 
  boolean createNodes = false;
  boolean createSpecial = false;
@@ -99,6 +98,14 @@ public class DevGUI extends JPanel{
 
  @SuppressWarnings("unchecked")
  public static void main(String[] args) {
+ 
+  Serialize serialize = new Serialize();
+  serialize.deSerialize("MapList");
+  
+  
+  
+  
+  
   
   if(new File("MapList.ser").canRead()){
    System.out.println("maplist exists");
