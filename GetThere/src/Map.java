@@ -102,16 +102,9 @@ public class Map implements Serializable{
 				edges.remove(i);
 		}
 	}
-<<<<<<< HEAD
-	
-	@Override
-	 public String toString() {
-	  return this.mapName;
-	 }
-=======
+
     @Override
     public String toString() {
     return this.mapName;
  }
->>>>>>> 9d449c83e81e5b0a301cba783a277c85e20dcb25
 }
