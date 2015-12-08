@@ -2,6 +2,8 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.PriorityQueue;
+
+import javax.swing.JOptionPane;
 public class Djikstra  {
 
 	
@@ -132,7 +134,9 @@ public class Djikstra  {
 	
 	public static int getDistance(LinkedList<Node> path){
 		if(path.size() <= 1){
-			throw new NoPathException("NO WAY");
+			JOptionPane.showMessageDialog(null, "No path was found.", "No Path Found",
+                    JOptionPane.ERROR_MESSAGE);
+			throw new NoPathException("No Path Found.");
 		}
 		System.out.println("path size = " + path.size());
 		int total = 0;
@@ -141,7 +145,7 @@ public class Djikstra  {
 			nextCost = path.get(i).getCost(path.get(i+1));
 			System.out.println("nextCost = " + nextCost);
 			if(nextCost<0){
-				throw new NoPathException("NO WAY");
+				throw new NoPathException("No Path Found");
 			}
 			total+=nextCost;
 		}

@@ -13,6 +13,8 @@ local.properties
 *.class
 .idea
 javax.mail.jar
+.DS_Store
+*.ser
 
 # Eclipse Core
 .project
