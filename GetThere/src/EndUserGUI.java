@@ -37,13 +37,12 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextPane;
 import javax.swing.ScrollPaneConstants;
-
+import javax.swing.ToolTipManager;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.plaf.basic.ComboPopup;
-
 import javax.swing.text.StyleConstants;
 
 import com.itextpdf.text.Document;
@@ -154,8 +153,9 @@ public class EndUserGUI extends JPanel implements ActionListener{
 	
 	private String emailDirections;
 	private int totalDistance;
-	
+
 	private LinkedList<Node> historicalNodes;
+	private ToolTipManager ttManager;
 
 	private JScrollPane scrollMapPanel;
 	/**
@@ -336,14 +336,14 @@ public class EndUserGUI extends JPanel implements ActionListener{
 				currentlyShownMap = maps.get(indexOfCurrentMap);
 				arrowCounter = 0;
 				mapsForPaths = null;
-				
+
 				historicalNodes = new LinkedList<>();
 				for(int m = 0; m < currentStartNodes.size(); m++){
-					if(currentStartNodes.get(m).getType() == NodeType.HISTORICAL){
+					if(currentStartNodes.get(m).getType().equals(NodeType.HISTORICAL)){
 						historicalNodes.add(currentStartNodes.get(m));
 					}
 				}
-				
+
 				startRoomSEL.removeAllItems();
 				startRoomSEL.setMap(maps.get(indexOfCurrentMap));
 				for(int i = 0; i < currentStartNodes.size(); ++i){
@@ -401,14 +401,14 @@ public class EndUserGUI extends JPanel implements ActionListener{
 				endRooms = new String[currentEndNodes.size()];
 				currentMapFile = maps.get(indexOfCurrentMap).getImage();
 				currentlyShownMap = maps.get(indexOfCurrentMap);
-				
+
 				historicalNodes = new LinkedList<>();
 				for(int m = 0; m < currentEndNodes.size(); m++){
-					if(currentEndNodes.get(m).getType() == NodeType.HISTORICAL){
+					if(currentEndNodes.get(m).getType().equals(NodeType.HISTORICAL)){
 						historicalNodes.add(currentEndNodes.get(m));
 					}
 				}
-				
+
 				endRoomSEL.removeAllItems();
 				endRoomSEL.setMap(maps.get(indexOfCurrentMap));
 				arrowCounter = 0;
@@ -535,17 +535,14 @@ public class EndUserGUI extends JPanel implements ActionListener{
 				        doc.addAuthor("GetThere");
 				        doc.addTitle("This is title");
 				        doc.open();
-				
-				        Paragraph para1 = new Paragraph();
-				        para1.add("Here are your direction maps");
-				
-				        doc.add(para1);
 				         
 				        //adding a local image and aligned RIGHT
 				        for(int i = 0; i < totalMaps; i++) {
 				        	new PanelCapture(mapPanel);
 					        Image image = Image.getInstance("Screen.png");
-					        //image.scaleAbsolute(200, 150);
+				            doc.setPageSize(image);
+				            doc.newPage();
+				            image.setAbsolutePosition(0, 0);
 					        doc.add(image);
 					        if(i!=totalMaps-1){
 					        	rightArrow.getModel().setArmed(true);
@@ -934,7 +931,11 @@ public class EndUserGUI extends JPanel implements ActionListener{
 		public void mouseMoved(MouseEvent e) {
 			int x = e.getX();
 			int y = e.getY();
-			
+
+			if(ttManager == null){
+				ttManager = ToolTipManager.sharedInstance();
+			}
+
 			if(nearHistoricalNode(x, y) != null){
 				// + nearHistoricalNode(x, y).getName() + 
 				URL url = getClass().getResource("/historicalimages/" + nearHistoricalNode(x, y).getName() + ".jpg");
@@ -943,10 +944,12 @@ public class EndUserGUI extends JPanel implements ActionListener{
 				}
 				String tt = "<html><body><img src='" + url + "'></body></html>";
 				setToolTipText(tt);
+				ttManager.setEnabled(true);
 			} else{
-				setToolTipText(null);
+				if(ttManager.isEnabled()){
+					ttManager.setEnabled(false);
+				}
 			}
-
 		}
 		public void mousePressed(MouseEvent e) {
 			int x = e.getX();
@@ -972,11 +975,17 @@ public class EndUserGUI extends JPanel implements ActionListener{
 			}
 		}
 	}
-	
+
 	public Node nearHistoricalNode(int x, int y){
-		for(int i = 0; i < historicalNodes.size(); i++){
-			if(((x - historicalNodes.get(i).getX()) < 6) && ((y - historicalNodes.get(i).getY()) < 6)){
-				return historicalNodes.get(i);
+		if(historicalNodes != null){
+			if(historicalNodes.size() > 0){
+				for(int i = 0; i < historicalNodes.size(); i++){
+					if(((x - historicalNodes.get(i).getX()) < 6) && ((y - historicalNodes.get(i).getY()) < 6)){
+						if(((historicalNodes.get(i).getX() - x) < 6) && ((historicalNodes.get(i).getY() - y) < 6)){
+							return historicalNodes.get(i);
+						}
+					}
+				}
 			}
 		}
 		return null;
