@@ -39,7 +39,7 @@ public class Map implements Serializable{
 		
 	public Map(BufferedImage img, String mapName) {
 		if (img == null) {
-			throw new RuntimeException("ehh");
+			throw new RuntimeException("No Image found");
 		}
 		this.mapImage = new ImageIcon(img, "map");
 		this.mapName = mapName;
