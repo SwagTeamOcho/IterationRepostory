@@ -1,3 +1,7 @@
+package src;
+import Utilities.*;
+import src.Map;
+
 import java.awt.BasicStroke;
 
 import java.awt.Color;
