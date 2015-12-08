@@ -1,11 +1,13 @@
 import java.awt.BasicStroke;
 
+
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
+import java.awt.event.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
@@ -14,6 +16,7 @@ import java.awt.event.MouseMotionListener;
 import java.awt.geom.GeneralPath;
 import java.util.LinkedList;
 
+import javax.swing.*;
 import javax.swing.BoxLayout;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
@@ -76,6 +79,8 @@ public class EndUserGUI extends JPanel implements ActionListener{
 	private JLabel endPoint;
 	private JLabel buildingEnd;
 	private JLabel roomEnd;
+	
+	private JLabel tutView;
 	//private JLabel floorStart;
 
 	//Combo Boxes on the GUI
@@ -122,6 +127,10 @@ public class EndUserGUI extends JPanel implements ActionListener{
 	private JButton nearestBathroom;
 	private Icon bathroomIcon;
 
+	private JButton tutorial;
+	private Icon tutIcon;
+	int count;
+	
 	private String emailDirections;
 	private int totalDistance;
 
@@ -186,6 +195,11 @@ public class EndUserGUI extends JPanel implements ActionListener{
 		uiPanel = new JPanel();
 		frame.getContentPane().add(uiPanel);
 		uiPanel.setLayout(null);
+		
+		tutView = new JLabel("",JLabel.CENTER);    
+		tutView.setLocation(0, 0);
+		tutView.setSize(1194,672);
+		uiPanel.add(tutView);
 
 		mapPanel = new JPanel();
 		mapPanel.setBounds(5, 5, 750, 620);
@@ -211,7 +225,6 @@ public class EndUserGUI extends JPanel implements ActionListener{
 		roomEnd = new JLabel("Select Room:");
 		roomEnd.setBounds(983, 92, 132, 29);
 
-
 		//Add Labels to the uiPanel
 		uiPanel.add(startPoint);
 		uiPanel.add(buildingStart);
@@ -219,7 +232,7 @@ public class EndUserGUI extends JPanel implements ActionListener{
 		uiPanel.add(endPoint);
 		uiPanel.add(buildingEnd);
 		uiPanel.add(roomEnd);
-
+		
 		//startRoomSEL.setModel(new DefaultComboBoxModel(new String[]{}));
 		startRoomSEL.setBounds(983, 50, 210, 29);
 		startRoomSEL.setEditable(false);
@@ -327,6 +340,24 @@ public class EndUserGUI extends JPanel implements ActionListener{
 		}
 
 
+		//Add Button for tuturial
+		tutIcon = new ImageIcon("IconImages/help9.png");
+		tutorial = new JButton();
+		tutorial.setToolTipText ("Tutorial");
+		tutorial.setIcon(tutIcon);
+		tutorial.setBounds(6, 632, 40, 40);
+		uiPanel.add(tutorial);
+		count = 1;
+		ImageIcon icon = new ImageIcon("IconImages/Tut.png");
+		tutorial.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e){
+				if (count > 0)
+					tutView.setIcon(icon);
+				if (count < 0)
+					tutView.setIcon(null);
+				count *= -1;
+			}
+		});
 
 		//Add Combo Boxes to UIPanel
 
