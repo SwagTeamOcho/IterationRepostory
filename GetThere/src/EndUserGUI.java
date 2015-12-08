@@ -14,6 +14,8 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionListener;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.GeneralPath;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.awt.image.BufferedImage;
 import java.net.URL;
 import java.util.ArrayList;
@@ -43,6 +45,11 @@ import javax.swing.event.ListSelectionListener;
 import javax.swing.plaf.basic.ComboPopup;
 
 import javax.swing.text.StyleConstants;
+
+import com.itextpdf.text.Document;
+import com.itextpdf.text.Image;
+import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.pdf.PdfWriter;
 
 ///**
 //* Created by Lumbini on 11/7/2015.
@@ -518,7 +525,46 @@ public class EndUserGUI extends JPanel implements ActionListener{
 			public void actionPerformed(ActionEvent e)
 			{
 				if(emailDirections != null) {
-					EMailDialogue em = new EMailDialogue(frame, emailDirections);
+					String[] attachments = new String[1];
+					try {
+						File file = new File("Directions.pdf");
+				        FileOutputStream pdfFileout = new FileOutputStream(file);
+				        Document doc = new Document();
+				        PdfWriter.getInstance(doc, pdfFileout);
+				
+				        doc.addAuthor("GetThere");
+				        doc.addTitle("This is title");
+				        doc.open();
+				
+				        Paragraph para1 = new Paragraph();
+				        para1.add("Here are your direction maps");
+				
+				        doc.add(para1);
+				         
+				        //adding a local image and aligned RIGHT
+				        for(int i = 0; i < totalMaps; i++) {
+				        	new PanelCapture(mapPanel);
+					        Image image = Image.getInstance("Screen.png");
+					        //image.scaleAbsolute(200, 150);
+					        doc.add(image);
+					        if(i!=totalMaps-1){
+					        	rightArrow.getModel().setArmed(true);
+					        	rightArrow.getModel().setPressed(true);
+					        	rightArrow.getModel().setPressed(false);
+					        	
+					        }
+					        rightArrow.getModel().setArmed(false);
+				        }
+				
+				        doc.close();
+				        pdfFileout.close();
+				
+				        System.out.println("Success!");
+					} catch (Exception e1) {
+			            e1.printStackTrace();
+			        }
+					attachments[0] = ("Directions.pdf");
+					EMailDialogue em = new EMailDialogue(frame, emailDirections, attachments);
 					em.setVisible(true);
 				}
 				else {
