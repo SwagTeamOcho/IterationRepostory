@@ -11,5 +11,6 @@ public enum NodeType {
 	LECTUREHALL, 
 	OFFICE,
 	DOOR,
-	ROOM
+	ROOM,
+	HISTORICAL
 }

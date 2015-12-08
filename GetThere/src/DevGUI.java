@@ -409,7 +409,7 @@ public class DevGUI extends JPanel{
 							} else {
 								String[] types = {"No Type", "Men's Bathroom", "Women's Bathroom", "Blue Tower", "Elevator", 
 										"Stairs", "Food", "Emergency Exit", "Lecture Hall", "Office", "Door",
-										"Room"};
+										"Room", "Historical"};
 								Object selectedValue = JOptionPane.showInputDialog(null,
 										"Choose a Node Type", "Input",
 										JOptionPane.INFORMATION_MESSAGE, null,
@@ -460,6 +460,9 @@ public class DevGUI extends JPanel{
 										currentStartNodes.add(new Node(x, y, nodeName, NodeType.ROOM));
 										currentStartNodes.get(currentStartNodes.size() - 1).setMapName(currentMapName);
 										break;
+									case "Historical":
+										currentStartNodes.add(new Node(x, y, nodeName, NodeType.HISTORICAL));
+										currentStartNodes.get(currentStartNodes.size() - 1).setMapName(currentMapName);
 									default:
 										currentStartNodes.add(new Node(x, y, nodeName, NodeType.NOTYPE));
 										currentStartNodes.get(currentStartNodes.size() - 1).setMapName(currentMapName);
