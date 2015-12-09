@@ -74,6 +74,7 @@ public class DevGUI extends JPanel{
  boolean importPushed = true;
  boolean updateMap = false;
  boolean createMapLink = false;
+ boolean editNodes = false;
  int indexOfCurrentMap;
  private LinkedList<String> currentMapList;
  private static Serialize serialize;
@@ -138,7 +139,7 @@ public class DevGUI extends JPanel{
 
   //Frame operations
   frame = new JFrame();
-  frame.setBounds(100, 100, 900, 700);
+  frame.setBounds(100, 100, 910, 700);
   frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
   frame.getContentPane().setLayout(new BoxLayout(frame.getContentPane(), BoxLayout.X_AXIS));
   frame.setTitle("Get There");
@@ -202,6 +203,7 @@ public class DevGUI extends JPanel{
      loadMap.setVisible(true);
      loadMap.setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
      updateMap = true;
+     editNodes = false;
     }
    });
 
@@ -215,6 +217,7 @@ public class DevGUI extends JPanel{
      createSpecial = false;
      createEdges = false;
      createMapLink = false;
+     editNodes = false;
 
     }
    });
@@ -229,6 +232,7 @@ public class DevGUI extends JPanel{
      createSpecial = true;
      createEdges = false;
      createMapLink = false;
+     editNodes = false;
 
     }
    });
@@ -245,12 +249,26 @@ public class DevGUI extends JPanel{
      createSpecial = false;
      createEdges = true;
      createMapLink = false;
+     editNodes = false;
     }
    });
    
-  
- 
-   
+   JButton btnEditor = new JButton("Node Editor");
+   btnEditor.setBounds(762, 256, 132, 29);;
+   uiPanel.add(btnEditor);
+   btnEditor.addActionListener(new ActionListener(){
+	   public void actionPerformed(ActionEvent e){
+		   System.out.println("Edit Nodes Pushed");
+		   createNodes = false;
+		   createSpecial = false;
+		   createEdges = false;
+		   createMapLink = false;
+		   editNodes = true;
+	   }
+   });
+//   btnEditor.setVisible(true);
+//   uiPanel.repaint();
+//   uiPanel.revalidate();
 
    //Construct button and add action listener
    JButton btnExport = new JButton("Save Changes");
@@ -279,7 +297,7 @@ public class DevGUI extends JPanel{
 
 
    JButton btnDeleteMap = new JButton("Delete Map");
-   btnDeleteMap.setBounds(762, 286, 132, 29);
+   btnDeleteMap.setBounds(762, 586, 132, 29);
    uiPanel.add(btnDeleteMap);
    btnDeleteMap.addActionListener(new ActionListener() {
     public void actionPerformed(ActionEvent e){
@@ -440,6 +458,11 @@ public class DevGUI extends JPanel{
        count = 0;
       }
      }
+     if(editNodes){
+    	 if(nodeIndex >= 0){
+    		 NodeEditor ne = new NodeEditor(uiPanel, nodesOnCurrentMap.get(nodeIndex));
+    	 }
+     }
      if (evt.getClickCount() >= 2 && (createNodes || createSpecial)) {
 
       LinkedList<Edge> tempList = new LinkedList<Edge>();
@@ -463,7 +486,54 @@ public class DevGUI extends JPanel{
   public void makeLink(int x, int y, String nodeName, NodeType type){
    Object[] mapNames = maps.toArray();
    
-
+   if(type == NodeType.ELEVATOR &&(JOptionPane.showConfirmDialog(
+		    frame,
+		    "Would you like to connect to an existing node?",
+		    "Node Connection",
+		    JOptionPane.YES_NO_OPTION)
+			== JOptionPane.YES_OPTION)){
+		Object connectingMap = JOptionPane.showInputDialog(null, 
+				"Choose a map to connect to",
+				"Input",
+				JOptionPane.INFORMATION_MESSAGE, null,
+				mapNames, mapNames[0]);
+		int indexInListOfMaps = maps.indexOf(connectingMap);
+		
+		LinkedList<Node> possibleNodes = new LinkedList<Node>();
+		possibleNodes = maps.get(maps.indexOf(connectingMap)).getNodes();
+		int c = 0;
+		for(int d = 0; d < possibleNodes.size(); ++d){
+			if(possibleNodes.get(d).getType().equals(NodeType.ELEVATOR))
+				c++;
+		}
+		String[] nodeSelect = new String[c];
+		int k = 0;
+		for(int j = 0; j < possibleNodes.size(); ++j){
+			if(possibleNodes.get(j).getType().equals(NodeType.ELEVATOR)){
+				nodeSelect[k] = (possibleNodes.get(j).getName());
+				k++;
+			}
+		}
+		String s = (String)JOptionPane.showInputDialog(
+		                    frame,
+		                    "Choose Node to connect to \n",
+		                    "Choose Node",
+		                    JOptionPane.PLAIN_MESSAGE,
+		                    null, 
+		                    nodeSelect,
+		                    null);
+		for(int n = 0; n < possibleNodes.size(); ++n){
+			if(possibleNodes.get(n).getName().equals(s)){
+				currentNode = possibleNodes.get(n);
+			}
+		}
+		Node newNode = new Node(x, y, nodeName, type);
+		newNode.setMapName(selectedMap.getMapName());
+		maps.get(maps.indexOf(selectedMap)).getNodes().add(newNode);
+		maps.get(maps.indexOf(selectedMap)).getEdges().add(new Edge(newNode, currentNode, 0));
+		maps.get(maps.indexOf(connectingMap)).getEdges().add(new Edge(newNode, currentNode, 0));
+	}
+   else{
    Object connectingMap = JOptionPane.showInputDialog(null, 
          "Choose a map to connect to",
          "Input",
@@ -489,7 +559,7 @@ public class DevGUI extends JPanel{
   maps.get(maps.indexOf(selectedMap)).getEdges().add(new Edge(linkNode1, linkNode2, 0));
   maps.get(maps.indexOf(connectingMap)).getEdges().add(new Edge(linkNode1, linkNode2, 0));
   
-  
+  }
   repaint();
   revalidate();
   }
