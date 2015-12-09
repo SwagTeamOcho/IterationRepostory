@@ -609,7 +609,7 @@ public class EndUserGUI extends JPanel implements ActionListener{
 		});
 		//Object[] nearestSpots = {new ImageIcon("IconImages/bathroomIcon.png"), new ImageIcon("IconImages/blueTowerIcon.png")};
 		bathroomIcon = new ImageIcon("IconImages/bathroomIcon.png");
-		Icon bathroomIconBIG = new ImageIcon("IconImages/bathroomIconBIG.png");
+		final Icon bathroomIconBIG = new ImageIcon("IconImages/bathroomIconBIG.png");
 		nearestBathroom = new JButton(bathroomIcon);
 		nearestBathroom.setToolTipText("Find nearest Bathroom");
 		nearestBathroom.setBounds(1017, 632, 40, 40);
