@@ -159,7 +159,7 @@ public class EndUserGUI extends JPanel implements ActionListener{
 		Serialize serialize = new Serialize();
 		Object tempMaps = serialize.deSerialize("MapList");
 		if(tempMaps instanceof LinkedList<?>){
-			maps = (LinkedList<Map>) serialize.deSerialize("MapList");
+			maps = (LinkedList<Map>) tempMaps;
 		}
 		startRoomSEL = new XComboBox(this);
 		endRoomSEL = new XComboBox(this);
@@ -181,7 +181,7 @@ public class EndUserGUI extends JPanel implements ActionListener{
 	public Map getCurrentlyShownMap(){
 		return currentlyShownMap;
 	}
-	
+
 	public LinkedList<Node> getHistoricalNodes(){
 		return this.historicalNodes;
 	}
@@ -362,6 +362,7 @@ public class EndUserGUI extends JPanel implements ActionListener{
 				uiPanel.add(zoom.getZoomInButton());
 				uiPanel.add(zoom.getZoomOutButton());
 				uiPanel.add(scrollMapPanel);
+				mapPanel.setPath(null);
 			}
 
 		});
@@ -432,6 +433,7 @@ public class EndUserGUI extends JPanel implements ActionListener{
 				uiPanel.add(zoom.getZoomInButton());
 				uiPanel.add(zoom.getZoomOutButton());
 				uiPanel.add(scrollMapPanel);
+				mapPanel.setPath(null);
 
 			}
 
@@ -778,8 +780,10 @@ public class EndUserGUI extends JPanel implements ActionListener{
 					GeneralPath path = new GeneralPath();
 					path.moveTo(listPath.getFirst().getX(), listPath.getFirst().getY());
 					for (k=1; k<listPath.size(); k++){
-						if(currentlyShownMap.getNodes().contains(listPath.get(k-1)) && 
-								currentlyShownMap.getNodes().contains(listPath.get(k))){
+						if(listPath.get(k-1).getMapName().equals(currentlyShownMap.getMapName())
+								&& listPath.get(k).getMapName().equals(currentlyShownMap.getMapName())){
+							//						if(currentlyShownMap.getNodes().contains(listPath.get(k-1)) && 
+							//								currentlyShownMap.getNodes().contains(listPath.get(k))){
 							path.lineTo(listPath.get(k).getX(),listPath.get(k).getY());
 							//path.transform(at);
 							//g2d.draw(path);
@@ -855,172 +859,174 @@ public class EndUserGUI extends JPanel implements ActionListener{
 
 		clear();
 
-		}
+	}
 
 
-		public class MyGraphics extends JComponent implements MouseMotionListener{
+	public class MyGraphics extends JComponent implements MouseMotionListener{
 
-			private static final long serialVersionUID = 1L;
-			private static final int SquareWidth = 5;
-
-
-			MyGraphics() {
-				setPreferredSize(new Dimension(760, 666));
-				addMouseMotionListener(this);
+		private static final long serialVersionUID = 1L;
+		private static final int SquareWidth = 5;
 
 
-				addMouseListener(new MouseAdapter(){
+		MyGraphics() {
+			setPreferredSize(new Dimension(760, 666));
+			addMouseMotionListener(this);
 
 
-					public void mouseClicked(MouseEvent evt) {
+			addMouseListener(new MouseAdapter(){
 
-						int x = evt.getX();
-						int y = evt.getY();
-						if(!startClicked){
-							startNode = findClosestNode(x,y);
-							startClicked = true;
-							mapPanel.setStartNode(startNode);
-						}
-						else if(!endClicked){
-							endNode = findClosestNode(x,y);
-							endClicked = true;
-							mapPanel.setEndNode(endNode);
-						}
+
+				public void mouseClicked(MouseEvent evt) {
+
+					int x = evt.getX();
+					int y = evt.getY();
+					if(!startClicked){
+						startNode = findClosestNode(x,y);
+						startClicked = true;
+						mapPanel.setStartNode(startNode);
 					}
-
-					private Node findClosestNode(int x, int y) {
-						double shortestDistance = Double.MAX_VALUE;
-						double previousShortestDistance;
-						Node result = null;
-						for(int i = 0; i < currentlyShownMap.getNodes().size(); i++){
-							previousShortestDistance = shortestDistance;
-							Node temp = currentlyShownMap.getNodes().get(i);
-							shortestDistance = Math.min(Math.sqrt((temp.getX()-x)*(temp.getX()-x) + (temp.getY()-y)*(temp.getY()-y)), shortestDistance);
-							if(previousShortestDistance != shortestDistance){
-								result = temp;
-							}
-						}
-						return result;
-					}});
-				addMouseMotionListener(this);
-
-			}
-
-			@Override
-			public void paintComponent(Graphics g) {
-				GeneralPath path = null;
-
-				if(path == null && updatePath == true && listPath.size() > 0){
-					removeAll();
-					int k;
-					path = new GeneralPath();
-					path.moveTo(listPath.getFirst().getX(), listPath.getFirst().getY());
-					for (k=1; k<listPath.size(); k++){
-						if(currentlyShownMap.getNodes().contains(listPath.get(k-1)) && 
-								currentlyShownMap.getNodes().contains(listPath.get(k))){
-							path.lineTo(listPath.get(k).getX(),listPath.get(k).getY());
-							//path.transform(at);
-							//g2d.draw(path);
-						}
-						else{
-							//path.transform(at);
-							path.moveTo(listPath.get(k).getX(), listPath.get(k).getY());
-						}
-					}
-					mapPanel.setPath(path);
-					endNode = listPath.get(listPath.size() - 1);
-					mapPanel.setEndNode(endNode);
-					if(mapsForPaths.size() > 0 && arrowCounter < mapsForPaths.size()){
-						if(mapsForPaths.get(arrowCounter).getNodes().contains(startNode)){
-							mapPanel.setStartNode(startNode);
-						}
-
-						if(mapsForPaths.get(arrowCounter).getNodes().contains(endNode)){
-							mapPanel.setEndNode(endNode);
-						}
+					else if(!endClicked){
+						endNode = findClosestNode(x,y);
+						endClicked = true;
+						mapPanel.setEndNode(endNode);
 					}
 				}
-				if(startClicked && (startNode != null) && (currentlyShownMap.getNodes().contains(startNode))){
-					mapPanel.setStartNode(startNode);
 
-				}
-
-				if(endClicked && (endNode != null) && (currentlyShownMap.getNodes().contains(endNode))){
-					mapPanel.setEndNode(endNode);
-				}
-			}
-
-
-
-			@Override
-			public void mouseDragged(MouseEvent e) {
-				// TODO Auto-generated method stub
-
-			}
-
-			@Override
-			public void mouseMoved(MouseEvent e) {
-				int x = e.getX();
-				int y = e.getY();
-
-				if(ttManager == null){
-					ttManager = ToolTipManager.sharedInstance();
-				}
-
-				if(nearHistoricalNode(x, y) != null){
-					// + nearHistoricalNode(x, y).getName() + 
-					URL url = getClass().getResource("/historicalimages/" + nearHistoricalNode(x, y).getName() + ".jpg");
-					if(url == null){
-						url = getClass().getResource("/historicalimages/default.jpg");
+				private Node findClosestNode(int x, int y) {
+					double shortestDistance = Double.MAX_VALUE;
+					double previousShortestDistance;
+					Node result = null;
+					for(int i = 0; i < currentlyShownMap.getNodes().size(); i++){
+						previousShortestDistance = shortestDistance;
+						Node temp = currentlyShownMap.getNodes().get(i);
+						shortestDistance = Math.min(Math.sqrt((temp.getX()-x)*(temp.getX()-x) + (temp.getY()-y)*(temp.getY()-y)), shortestDistance);
+						if(previousShortestDistance != shortestDistance){
+							result = temp;
+						}
 					}
-					String tt = "<html><body><img src='" + url + "'></body></html>";
-					System.out.println(tt);
-					setToolTipText(tt);
-					ttManager.setEnabled(true);
-				} else{
-					if(ttManager.isEnabled()){
-						ttManager.setEnabled(false);
-					}
-				}
-			}
-			public void mousePressed(MouseEvent e) {
-				int x = e.getX();
-				int y = e.getY();
-			}
-
+					return result;
+				}});
+			addMouseMotionListener(this);
 
 		}
 
 		@Override
-		public void actionPerformed(ActionEvent e) {
+		public void paintComponent(Graphics g) {
+			GeneralPath path = null;
+
+			if(path == null && updatePath == true && listPath.size() > 0){
+				removeAll();
+				int k;
+				path = new GeneralPath();
+				path.moveTo(listPath.getFirst().getX(), listPath.getFirst().getY());
+				for (k=1; k<listPath.size(); k++){
+					if(listPath.get(k-1).getMapName().equals(currentlyShownMap.getMapName())
+							&& listPath.get(k).getMapName().equals(currentlyShownMap.getMapName())){
+						//					if(currentlyShownMap.getNodes().contains(listPath.get(k-1)) && 
+						//							currentlyShownMap.getNodes().contains(listPath.get(k))){
+						path.lineTo(listPath.get(k).getX(),listPath.get(k).getY());
+						//path.transform(at);
+						//g2d.draw(path);
+					}
+					else{
+						//path.transform(at);
+						path.moveTo(listPath.get(k).getX(), listPath.get(k).getY());
+					}
+				}
+				mapPanel.setPath(path);
+				endNode = listPath.get(listPath.size() - 1);
+				mapPanel.setEndNode(endNode);
+				if(mapsForPaths.size() > 0 && arrowCounter < mapsForPaths.size()){
+					if(mapsForPaths.get(arrowCounter).getNodes().contains(startNode)){
+						mapPanel.setStartNode(startNode);
+					}
+
+					if(mapsForPaths.get(arrowCounter).getNodes().contains(endNode)){
+						mapPanel.setEndNode(endNode);
+					}
+				}
+			}
+			if(startClicked && (startNode != null) && (currentlyShownMap.getNodes().contains(startNode))){
+				mapPanel.setStartNode(startNode);
+
+			}
+
+			if(endClicked && (endNode != null) && (currentlyShownMap.getNodes().contains(endNode))){
+				mapPanel.setEndNode(endNode);
+			}
+		}
+
+
+
+		@Override
+		public void mouseDragged(MouseEvent e) {
 			// TODO Auto-generated method stub
 
 		}
 
-		private int IDCount;
-		public void fixIDs(LinkedList<Map> mapList){
-			IDCount = 0;
-			for(int i = 0; i < mapList.size(); i++){
-				for (int j = 0; j < mapList.get(i).getNodes().size(); j++){
-					mapList.get(i).getNodes().get(j).setID(IDCount);
-					IDCount++;
+		@Override
+		public void mouseMoved(MouseEvent e) {
+			int x = e.getX();
+			int y = e.getY();
+
+			if(ttManager == null){
+				ttManager = ToolTipManager.sharedInstance();
+			}
+
+			if(nearHistoricalNode(x, y) != null){
+				// + nearHistoricalNode(x, y).getName() + 
+				URL url = getClass().getResource("/historicalimages/" + nearHistoricalNode(x, y).getName() + ".jpg");
+				if(url == null){
+					url = getClass().getResource("/historicalimages/default.jpg");
+				}
+				String tt = "<html><body><img src='" + url + "'></body></html>";
+				System.out.println(tt);
+				setToolTipText(tt);
+				ttManager.setEnabled(true);
+			} else{
+				if(ttManager.isEnabled()){
+					ttManager.setEnabled(false);
 				}
 			}
 		}
+		public void mousePressed(MouseEvent e) {
+			int x = e.getX();
+			int y = e.getY();
+		}
 
-		public Node nearHistoricalNode(int x, int y){
-			if(historicalNodes != null){
-				if(historicalNodes.size() > 0){
-					for(int i = 0; i < historicalNodes.size(); i++){
-						if(((x - historicalNodes.get(i).getX()) < 6) && ((y - historicalNodes.get(i).getY()) < 6)){
-							if(((historicalNodes.get(i).getX() - x) < 6) && ((historicalNodes.get(i).getY() - y) < 6)){
-								return historicalNodes.get(i);
-							}
+
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		// TODO Auto-generated method stub
+
+	}
+
+	private int IDCount;
+	public void fixIDs(LinkedList<Map> mapList){
+		IDCount = 0;
+		for(int i = 0; i < mapList.size(); i++){
+			for (int j = 0; j < mapList.get(i).getNodes().size(); j++){
+				mapList.get(i).getNodes().get(j).setID(IDCount);
+				IDCount++;
+			}
+		}
+	}
+
+	public Node nearHistoricalNode(int x, int y){
+		if(historicalNodes != null){
+			if(historicalNodes.size() > 0){
+				for(int i = 0; i < historicalNodes.size(); i++){
+					if(((x - historicalNodes.get(i).getX()) < 6) && ((y - historicalNodes.get(i).getY()) < 6)){
+						if(((historicalNodes.get(i).getX() - x) < 6) && ((historicalNodes.get(i).getY() - y) < 6)){
+							return historicalNodes.get(i);
 						}
 					}
 				}
 			}
-			return null;
 		}
-
+		return null;
 	}
+
+}
