@@ -170,6 +170,8 @@ public class Djikstra  {
 			return speedMin + "mins, " + speedSec + "s";
 		}else if(speedHour == 0 && speedMin == 0){
 			return speedSec + "s";
+		}else if(speedMin == 0){
+			return speedSec + "s";
 		}else{
 			return speedHour + "hrs, " + speedMin + "mins, " + speedSec + "s";
 		}

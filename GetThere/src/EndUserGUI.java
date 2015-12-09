@@ -688,7 +688,6 @@ public class EndUserGUI extends JPanel implements ActionListener{
 				if(listPath != null && startNode != null){
 					listPath = pathCalc.nearestSpecialNode(startNode, NodeType.BLUETOWER);
 					updatePath = true;
-					findMapsForPaths();
 				}
 			}
 		});
@@ -790,30 +789,6 @@ public class EndUserGUI extends JPanel implements ActionListener{
 		clear();
 	}
 	
-	public void findMapsForPaths(){
-		for (int i = 0; i < listPath.size(); i++){
-			for (int j = 0; j < maps.size(); j++){
-				nodesInMap = maps.get(j).getNodes();
-				for(int k = 0; k<nodesInMap.size(); k++){
-					if(listPath.get(i) == nodesInMap.get(k)){
-						//if(mapsForPaths.size() == 0){
-						//	mapsForPaths.add(maps.get(j));
-						if (mapsForPaths !=null && !mapsForPaths.contains(maps.get(j))){
-							mapsForPaths.add(maps.get(j));
-						}
-					}
-				}
-			}
-			currentMapFile = mapsForPaths.getFirst().getImage();
-			currentlyShownMap = mapsForPaths.getFirst();
-			totalMaps = mapsForPaths.size();
-
-			if(mapsForPaths.size() > 1){
-				rightArrow.setEnabled(true);
-				mapNumber.setText(String.valueOf(1) + " of " + String.valueOf(totalMaps));
-			}
-		}
-	}
 	
 	public class MyGraphics extends JComponent implements MouseMotionListener{
 
