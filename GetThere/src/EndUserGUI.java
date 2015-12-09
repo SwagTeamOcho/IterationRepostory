@@ -37,13 +37,12 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextPane;
 import javax.swing.ScrollPaneConstants;
-
+import javax.swing.ToolTipManager;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.plaf.basic.ComboPopup;
-
 import javax.swing.text.StyleConstants;
 
 import com.itextpdf.text.Document;
@@ -61,23 +60,17 @@ public class EndUserGUI extends JPanel implements ActionListener{
 	private static final long serialVersionUID = 2270760135813536905L;
 	private LinkedList<Map> maps = new LinkedList<Map>();
 	private LinkedList<Node> currentStartNodes = new LinkedList<Node>();
-	//private LinkedList<Edge> currentStartEdges = new LinkedList<Edge>();
 	private LinkedList<Node> currentEndNodes = new LinkedList<Node>();
 	private LinkedList<Map> mapsForPaths = new LinkedList<Map>();
 	private LinkedList<Node> nodesInMap = new LinkedList<Node>();
 
-	//private static LinkedList<Edge> currentEndEdges = new LinkedList<Edge>();
 	private String[] startRooms;
 	private String[] endRooms;
-	//	private String buildingSelectedSTART;   //track which building is selected to start in.
-	//	private String buildingSelectedEND;
-	//private String currentMapName;
 	private static ImageIcon currentMapFile;
 
 	private boolean startClicked = false;
 	private boolean endClicked = false;
-	//private boolean startFlag = false;
-	//private boolean endHoverFlag = false;
+
 
 
 	private JTextArea directions;
@@ -85,7 +78,6 @@ public class EndUserGUI extends JPanel implements ActionListener{
 	private JFrame frame;		//Creates the main frame for the GUI
 	private JPanel uiPanel;		//Panel to hold the interface buttons
 	private ImagePanel mapPanel;	//Panel to hold the map
-	//private Image mapImage;		
 	private ImageZoom zoom;
 	//Represents the map to be chosen
 	//private Image pathImage;	//Image that draws the path on the map
@@ -108,8 +100,6 @@ public class EndUserGUI extends JPanel implements ActionListener{
 	private XComboBox endRoomSEL;
 	//private JComboBox startFloorSEL;
 	
-	private ArrayList<String> sortedStartRooms = new ArrayList<String>();
-	private ArrayList<String> sortedEndRooms = new ArrayList<String>();
 
 	//Buttons on the UI
 	private JButton searchButton;
@@ -154,8 +144,9 @@ public class EndUserGUI extends JPanel implements ActionListener{
 	
 	private String emailDirections;
 	private int totalDistance;
-	
+
 	private LinkedList<Node> historicalNodes;
+	private ToolTipManager ttManager;
 
 	private JScrollPane scrollMapPanel;
 	/**
@@ -207,7 +198,6 @@ public class EndUserGUI extends JPanel implements ActionListener{
 	
 	
 	public void clear(){
-		System.out.println("CLEARING");
 		updatePath = false;
         startClicked = false;
         endClicked = false;
@@ -226,8 +216,10 @@ public class EndUserGUI extends JPanel implements ActionListener{
 	
 	
 	private void initialize() {
-		
-		MyGraphics graph = new MyGraphics();
+
+
+		final MyGraphics graph = new MyGraphics();
+
 		
 		
 		//Frame operations
@@ -268,7 +260,6 @@ public class EndUserGUI extends JPanel implements ActionListener{
 			}
 		});
 		uiPanel.add(scrollMapPanel);
-		
 		
 
 		//Creating Labels
@@ -330,21 +321,21 @@ public class EndUserGUI extends JPanel implements ActionListener{
 						if(buildingSelectedSTART.equals(maps.get(indexOfCurrentMap).getMapName()))
 							break;
 					}
-					currentStartNodes = maps.get(indexOfCurrentMap).getNodes();
-					startRooms = new String[currentStartNodes.size()];
-					//currentStartEdges = maps.get(indexOfCurrentMap).getEdges();
-					currentMapFile = maps.get(indexOfCurrentMap).getImage();
-					currentlyShownMap = maps.get(indexOfCurrentMap);
-					arrowCounter = 0;
-					mapsForPaths = null;
-					
-					historicalNodes = new LinkedList<>();
-					for(int m = 0; m < currentStartNodes.size(); m++){
-						if(currentStartNodes.get(m).getType() == NodeType.HISTORICAL){
-							historicalNodes.add(currentStartNodes.get(m));
-						}
+				currentStartNodes = maps.get(indexOfCurrentMap).getNodes();
+				startRooms = new String[currentStartNodes.size()];
+				//currentStartEdges = maps.get(indexOfCurrentMap).getEdges();
+				currentMapFile = maps.get(indexOfCurrentMap).getImage();
+				currentlyShownMap = maps.get(indexOfCurrentMap);
+				arrowCounter = 0;
+				mapsForPaths = null;
+				
+				historicalNodes = new LinkedList<Node>();
+				for(int m = 0; m < currentStartNodes.size(); m++){
+					if(currentStartNodes.get(m).getType() == NodeType.HISTORICAL){
+						historicalNodes.add(currentStartNodes.get(m));
 					}
-					
+				}
+					ArrayList<String> sortedStartRooms = new ArrayList<String>();
 					startRoomSEL.removeAllItems();
 					startRoomSEL.setMap(maps.get(indexOfCurrentMap));
 					for(int i = 0; i < currentStartNodes.size(); ++i){
@@ -366,8 +357,10 @@ public class EndUserGUI extends JPanel implements ActionListener{
 					uiPanel.add(zoom.getZoomInButton());
 					uiPanel.add(zoom.getZoomOutButton());
 					uiPanel.add(scrollMapPanel);
-				}
+			}
+				
 		});
+		
 
 		for (int i = 0; i < maps.size(); i++) {
 			if(maps.get(i).getMapName() != null)
@@ -387,7 +380,9 @@ public class EndUserGUI extends JPanel implements ActionListener{
 		endBuildingSEL.setVisible(true);
 		endBuildingSEL.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e) {
+				//currentMapFile = maps.get(maps.size()-1).getImage();
 				updatePath = false;
+				mapNumber.setText("");
 				int indexOfCurrentMap;
 				@SuppressWarnings("unchecked")
 				JComboBox<String> cb = (JComboBox<String>)e.getSource();
@@ -396,34 +391,46 @@ public class EndUserGUI extends JPanel implements ActionListener{
 					if(buildingSelectedEND.equals(maps.get(indexOfCurrentMap).getMapName()))
 						break;
 				}
-				currentEndNodes = maps.get(indexOfCurrentMap).getNodes();
-				endRooms = new String[currentEndNodes.size()];
-				currentMapFile = maps.get(indexOfCurrentMap).getImage();
-				currentlyShownMap = maps.get(indexOfCurrentMap);
-				
-				historicalNodes = new LinkedList<>();
-				for(int m = 0; m < currentEndNodes.size(); m++){
-					if(currentEndNodes.get(m).getType() == NodeType.HISTORICAL){
-						historicalNodes.add(currentEndNodes.get(m));
-					}
-				}
-				
-				endRoomSEL.removeAllItems();
-				endRoomSEL.setMap(maps.get(indexOfCurrentMap));
-				arrowCounter = 0;
-				mapsForPaths = null;
-
-				for(int i = 0; i < currentEndNodes.size(); i++){
-					endRooms[i] = currentEndNodes.get(i).getName();
-					if(endRooms[i] != "" && currentEndNodes.get(i).getType() != NodeType.NOTYPE)
-						sortedEndRooms.add(endRooms[i]);
-				}
-				Collections.sort(sortedEndRooms);
-				for(int i = 0; i < sortedEndRooms.size(); i++){
-					endRoomSEL.addItem(sortedEndRooms.get(i));
+			currentEndNodes = maps.get(indexOfCurrentMap).getNodes();
+			endRooms = new String[currentEndNodes.size()];
+			//currentendEdges = maps.get(indexOfCurrentMap).getEdges();
+			currentMapFile = maps.get(indexOfCurrentMap).getImage();
+			currentlyShownMap = maps.get(indexOfCurrentMap);
+			arrowCounter = 0;
+			mapsForPaths = null;
+			
+			historicalNodes = new LinkedList<Node>();
+			for(int m = 0; m < currentEndNodes.size(); m++){
+				if(currentEndNodes.get(m).getType() == NodeType.HISTORICAL){
+					historicalNodes.add(currentEndNodes.get(m));
 				}
 			}
-		});
+				ArrayList<String> sortedendRooms = new ArrayList<String>();
+				endRoomSEL.removeAllItems();
+				endRoomSEL.setMap(maps.get(indexOfCurrentMap));
+				for(int i = 0; i < currentEndNodes.size(); ++i){
+					endRooms[i] = currentEndNodes.get(i).getName();
+					if(endRooms[i] != "" && currentEndNodes.get(i).getType() != NodeType.NOTYPE)
+						sortedendRooms.add(endRooms[i]);
+				}
+				Collections.sort(sortedendRooms);
+				for(int i = 0; i < sortedendRooms.size(); i++){
+					endRoomSEL.addItem(sortedendRooms.get(i));
+				}
+//				mapPanel.setImage(currentlyShownMap.getImage());
+//				mapPanel.add(graph);
+//				zoom = new ImageZoom(mapPanel);
+//				JLabel scaleLabel = new JLabel("Scale");
+//				scaleLabel.setBounds(680, 630, 50, 30);
+//				uiPanel.add(scaleLabel);
+//				uiPanel.add(zoom.getZoomingSpinner());
+//				uiPanel.add(zoom.getZoomInButton());
+//				uiPanel.add(zoom.getZoomOutButton());
+//				uiPanel.add(scrollMapPanel);
+		
+		}
+			
+	});
 
 		for (int i = 0; i < maps.size(); i++) {
 			if(maps.get(i).getMapName() != null)
@@ -439,7 +446,7 @@ public class EndUserGUI extends JPanel implements ActionListener{
 		tutorial.setBounds(6, 632, 40, 40);
 		uiPanel.add(tutorial);
 		count = 1;
-		ImageIcon icon = new ImageIcon("IconImages/Tut.png");
+		final ImageIcon icon = new ImageIcon("IconImages/Tut.png");
 		tutorial.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
 				if (count > 0)
@@ -503,13 +510,13 @@ public class EndUserGUI extends JPanel implements ActionListener{
 		uiPanel.add(scrollDire);
 
 		emergencyIcon = new ImageIcon("IconImages/emergencyIcon.png");
-		Icon emergencyIconBIG = new ImageIcon("IconImages/emergencyIconBIG.png");
+		final Icon emergencyIconBIG = new ImageIcon("IconImages/emergencyIconBIG.png");
 		emergency = new JButton();
 		emergency.setToolTipText("Emergency Information");
 		emergency.setIcon(emergencyIcon);
 		emergency.setBounds(872, 632, 40, 40);
 		uiPanel.add(emergency);
-		String emergencyInfo = "Call Campus Police:" + "\n" + "508-831-5555";
+		final String emergencyInfo = "Call Campus Police:" + "\n" + "508-831-5555";
 		emergency.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
 				JOptionPane.showMessageDialog(null, emergencyInfo, "Incase of emergency", JOptionPane.PLAIN_MESSAGE, emergencyIconBIG);
@@ -536,17 +543,14 @@ public class EndUserGUI extends JPanel implements ActionListener{
 				        doc.addAuthor("GetThere");
 				        doc.addTitle("This is title");
 				        doc.open();
-				
-				        Paragraph para1 = new Paragraph();
-				        para1.add("Here are your direction maps");
-				
-				        doc.add(para1);
 				         
 				        //adding a local image and aligned RIGHT
 				        for(int i = 0; i < totalMaps; i++) {
 				        	new PanelCapture(mapPanel);
 					        Image image = Image.getInstance("Screen.png");
-					        //image.scaleAbsolute(200, 150);
+				            doc.setPageSize(image);
+				            doc.newPage();
+				            image.setAbsolutePosition(0, 0);
 					        doc.add(image);
 					        if(i!=totalMaps-1){
 					        	rightArrow.getModel().setArmed(true);
@@ -560,7 +564,6 @@ public class EndUserGUI extends JPanel implements ActionListener{
 				        doc.close();
 				        pdfFileout.close();
 				
-				        System.out.println("Success!");
 					} catch (Exception e1) {
 			            e1.printStackTrace();
 			        }
@@ -574,11 +577,11 @@ public class EndUserGUI extends JPanel implements ActionListener{
 		});
 
 		transportIcon = new ImageIcon("IconImages/transportIcon.png");
-		Icon transportIconBIG = new ImageIcon("IconImages/transportIconBIG.png");
-		Icon gatewaySchedule = new ImageIcon("IconImages/gatewaySchedule.png");
-		Icon eveningSchedule = new ImageIcon("IconImages/eveningSchedule.png");
-		Icon wpiumassSchedule = new ImageIcon("IconImages/wpi-umassSchedule.png");
-		Icon snapSchedule = new ImageIcon("IconImages/snapSchedule.png");
+		final Icon transportIconBIG = new ImageIcon("IconImages/transportIconBIG.png");
+		final Icon gatewaySchedule = new ImageIcon("IconImages/gatewaySchedule.png");
+		final Icon eveningSchedule = new ImageIcon("IconImages/eveningSchedule.png");
+		final Icon wpiumassSchedule = new ImageIcon("IconImages/wpi-umassSchedule.png");
+		final Icon snapSchedule = new ImageIcon("IconImages/snapSchedule.png");
 		transport = new JButton();
 		transport.setToolTipText("View Transport Schedule");
 		transport.setIcon(transportIcon);
@@ -611,7 +614,7 @@ public class EndUserGUI extends JPanel implements ActionListener{
 		});
 
 		bathroomIcon = new ImageIcon("IconImages/bathroomIcon.png");
-		Icon bathroomIconBIG = new ImageIcon("IconImages/bathroomIconBIG.png");
+		final Icon bathroomIconBIG = new ImageIcon("IconImages/bathroomIconBIG.png");
 		nearestBathroom = new JButton();
 		nearestBathroom.setToolTipText("Find nearest Bathroom");
 		nearestBathroom.setIcon(bathroomIcon);
@@ -644,19 +647,19 @@ public class EndUserGUI extends JPanel implements ActionListener{
 				}
 			}
 		});
-
-		historyIcon = new ImageIcon("IconImages/historyIcon.png");
-		ImageIcon historyIconBIG = new ImageIcon("IconImages/historyIconBIG.png");
-		history = new JButton();
-		history.setToolTipText("...Coming Soon");
-		history.setIcon(historyIcon);
-		history.setBounds(1064, 632, 40, 40);
-		uiPanel.add(history);
-		history.addActionListener(new ActionListener(){
-			public void actionPerformed(ActionEvent e){
-				JOptionPane.showMessageDialog(null, "....Coming Soon", "...Coming Soon", JOptionPane.PLAIN_MESSAGE, historyIconBIG);
-			}
-		});
+//
+//		historyIcon = new ImageIcon("IconImages/historyIcon.png");
+//		final ImageIcon historyIconBIG = new ImageIcon("IconImages/historyIconBIG.png");
+//		history = new JButton();
+//		history.setToolTipText("...Coming Soon");
+//		history.setIcon(historyIcon);
+//		history.setBounds(1064, 632, 40, 40);
+//		uiPanel.add(history);
+//		history.addActionListener(new ActionListener(){
+//			public void actionPerformed(ActionEvent e){
+//				JOptionPane.showMessageDialog(null, "....Coming Soon", "...Coming Soon", JOptionPane.PLAIN_MESSAGE, historyIconBIG);
+//			}
+//		});
 
 		//Construct buttons and add action listener
 		searchButton.addActionListener(new ActionListener() {
@@ -708,7 +711,7 @@ public class EndUserGUI extends JPanel implements ActionListener{
 					}
 					int k;
 					GeneralPath path = new GeneralPath();
-					path.moveTo(listPath.getFirst().getX(), listPath.getFirst().getY());; 
+					path.moveTo(listPath.getFirst().getX(), listPath.getFirst().getY());
 					for (k=1; k<listPath.size(); k++){
 						if(currentlyShownMap.getNodes().contains(listPath.get(k-1)) && 
 								currentlyShownMap.getNodes().contains(listPath.get(k))){
@@ -721,13 +724,11 @@ public class EndUserGUI extends JPanel implements ActionListener{
 							path.moveTo(listPath.get(k).getX(), listPath.get(k).getY());
 						}
 					}
-					
+					mapPanel.setPath(path);
 					endNode = listPath.get(listPath.size() - 1);
 					mapPanel.setEndNode(endNode);
 					if(mapsForPaths != null){
-						System.out.println("check 0");
 						if(mapsForPaths.get(arrowCounter).getNodes().contains(startNode)){
-							System.out.println("Check1");
 							mapPanel.setStartNode(startNode);
 						}
 		
@@ -736,7 +737,8 @@ public class EndUserGUI extends JPanel implements ActionListener{
 						}
 					}
 					
-					mapPanel.setPath(path);
+					
+					
 					//					emailDirections = "From: " + startNode.getMapName() + " " + startNode.getName() + "\n" + "to "
 					//                            + Node.getMapName() + ", " + endRoomSEL.getSelectedItem() + "\n" + "\n" +
 					emailDirections = pathCalc.gpsInstructions(pathCalc.navigate(startNode, endNode));
@@ -754,36 +756,33 @@ public class EndUserGUI extends JPanel implements ActionListener{
 		leftArrow.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
 				if(mapsForPaths!= null){
-					if(arrowCounter != 0){
-						rightArrow.setEnabled(true);
-						arrowCounter -= 1;
-						mapNumber.setText(String.valueOf(arrowCounter + 1) + " of " + String.valueOf(totalMaps));
-						currentMapFile = mapsForPaths.get(arrowCounter).getImage();
-						currentlyShownMap = mapsForPaths.get(arrowCounter);
-					}else if (arrowCounter == 0){
+					arrowCounter -= 1;
+					rightArrow.setEnabled(true);
+					mapNumber.setText(String.valueOf(arrowCounter + 1) + " of " + String.valueOf(totalMaps));
+					currentMapFile = mapsForPaths.get(arrowCounter).getImage();
+					currentlyShownMap = mapsForPaths.get(arrowCounter);
+					if (arrowCounter == 0)
 						leftArrow.setEnabled(false);
-					}
 				}
 			}
 		});
 		rightArrow.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
 				if(mapsForPaths != null){
-					if(arrowCounter != totalMaps-1){
-						leftArrow.setEnabled(true);
-						arrowCounter += 1;
-						mapNumber.setText(String.valueOf(arrowCounter + 1) + " of " + String.valueOf(totalMaps));
-						currentMapFile = mapsForPaths.get(arrowCounter).getImage();
-						currentlyShownMap = mapsForPaths.get(arrowCounter);
-					}else if (arrowCounter == totalMaps-1){
+					leftArrow.setEnabled(true);
+					arrowCounter += 1;
+					mapNumber.setText(String.valueOf(arrowCounter + 1) + " of " + String.valueOf(totalMaps));
+					currentMapFile = mapsForPaths.get(arrowCounter).getImage();
+					currentlyShownMap = mapsForPaths.get(arrowCounter);
+					if (arrowCounter == totalMaps-1)
 						rightArrow.setEnabled(false);
-					}
 				}
 			}
 		});
 		uiPanel.setVisible(true);
 		frame.setVisible(true);
 		clear();
+	
 	}
 
 	public class MyGraphics extends JComponent implements MouseMotionListener{
@@ -805,7 +804,6 @@ public class EndUserGUI extends JPanel implements ActionListener{
 					int x = evt.getX();
 					int y = evt.getY();
 					if(!startClicked){
-						System.out.println("SETTING STARTNODE TO SHIT");
 						startNode = findClosestNode(x,y);
 						startClicked = true;
 						mapPanel.setStartNode(startNode);
@@ -837,60 +835,39 @@ public class EndUserGUI extends JPanel implements ActionListener{
 
 		@Override
 		public void paintComponent(Graphics g) {
-			//super.paintComponent(g);
+			GeneralPath path = null;
 			
-
-			
-			
-			//g.drawImage(currentMapFile.getImage(), 0, 0, this);
-			if(currentlyShownMap != null){
-			
-			mapPanel.setImage(currentlyShownMap.getImage());
-			
-			uiPanel.setVisible(true);
-			frame.setVisible(true);
-			}
-
-
-			Graphics2D g2d = (Graphics2D) g;
-			AffineTransform at = new AffineTransform();
-			g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
-					RenderingHints.VALUE_ANTIALIAS_ON);
-			BasicStroke s = new BasicStroke(
-					3f, 
-					BasicStroke.CAP_ROUND, 
-					BasicStroke.JOIN_ROUND);
-			g2d.setStroke(s);
-			double scale =  mapPanel.getScale();
-			
-
-			int w = mapPanel.getWidth();
-	        int h = mapPanel.getHeight();
-	        BufferedImage image = mapPanel.getImage();
-	        if(image != null){
-	        int imageWidth = image.getWidth();
-	        int imageHeight = image.getHeight();
-	        double x = (w - scale * imageWidth)/2;
-	        double y = (h - scale * imageHeight)/2;
-	        at = AffineTransform.getTranslateInstance(0,0);
-	        at.scale(scale, scale);
-	       
-	        }
-
-				
-
-			
-			if(startClicked){
-				System.out.println("1111");
-			}
-			if(startNode != null){
-				System.out.println(startNode.getName());
-			}
-			if(currentlyShownMap.getNodes().contains(startNode)){
-				System.out.println("3333");
+			if(path == null && updatePath == true && listPath.size() > 0){
+				removeAll();
+				int k;
+				path = new GeneralPath();
+				path.moveTo(listPath.getFirst().getX(), listPath.getFirst().getY());
+				for (k=1; k<listPath.size(); k++){
+					if(currentlyShownMap.getNodes().contains(listPath.get(k-1)) && 
+							currentlyShownMap.getNodes().contains(listPath.get(k))){
+						path.lineTo(listPath.get(k).getX(),listPath.get(k).getY());
+						//path.transform(at);
+						//g2d.draw(path);
+					}
+					else{
+						//path.transform(at);
+						path.moveTo(listPath.get(k).getX(), listPath.get(k).getY());
+					}
+				}
+				mapPanel.setPath(path);
+				endNode = listPath.get(listPath.size() - 1);
+				mapPanel.setEndNode(endNode);
+				if(mapsForPaths != null){
+					if(mapsForPaths.get(arrowCounter).getNodes().contains(startNode)){
+						mapPanel.setStartNode(startNode);
+					}
+	
+					if(mapsForPaths.get(arrowCounter).getNodes().contains(endNode)){
+					mapPanel.setEndNode(endNode);
+					}
+				}
 			}
 			if(startClicked && (startNode != null) && (currentlyShownMap.getNodes().contains(startNode))){
-				System.out.println("Check2");
 				mapPanel.setStartNode(startNode);
 
 			}
@@ -912,7 +889,11 @@ public class EndUserGUI extends JPanel implements ActionListener{
 		public void mouseMoved(MouseEvent e) {
 			int x = e.getX();
 			int y = e.getY();
-			
+
+			if(ttManager == null){
+				ttManager = ToolTipManager.sharedInstance();
+			}
+
 			if(nearHistoricalNode(x, y) != null){
 				// + nearHistoricalNode(x, y).getName() + 
 				URL url = getClass().getResource("/historicalimages/" + nearHistoricalNode(x, y).getName() + ".jpg");
@@ -921,10 +902,12 @@ public class EndUserGUI extends JPanel implements ActionListener{
 				}
 				String tt = "<html><body><img src='" + url + "'></body></html>";
 				setToolTipText(tt);
+				ttManager.setEnabled(true);
 			} else{
-				setToolTipText(null);
+				if(ttManager.isEnabled()){
+					ttManager.setEnabled(false);
+				}
 			}
-
 		}
 		public void mousePressed(MouseEvent e) {
 			int x = e.getX();
@@ -950,13 +933,20 @@ public class EndUserGUI extends JPanel implements ActionListener{
 			}
 		}
 	}
-	
+
 	public Node nearHistoricalNode(int x, int y){
-		for(int i = 0; i < historicalNodes.size(); i++){
-			if(((x - historicalNodes.get(i).getX()) < 6) && ((y - historicalNodes.get(i).getY()) < 6)){
-				return historicalNodes.get(i);
+		if(historicalNodes != null){
+			if(historicalNodes.size() > 0){
+				for(int i = 0; i < historicalNodes.size(); i++){
+					if(((x - historicalNodes.get(i).getX()) < 6) && ((y - historicalNodes.get(i).getY()) < 6)){
+						if(((historicalNodes.get(i).getX() - x) < 6) && ((historicalNodes.get(i).getY() - y) < 6)){
+							return historicalNodes.get(i);
+						}
+					}
+				}
 			}
 		}
 		return null;
 	}
+	
 }
