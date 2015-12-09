@@ -18,6 +18,7 @@ class ImagePanel extends JPanel
 
 {
 	private static final int CircleDiam = 10;
+
     BufferedImage image;
     double scale;
     GeneralPath path;
@@ -165,13 +166,4 @@ Point2D before1 = new Point(), after1 = new Point(), before2 = new Point(), afte
         g.dispose();
         return newImage;
     }
-    
-    
-
-	
-
-	
-	
-  
-   
 } 
