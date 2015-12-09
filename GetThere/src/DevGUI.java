@@ -423,6 +423,9 @@ public class DevGUI extends JPanel{
           nodesOnCurrentMap.add(new Node(x, y, nodeName, NodeType.ROOM));
           nodesOnCurrentMap.get(nodesOnCurrentMap.size() - 1).setMapName(currentMapName);
           break;
+         case "Historical":
+        	 nodesOnCurrentMap.add(new Node(x, y, nodeName, NodeType.HISTORICAL));
+        	 nodesOnCurrentMap.get(nodesOnCurrentMap.size() - 1).setMapName(currentMapName);
          default:
           nodesOnCurrentMap.add(new Node(x, y, nodeName, NodeType.NOTYPE));
           nodesOnCurrentMap.get(nodesOnCurrentMap.size() - 1).setMapName(currentMapName);
@@ -448,7 +451,7 @@ public class DevGUI extends JPanel{
      }
      if(editNodes){
     	 if(nodeIndex >= 0){
-  //  		 NodeEditor ne = new NodeEditor(uiPanel, nodesOnCurrentMap.get(nodeIndex));
+    		 new NodeEditor(uiPanel, nodesOnCurrentMap.get(nodeIndex));
     	 }
      }
      if (evt.getClickCount() >= 2 && (createNodes || createSpecial)) {
