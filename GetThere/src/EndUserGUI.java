@@ -418,16 +418,16 @@ public class EndUserGUI extends JPanel implements ActionListener{
 				for(int i = 0; i < sortedendRooms.size(); i++){
 					endRoomSEL.addItem(sortedendRooms.get(i));
 				}
-				//				mapPanel.setImage(currentlyShownMap.getImage());
-				//				mapPanel.add(graph);
-				//				zoom = new ImageZoom(mapPanel);
-				//				JLabel scaleLabel = new JLabel("Scale");
-				//				scaleLabel.setBounds(680, 630, 50, 30);
-				//				uiPanel.add(scaleLabel);
-				//				uiPanel.add(zoom.getZoomingSpinner());
-				//				uiPanel.add(zoom.getZoomInButton());
-				//				uiPanel.add(zoom.getZoomOutButton());
-				//				uiPanel.add(scrollMapPanel);
+								mapPanel.setImage(currentlyShownMap.getImage());
+								mapPanel.add(graph);
+								zoom = new ImageZoom(mapPanel);
+								JLabel scaleLabel = new JLabel("Scale");
+								scaleLabel.setBounds(680, 630, 50, 30);
+								uiPanel.add(scaleLabel);
+								uiPanel.add(zoom.getZoomingSpinner());
+								uiPanel.add(zoom.getZoomInButton());
+								uiPanel.add(zoom.getZoomOutButton());
+								uiPanel.add(scrollMapPanel);
 
 			}
 
@@ -724,7 +724,6 @@ public class EndUserGUI extends JPanel implements ActionListener{
 				if(updatePath && startNode != null && endNode != null){
 					listPath = pathCalc.navigate(startNode, endNode);
 					mapsForPaths = new LinkedList<Map>();
-
 					for (i = 0; i < listPath.size(); i++){
 						for (int j = 0; j < maps.size(); j++){
 							nodesInMap = maps.get(j).getNodes();
@@ -738,6 +737,7 @@ public class EndUserGUI extends JPanel implements ActionListener{
 						}
 						currentMapFile = mapsForPaths.getFirst().getImage();
 						currentlyShownMap = mapsForPaths.getFirst();
+						mapPanel.setImage(currentlyShownMap.getImage());
 						totalMaps = mapsForPaths.size();
 
 						if(mapsForPaths.size() > 1){
@@ -801,6 +801,7 @@ public class EndUserGUI extends JPanel implements ActionListener{
 					mapNumber.setText(String.valueOf(arrowCounter + 1) + " of " + String.valueOf(totalMaps));
 					currentMapFile = mapsForPaths.get(arrowCounter).getImage();
 					currentlyShownMap = mapsForPaths.get(arrowCounter);
+					mapPanel.setImage(currentlyShownMap.getImage());
 					if (arrowCounter == 0)
 						leftArrow.setEnabled(false);
 				}
@@ -814,6 +815,7 @@ public class EndUserGUI extends JPanel implements ActionListener{
 					mapNumber.setText(String.valueOf(arrowCounter + 1) + " of " + String.valueOf(totalMaps));
 					currentMapFile = mapsForPaths.get(arrowCounter).getImage();
 					currentlyShownMap = mapsForPaths.get(arrowCounter);
+					mapPanel.setImage(currentlyShownMap.getImage());
 					if (arrowCounter == totalMaps-1)
 						rightArrow.setEnabled(false);
 				}
