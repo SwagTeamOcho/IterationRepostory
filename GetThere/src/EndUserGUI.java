@@ -643,6 +643,40 @@ public class EndUserGUI extends JPanel implements ActionListener{
 					default:
 						break;
 					}
+					endNode = listPath.get(listPath.size() - 1);
+					mapsForPaths = new LinkedList<Map>();
+					for (int i = 0; i < listPath.size(); i++){
+						for (int j = 0; j < maps.size(); j++){
+							nodesInMap = maps.get(j).getNodes();
+							for(int k = 0; k<nodesInMap.size(); k++){
+								if(listPath.get(i) == nodesInMap.get(k)){
+									if(!mapsForPaths.contains(maps.get(j))){
+										mapsForPaths.add(maps.get(j));
+									}
+								}
+							}
+						}
+						currentMapFile = mapsForPaths.getFirst().getImage();
+						currentlyShownMap = mapsForPaths.getFirst();
+						totalMaps = mapsForPaths.size();
+
+						if(mapsForPaths.size() > 1){
+							rightArrow.setEnabled(true);
+							mapNumber.setText(String.valueOf(1) + " of " + String.valueOf(totalMaps));
+						}
+					}
+					//					emailDirections = "From: " + startNode.getMapName() + " " + startNode.getName() + "\n" + "to "
+					//                            + Node.getMapName() + ", " + endRoomSEL.getSelectedItem() + "\n" + "\n" +
+					emailDirections = pathCalc.gpsInstructions(pathCalc.navigate(startNode, endNode));
+					if (listPath != null){
+						totalDistance = Djikstra.getDistance(listPath);
+					}
+					directions.setText("From: " + startNode.getMapName() + ", " + startNode.getName() + "\n" + "to " 
+										+ endNode.getMapName() + ", " + endRoomSEL.getSelectedItem() + "\n" + "\n" 
+										+ "Total Distance to Destination: " + totalDistance  + " ft" + "\n"+ "Time to Destination: " +
+										(double)totalDistance/4.11 +"mins" + "\n" + emailDirections);
+					repaint();
+					revalidate();
 				}
 			}
 		});
