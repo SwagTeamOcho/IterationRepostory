@@ -50,18 +50,15 @@ public class XComboBox extends JComboBox<String> {
 				JList list = getPopupList();
 				hovered = getNodeByName(String.valueOf(list.getSelectedValue()), map.getNodes());
 				if (hovered != null){
-					//System.out.println("--> " + hovered.getX() + "---" + hovered.getY());
-					System.out.println(getPopupName());
-					
 					if(getPopupName().equals("Start")){
 						gui.setStartClicked(true);
 						gui.setStartNode(hovered);
-						System.out.println("START SELECTED");
+						gui.getMapPanel().setStartNode(hovered);
 					}
 					else if(getPopupName().equals("End")){
 						gui.setEndClicked(true);
 						gui.setEndNode(hovered);
-						System.out.println("END SELECTED");
+						gui.getMapPanel().setEndNode(hovered);
 					}
 				}
 			

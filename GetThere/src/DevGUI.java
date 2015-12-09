@@ -375,7 +375,7 @@ public class DevGUI extends JPanel{
 							} else {
 								String[] types = {"No Type", "Men's Bathroom", "Women's Bathroom", "Blue Tower", "Elevator", 
 										"Stairs", "Food", "Emergency Exit", "Lecture Hall", "Office", "Door",
-								"Room"};
+								"Room", "Historical"};
 								Object selectedValue = JOptionPane.showInputDialog(null,
 										"Choose a Node Type", "Input",
 										JOptionPane.INFORMATION_MESSAGE, null,
