@@ -451,7 +451,9 @@ public class DevGUI extends JPanel{
 					}
 					if(editNodes){
 						if(nodeIndex >= 0){
-							new NodeEditor(uiPanel, nodesOnCurrentMap.get(nodeIndex));
+							NodeType typeOfNode = nodesOnCurrentMap.get(nodeIndex).getType();
+							if(typeOfNode != NodeType.ELEVATOR && typeOfNode != NodeType.STAIRS && typeOfNode != NodeType.DOOR && typeOfNode != NodeType.EMERGEXIT)
+								new NodeEditor(uiPanel, nodesOnCurrentMap.get(nodeIndex));
 						}
 					}
 					if (evt.getClickCount() >= 2 && (createNodes || createSpecial)) {
