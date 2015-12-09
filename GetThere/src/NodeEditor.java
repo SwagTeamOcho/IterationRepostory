@@ -15,8 +15,7 @@ private int typeIndex;
 private String name;
 JPanel uiPanel;
 
-String[] types = {"No Type", "Men's Bathroom", "Women's Bathroom", "Blue Tower", "Elevator", 
-		"Stairs", "Food", "Emergency Exit", "Lecture Hall", "Office", "Door",
+String[] types = {"No Type", "Men's Bathroom", "Women's Bathroom", "Blue Tower", "Food", "Lecture Hall", "Office",
 		"Room", "Historical"};
 private Node node;
 
@@ -24,10 +23,9 @@ private Node node;
 		this.uiPanel = panel;
 		xCord = node.getX();
 		yCord = node.getY();
+		name = node.getName();
 		this.node = node;
 
-		
-		
 		//typeString = "";
 		switch(node.getType()){
 		case NOTYPE:
@@ -47,7 +45,7 @@ private Node node;
 			typeIndex = 3;
 			break;
 		case FOOD:
-			//typeString = "Food";
+			//typeString = "Food";	
 			typeIndex = 4;
 			break;
 		case LECTUREHALL:
@@ -62,21 +60,8 @@ private Node node;
 			//typeString = "Room";
 			typeIndex = 7;
 			break;
-		case DOOR:
-			//typeString = "Door";
+		case HISTORICAL: 
 			typeIndex = 8;
-			break;
-		case ELEVATOR:
-			//typeString = "Elevator";
-			typeIndex = 9;
-			break;
-		case EMERGEXIT:
-			//typeString = "Emergency Exit";
-			typeIndex = 10;
-			break;
-		case STAIRS:
-			//typeString = "Stairs";
-			typeIndex = 11;
 			break;
 		default:
 			break;
@@ -93,7 +78,6 @@ private Node node;
 		final JLabel nameLabel = new JLabel("Node Name:");
 		nameLabel.setBounds(762, 286, 80, 25);
 		uiPanel.add(nameLabel);
-		System.out.println("added nameLabel");
 		
 		final JLabel xLabel = new JLabel("X Coordinate");
 		xLabel.setBounds(762, 331, 132, 25);
@@ -178,6 +162,9 @@ private Node node;
 					node.setType(NodeType.NOTYPE);
 				}
 			}
+			xCord = Integer.parseInt(xText.getText());
+			yCord = Integer.parseInt(yText.getText());
+			name = nameText.getText();
 			
 			node.setX(xCord);
 			node.setY(yCord);
