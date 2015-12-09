@@ -717,7 +717,7 @@ public class EndUserGUI extends JPanel implements ActionListener{
 					directions.setText("From: " + startNode.getMapName() + ", " + startNode.getName() + "\n" + "to " 
 										+ endNode.getMapName() + ", " + endRoomSEL.getSelectedItem() + "\n" + "\n" 
 										+ "Total Distance to Destination: " + totalDistance  + " ft" + "\n"+ "Time to Destination: " +
-										(double)totalDistance/4.11 +"mins" + "\n" + emailDirections);
+										Djikstra.getSpeed(totalDistance) + "\n" + emailDirections);
 					repaint();
 					revalidate();
 				}

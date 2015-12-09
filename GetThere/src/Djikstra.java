@@ -153,6 +153,27 @@ public class Djikstra  {
 		return total;
 	}
 	
+	public static String getSpeed(int totalDist){
+		double avgWalk = 4.11;	//4.11ft/sec
+		int speedSec = (int)(totalDist/avgWalk);
+		int speedMin = 0;
+		int speedHour = 0;
+		while(speedSec > 59){
+			speedSec -= 60;
+			speedMin += 1;
+			while(speedMin > 59){
+				speedMin -= 60;
+				speedHour += 1;
+			}
+		}
+		if(speedHour == 0){
+			return speedMin + "mins, " + speedSec + "s";
+		}else if(speedHour == 0 && speedMin == 0){
+			return speedSec + "s";
+		}else{
+			return speedHour + "hrs, " + speedMin + "mins, " + speedSec + "s";
+		}
+	}
 
 	
 	public String gpsInstructions (LinkedList<Node> path){
