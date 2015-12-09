@@ -37,13 +37,12 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextPane;
 import javax.swing.ScrollPaneConstants;
-
+import javax.swing.ToolTipManager;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.plaf.basic.ComboPopup;
-
 import javax.swing.text.StyleConstants;
 
 import com.itextpdf.text.Document;
@@ -154,8 +153,9 @@ public class EndUserGUI extends JPanel implements ActionListener{
 	
 	private String emailDirections;
 	private int totalDistance;
-	
+
 	private LinkedList<Node> historicalNodes;
+	private ToolTipManager ttManager;
 
 	private JScrollPane scrollMapPanel;
 	/**
@@ -221,7 +221,7 @@ public class EndUserGUI extends JPanel implements ActionListener{
 	
 	private void initialize() {
 
-		MyGraphics graph = new MyGraphics();
+		final MyGraphics graph = new MyGraphics();
 		
 		
 		//Frame operations
@@ -337,14 +337,14 @@ public class EndUserGUI extends JPanel implements ActionListener{
 				currentlyShownMap = maps.get(indexOfCurrentMap);
 				arrowCounter = 0;
 				mapsForPaths = null;
-				
+
 				historicalNodes = new LinkedList<>();
 				for(int m = 0; m < currentStartNodes.size(); m++){
-					if(currentStartNodes.get(m).getType() == NodeType.HISTORICAL){
+					if(currentStartNodes.get(m).getType().equals(NodeType.HISTORICAL)){
 						historicalNodes.add(currentStartNodes.get(m));
 					}
 				}
-				
+
 				startRoomSEL.removeAllItems();
 				startRoomSEL.setMap(maps.get(indexOfCurrentMap));
 				for(int i = 0; i < currentStartNodes.size(); ++i){
@@ -402,14 +402,14 @@ public class EndUserGUI extends JPanel implements ActionListener{
 				endRooms = new String[currentEndNodes.size()];
 				currentMapFile = maps.get(indexOfCurrentMap).getImage();
 				currentlyShownMap = maps.get(indexOfCurrentMap);
-				
+
 				historicalNodes = new LinkedList<>();
 				for(int m = 0; m < currentEndNodes.size(); m++){
-					if(currentEndNodes.get(m).getType() == NodeType.HISTORICAL){
+					if(currentEndNodes.get(m).getType().equals(NodeType.HISTORICAL)){
 						historicalNodes.add(currentEndNodes.get(m));
 					}
 				}
-				
+
 				endRoomSEL.removeAllItems();
 				endRoomSEL.setMap(maps.get(indexOfCurrentMap));
 				arrowCounter = 0;
@@ -443,7 +443,7 @@ public class EndUserGUI extends JPanel implements ActionListener{
 		tutorial.setBounds(6, 632, 40, 40);
 		uiPanel.add(tutorial);
 		count = 1;
-		ImageIcon icon = new ImageIcon("IconImages/Tut.png");
+		final ImageIcon icon = new ImageIcon("IconImages/Tut.png");
 		tutorial.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
 				if (count > 0)
@@ -507,13 +507,13 @@ public class EndUserGUI extends JPanel implements ActionListener{
 		uiPanel.add(scrollDire);
 
 		emergencyIcon = new ImageIcon("IconImages/emergencyIcon.png");
-		Icon emergencyIconBIG = new ImageIcon("IconImages/emergencyIconBIG.png");
+		final Icon emergencyIconBIG = new ImageIcon("IconImages/emergencyIconBIG.png");
 		emergency = new JButton();
 		emergency.setToolTipText("Emergency Information");
 		emergency.setIcon(emergencyIcon);
 		emergency.setBounds(872, 632, 40, 40);
 		uiPanel.add(emergency);
-		String emergencyInfo = "Call Campus Police:" + "\n" + "508-831-5555";
+		final String emergencyInfo = "Call Campus Police:" + "\n" + "508-831-5555";
 		emergency.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
 				JOptionPane.showMessageDialog(null, emergencyInfo, "Incase of emergency", JOptionPane.PLAIN_MESSAGE, emergencyIconBIG);
@@ -575,11 +575,11 @@ public class EndUserGUI extends JPanel implements ActionListener{
 		});
 
 		transportIcon = new ImageIcon("IconImages/transportIcon.png");
-		Icon transportIconBIG = new ImageIcon("IconImages/transportIconBIG.png");
-		Icon gatewaySchedule = new ImageIcon("IconImages/gatewaySchedule.png");
-		Icon eveningSchedule = new ImageIcon("IconImages/eveningSchedule.png");
-		Icon wpiumassSchedule = new ImageIcon("IconImages/wpi-umassSchedule.png");
-		Icon snapSchedule = new ImageIcon("IconImages/snapSchedule.png");
+		final Icon transportIconBIG = new ImageIcon("IconImages/transportIconBIG.png");
+		final Icon gatewaySchedule = new ImageIcon("IconImages/gatewaySchedule.png");
+		final Icon eveningSchedule = new ImageIcon("IconImages/eveningSchedule.png");
+		final Icon wpiumassSchedule = new ImageIcon("IconImages/wpi-umassSchedule.png");
+		final Icon snapSchedule = new ImageIcon("IconImages/snapSchedule.png");
 		transport = new JButton();
 		transport.setToolTipText("View Transport Schedule");
 		transport.setIcon(transportIcon);
@@ -647,7 +647,7 @@ public class EndUserGUI extends JPanel implements ActionListener{
 		});
 
 		historyIcon = new ImageIcon("IconImages/historyIcon.png");
-		ImageIcon historyIconBIG = new ImageIcon("IconImages/historyIconBIG.png");
+		final ImageIcon historyIconBIG = new ImageIcon("IconImages/historyIconBIG.png");
 		history = new JButton();
 		history.setToolTipText("...Coming Soon");
 		history.setIcon(historyIcon);
@@ -903,7 +903,11 @@ public class EndUserGUI extends JPanel implements ActionListener{
 		public void mouseMoved(MouseEvent e) {
 			int x = e.getX();
 			int y = e.getY();
-			
+
+			if(ttManager == null){
+				ttManager = ToolTipManager.sharedInstance();
+			}
+
 			if(nearHistoricalNode(x, y) != null){
 				// + nearHistoricalNode(x, y).getName() + 
 				URL url = getClass().getResource("/historicalimages/" + nearHistoricalNode(x, y).getName() + ".jpg");
@@ -912,10 +916,12 @@ public class EndUserGUI extends JPanel implements ActionListener{
 				}
 				String tt = "<html><body><img src='" + url + "'></body></html>";
 				setToolTipText(tt);
+				ttManager.setEnabled(true);
 			} else{
-				setToolTipText(null);
+				if(ttManager.isEnabled()){
+					ttManager.setEnabled(false);
+				}
 			}
-
 		}
 		public void mousePressed(MouseEvent e) {
 			int x = e.getX();
@@ -941,11 +947,17 @@ public class EndUserGUI extends JPanel implements ActionListener{
 			}
 		}
 	}
-	
+
 	public Node nearHistoricalNode(int x, int y){
-		for(int i = 0; i < historicalNodes.size(); i++){
-			if(((x - historicalNodes.get(i).getX()) < 6) && ((y - historicalNodes.get(i).getY()) < 6)){
-				return historicalNodes.get(i);
+		if(historicalNodes != null){
+			if(historicalNodes.size() > 0){
+				for(int i = 0; i < historicalNodes.size(); i++){
+					if(((x - historicalNodes.get(i).getX()) < 6) && ((y - historicalNodes.get(i).getY()) < 6)){
+						if(((historicalNodes.get(i).getX() - x) < 6) && ((historicalNodes.get(i).getY() - y) < 6)){
+							return historicalNodes.get(i);
+						}
+					}
+				}
 			}
 		}
 		return null;
