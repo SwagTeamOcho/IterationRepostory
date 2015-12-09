@@ -7,7 +7,7 @@ import java.awt.event.ActionListener;
 import javax.swing.*;
 
 public class NodeEditor{
-private String typeString;
+//private String typeString;
 private String typeSel;
 private int xCord;
 private int yCord;
@@ -28,59 +28,55 @@ private Node node;
 
 		
 		
-		typeString = "";
+		//typeString = "";
 		switch(node.getType()){
 		case NOTYPE:
-			typeString = "No Type";
+			//typeString = "No Type";
 			typeIndex = 0;
 			break;
 		case MBATHROOM:
-			typeString = " Men's Bathroom";
+			//typeString = " Men's Bathroom";
 			typeIndex = 1;
 			break;
 		case FBATHROOM:
-			typeString = "Women's Bathroom";
+			//typeString = "Women's Bathroom";
 			typeIndex = 2;
 			break;
 		case BLUETOWER:
-			typeString = "Blue Tower";
+			//typeString = "Blue Tower";
 			typeIndex = 3;
 			break;
 		case FOOD:
-			typeString = "Food";
+			//typeString = "Food";
 			typeIndex = 4;
 			break;
 		case LECTUREHALL:
-			typeString = "Lecture Hall";
+			//typeString = "Lecture Hall";
 			typeIndex = 5;
 			break;
 		case OFFICE:
-			typeString = "Office";
+			//typeString = "Office";
 			typeIndex = 6;
 			break;
 		case ROOM:
-			typeString = "Room";
+			//typeString = "Room";
 			typeIndex = 7;
 			break;
-		case BATHROOM:
-			typeString = "Bathroom";
+		case DOOR:
+			//typeString = "Door";
 			typeIndex = 8;
 			break;
-		case DOOR:
-			typeString = "Door";
+		case ELEVATOR:
+			//typeString = "Elevator";
 			typeIndex = 9;
 			break;
-		case ELEVATOR:
-			typeString = "Elevator";
+		case EMERGEXIT:
+			//typeString = "Emergency Exit";
 			typeIndex = 10;
 			break;
-		case EMERGEXIT:
-			typeString = "Emergency Exit";
-			typeIndex = 11;
-			break;
 		case STAIRS:
-			typeString = "Stairs";
-			typeIndex = 12;
+			//typeString = "Stairs";
+			typeIndex = 11;
 			break;
 		default:
 			break;
@@ -94,41 +90,41 @@ private Node node;
 		
 		uiPanel.setLayout(null);
 
-		JLabel nameLabel = new JLabel("Node Name:");
+		final JLabel nameLabel = new JLabel("Node Name:");
 		nameLabel.setBounds(762, 286, 80, 25);
 		uiPanel.add(nameLabel);
 		System.out.println("added nameLabel");
 		
-		JLabel xLabel = new JLabel("X Coordinate");
+		final JLabel xLabel = new JLabel("X Coordinate");
 		xLabel.setBounds(762, 331, 132, 25);
 		uiPanel.add(xLabel);
 		
-		JLabel yLabel = new JLabel("Y Coordinate");
+		final JLabel yLabel = new JLabel("Y Coordinate");
 		yLabel.setBounds(762, 376, 80, 25);
 		uiPanel.add(yLabel);
 		
-		JTextField nameText = new JTextField(name, 20);
+		final JTextField nameText = new JTextField(name, 20);
 		nameText.setBounds(762, 306, 132, 25);
 		uiPanel.add(nameText);
 
-		JTextField xText = new JTextField(Integer.toString(xCord), 20);
+		final JTextField xText = new JTextField(Integer.toString(xCord), 20);
 		xText.setBounds(762, 351, 132, 25);
 		uiPanel.add(xText);
 		
-		JTextField yText = new JTextField(Integer.toString(yCord), 20);
+		final JTextField yText = new JTextField(Integer.toString(yCord), 20);
 		yText.setBounds(762, 396, 132, 25);
 		uiPanel.add(yText);
 		
-		JLabel typeLabel = new JLabel("Node Type");
+		final JLabel typeLabel = new JLabel("Node Type");
 		typeLabel.setBounds(762, 421, 80, 25);
 		uiPanel.add(typeLabel);
 		
-		JComboBox<String> typeBox = new JComboBox<String>(types);
+		final JComboBox<String> typeBox = new JComboBox<String>(types);
 		typeBox.setSelectedIndex(typeIndex);
 		typeBox.setBounds(762, 441, 132, 25);
 		uiPanel.add(typeBox);
 
-		JButton saveButton = new JButton("Save Node");
+		final JButton saveButton = new JButton("Save Node");
 		saveButton.setBounds(762, 526, 132, 29);
 		uiPanel.add(saveButton);
 		
@@ -203,8 +199,7 @@ private Node node;
 	
 	typeBox.addActionListener(new ActionListener() {
 		public void actionPerformed(ActionEvent e) {
-        JComboBox<String> cb = (JComboBox<String>)e.getSource();
-        String typeSel = (String)cb.getSelectedItem();
+        typeSel = (String) typeBox.getSelectedItem();
 		}
 	});
 	}
