@@ -18,7 +18,6 @@ class ImageZoom
 	ImagePanel imagePanel;
 	public ImageZoom(ImagePanel ip)
 	{
-
 		imagePanel = ip;
 	}
 	public JSpinner getZoomingSpinner(){

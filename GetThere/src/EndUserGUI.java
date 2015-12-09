@@ -945,6 +945,7 @@ public class EndUserGUI extends JPanel implements ActionListener{
 					url = getClass().getResource("/historicalimages/default.jpg");
 				}
 				String tt = "<html><body><img src='" + url + "'></body></html>";
+				System.out.println(tt);
 				setToolTipText(tt);
 				ttManager.setEnabled(true);
 			} else{
