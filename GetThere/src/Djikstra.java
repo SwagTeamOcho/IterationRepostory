@@ -52,8 +52,6 @@ public class Djikstra  {
 		}
 		current = goal;
 		temp.add(current);
-		if(current != null){System.out.println("current not null");}
-		if(start != null){System.out.println("start not null");}
 		
 		while (!(current.equals(start))){
 			if(cameFrom.get(current) == null){break;}
@@ -138,12 +136,10 @@ public class Djikstra  {
                     JOptionPane.ERROR_MESSAGE);
 			throw new NoPathException("No Path Found.");
 		}
-		System.out.println("path size = " + path.size());
 		int total = 0;
 		int nextCost = 0;
 		for(int i = 0; i < path.size() - 1; i++){
 			nextCost = path.get(i).getCost(path.get(i+1));
-			System.out.println("nextCost = " + nextCost);
 			if(nextCost<0){
 				throw new NoPathException("No Path Found");
 			}
