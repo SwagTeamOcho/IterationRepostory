@@ -5,7 +5,7 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.RenderingHints;
+import java.awt.RenderingHiants;
 import java.awt.event.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -97,7 +97,7 @@ public class EndUserGUI extends JPanel implements ActionListener{
 	private JLabel endPoint;
 	private JLabel buildingEnd;
 	private JLabel roomEnd;
-	
+
 	private JLabel tutView;
 	//private JLabel floorStart;
 
@@ -107,7 +107,7 @@ public class EndUserGUI extends JPanel implements ActionListener{
 	private JComboBox<String> endBuildingSEL;
 	private XComboBox endRoomSEL;
 	//private JComboBox startFloorSEL;
-	
+
 
 	//Buttons on the UI
 	private JButton searchButton;
@@ -149,7 +149,7 @@ public class EndUserGUI extends JPanel implements ActionListener{
 	private JButton tutorial;
 	private Icon tutIcon;
 	int count;
-	
+
 	private String emailDirections;
 	private int totalDistance;
 
@@ -199,30 +199,30 @@ public class EndUserGUI extends JPanel implements ActionListener{
 	public void setEndNode(Node node){
 		endNode = node;
 	}
-	
-	
+
+
 	public void clear(){
 		updatePath = false;
-        startClicked = false;
-        endClicked = false;
-        endNode = null;
-        directions.setText("");
-        mapsForPaths = null;
-        mapNumber.setText("");
-        mapPanel.setStartNode(null);
-        mapPanel.setEndNode(null);
-        mapPanel.setPath(null);
+		startClicked = false;
+		endClicked = false;
+		endNode = null;
+		directions.setText("");
+		mapsForPaths = null;
+		mapNumber.setText("");
+		mapPanel.setStartNode(null);
+		mapPanel.setEndNode(null);
+		mapPanel.setPath(null);
 	}
 	/**
 	 * Initialize the contents of the frame.
 	 */
-	
-	
+
+
 	private void initialize() {
 
 		final MyGraphics graph = new MyGraphics();
-		
-		
+
+
 		//Frame operations
 		frame = new JFrame();
 		frame.setBounds(100, 100, 1200, 700);
@@ -236,7 +236,7 @@ public class EndUserGUI extends JPanel implements ActionListener{
 		uiPanel = new JPanel();
 		frame.getContentPane().add(uiPanel);
 		uiPanel.setLayout(null);
-		
+
 		tutView = new JLabel("",JLabel.CENTER);    
 		tutView.setLocation(0, 0);
 		tutView.setSize(1194,672);
@@ -249,22 +249,22 @@ public class EndUserGUI extends JPanel implements ActionListener{
 		zoom = new ImageZoom(mapPanel);
 		//uiPanel.add(zoom.getUIPanel());
 		//uiPanel.add(mapPanel);
-		
+
 		scrollMapPanel.getViewport().addChangeListener(new ChangeListener(){
-			
+
 
 			@Override
 			public void stateChanged(ChangeEvent e) {
-				
-				
-				
+
+
+
 			}
 		});
 		uiPanel.add(scrollMapPanel);
-		
-		
+
+
 		//scrollMapPanel.add(graph);
-		
+
 		revalidate();
 		repaint();
 
@@ -294,7 +294,7 @@ public class EndUserGUI extends JPanel implements ActionListener{
 		uiPanel.add(endPoint);
 		uiPanel.add(buildingEnd);
 		uiPanel.add(roomEnd);
-		
+
 		//startRoomSEL.setModel(new DefaultComboBoxModel(new String[]{}));
 		startRoomSEL.setBounds(983, 50, 210, 29);
 		startRoomSEL.setEditable(false);
@@ -468,16 +468,16 @@ public class EndUserGUI extends JPanel implements ActionListener{
 		uiPanel.add(searchButton);
 
 		clearButton = new JButton ("Clear");
-        clearButton.setBounds(853, 150, 132, 30);
-        uiPanel.add(clearButton);
-        clearButton.addActionListener(new ActionListener()  {
-            public void actionPerformed(ActionEvent e)
-            {
-                clear();
-            }
-        });
+		clearButton.setBounds(853, 150, 132, 30);
+		uiPanel.add(clearButton);
+		clearButton.addActionListener(new ActionListener()  {
+			public void actionPerformed(ActionEvent e)
+			{
+				clear();
+			}
+		});
 
-        
+
 
 		leftArrow = new JButton("<<");
 		leftArrow.setBounds(275, 630, 80, 29);
@@ -534,38 +534,38 @@ public class EndUserGUI extends JPanel implements ActionListener{
 					String[] attachments = new String[1];
 					try {
 						File file = new File("Directions.pdf");
-				        FileOutputStream pdfFileout = new FileOutputStream(file);
-				        Document doc = new Document();
-				        PdfWriter.getInstance(doc, pdfFileout);
-				
-				        doc.addAuthor("GetThere");
-				        doc.addTitle("This is title");
-				        doc.open();
-				         
-				        //adding a local image and aligned RIGHT
-				        for(int i = 0; i < totalMaps; i++) {
-				        	new PanelCapture(mapPanel);
-					        Image image = Image.getInstance("Screen.png");
-				            doc.setPageSize(image);
-				            doc.newPage();
-				            image.setAbsolutePosition(0, 0);
-					        doc.add(image);
-					        if(i!=totalMaps-1){
-					        	rightArrow.getModel().setArmed(true);
-					        	rightArrow.getModel().setPressed(true);
-					        	rightArrow.getModel().setPressed(false);
-					        	
-					        }
-					        rightArrow.getModel().setArmed(false);
-				        }
-				
-				        doc.close();
-				        pdfFileout.close();
-				
-				        System.out.println("Success!");
+						FileOutputStream pdfFileout = new FileOutputStream(file);
+						Document doc = new Document();
+						PdfWriter.getInstance(doc, pdfFileout);
+
+						doc.addAuthor("GetThere");
+						doc.addTitle("This is title");
+						doc.open();
+
+						//adding a local image and aligned RIGHT
+						for(int i = 0; i < totalMaps; i++) {
+							new PanelCapture(mapPanel);
+							Image image = Image.getInstance("Screen.png");
+							doc.setPageSize(image);
+							doc.newPage();
+							image.setAbsolutePosition(0, 0);
+							doc.add(image);
+							if(i!=totalMaps-1){
+								rightArrow.getModel().setArmed(true);
+								rightArrow.getModel().setPressed(true);
+								rightArrow.getModel().setPressed(false);
+
+							}
+							rightArrow.getModel().setArmed(false);
+						}
+
+						doc.close();
+						pdfFileout.close();
+
+						System.out.println("Success!");
 					} catch (Exception e1) {
-			            e1.printStackTrace();
-			        }
+						e1.printStackTrace();
+					}
 					attachments[0] = ("Directions.pdf");
 					EMailDialogue em = new EMailDialogue(frame, emailDirections, attachments);
 					em.setVisible(true);
@@ -672,9 +672,9 @@ public class EndUserGUI extends JPanel implements ActionListener{
 						totalDistance = Djikstra.getDistance(listPath);
 					}
 					directions.setText("From: " + startNode.getMapName() + ", " + startNode.getName() + "\n" + "to " 
-										+ endNode.getMapName() + ", " + endRoomSEL.getSelectedItem() + "\n" + "\n" 
-										+ "Total Distance to Destination: " + totalDistance  + " ft" + "\n"+ "Time to Destination: " +
-										(double)totalDistance/4.11 +"mins" + "\n" + emailDirections);
+							+ endNode.getMapName() + ", " + endRoomSEL.getSelectedItem() + "\n" + "\n" 
+							+ "Total Distance to Destination: " + totalDistance  + " ft" + "\n"+ "Time to Destination: " +
+							(double)totalDistance/4.11 +"mins" + "\n" + emailDirections);
 					repaint();
 					revalidate();
 				}
@@ -747,9 +747,9 @@ public class EndUserGUI extends JPanel implements ActionListener{
 						totalDistance = Djikstra.getDistance(listPath);
 					}
 					directions.setText("From: " + startNode.getMapName() + ", " + startNode.getName() + "\n" + "to " 
-										+ endNode.getMapName() + ", " + endRoomSEL.getSelectedItem() + "\n" + "\n" 
-										+ "Total Distance to Destination: " + totalDistance  + " ft" + "\n"+ "Time to Destination: " +
-										(double)totalDistance/4.11 +"mins" + "\n" + emailDirections);
+							+ endNode.getMapName() + ", " + endRoomSEL.getSelectedItem() + "\n" + "\n" 
+							+ "Total Distance to Destination: " + totalDistance  + " ft" + "\n"+ "Time to Destination: " +
+							(double)totalDistance/4.11 +"mins" + "\n" + emailDirections);
 					repaint();
 					revalidate();
 				}
@@ -791,16 +791,16 @@ public class EndUserGUI extends JPanel implements ActionListener{
 
 		private static final long serialVersionUID = 1L;
 		private static final int SquareWidth = 5;
-		
+
 
 		MyGraphics() {
 			setPreferredSize(new Dimension(760, 666));
 			addMouseMotionListener(this);
-			
+
 
 			addMouseListener(new MouseAdapter(){
-				
-				
+
+
 				public void mouseClicked(MouseEvent evt) {
 					int x = evt.getX();
 					int y = evt.getY();
@@ -814,7 +814,7 @@ public class EndUserGUI extends JPanel implements ActionListener{
 						endClicked = true;
 					}
 				}
-				
+
 				private Node findClosestNode(int x, int y) {
 					double shortestDistance = Double.MAX_VALUE;
 					double previousShortestDistance;
@@ -830,23 +830,23 @@ public class EndUserGUI extends JPanel implements ActionListener{
 					return result;
 				}});
 			addMouseMotionListener(this);
-			
+
 		}
 
 		@Override
 		public void paintComponent(Graphics g) {
 			super.paintComponent(g);
-			
 
-			
-			
+
+
+
 			//g.drawImage(currentMapFile.getImage(), 0, 0, this);
 			if(currentlyShownMap != null){
-			
-			mapPanel.setImage(currentlyShownMap.getImage());
-			
-			uiPanel.setVisible(true);
-			frame.setVisible(true);
+
+				mapPanel.setImage(currentlyShownMap.getImage());
+
+				uiPanel.setVisible(true);
+				frame.setVisible(true);
 			}
 
 			GeneralPath path = null;
@@ -863,20 +863,20 @@ public class EndUserGUI extends JPanel implements ActionListener{
 					BasicStroke.JOIN_ROUND);
 			g2d.setStroke(s);
 			double scale =  mapPanel.getScale();
-			
+
 
 			int w = mapPanel.getWidth();
-	        int h = mapPanel.getHeight();
-	        BufferedImage image = mapPanel.getImage();
-	        if(image != null){
-	        int imageWidth = image.getWidth();
-	        int imageHeight = image.getHeight();
-	        double x = (w - scale * imageWidth)/2;
-	        double y = (h - scale * imageHeight)/2;
-	        at = AffineTransform.getTranslateInstance(0,0);
-	        at.scale(scale, scale);
-	       
-	        }
+			int h = mapPanel.getHeight();
+			BufferedImage image = mapPanel.getImage();
+			if(image != null){
+				int imageWidth = image.getWidth();
+				int imageHeight = image.getHeight();
+				double x = (w - scale * imageWidth)/2;
+				double y = (h - scale * imageHeight)/2;
+				at = AffineTransform.getTranslateInstance(0,0);
+				at.scale(scale, scale);
+
+			}
 			repaint();
 			revalidate();
 			if (path==null && updatePath == true && listPath.size() > 0) {
@@ -899,15 +899,15 @@ public class EndUserGUI extends JPanel implements ActionListener{
 				mapPanel.setPath(path);
 
 				endNode = listPath.get(listPath.size() - 1);
-				
+
 				if(mapsForPaths != null){
 					if(mapsForPaths.get(arrowCounter).getNodes().contains(startNode)){
 						mapPanel.setStartNode(startNode);
-						
+
 					}
-	
+
 					if(mapsForPaths.get(arrowCounter).getNodes().contains(endNode)){
-					mapPanel.setEndNode(endNode);
+						mapPanel.setEndNode(endNode);
 					}
 				}
 
@@ -922,7 +922,7 @@ public class EndUserGUI extends JPanel implements ActionListener{
 				mapPanel.setEndNode(endNode);
 			}
 		}
-		
+
 
 		@Override
 		public void mouseDragged(MouseEvent e) {
