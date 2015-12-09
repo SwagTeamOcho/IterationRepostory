@@ -5,7 +5,7 @@ public class EndUserMain {
 
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
-			EndUserGUI window = new EndUserGUI();
+			EndUserGUI window = new EndUserGUI(); 
 			public void run() {
 				try {
 					window.getFrame().setVisible(true);

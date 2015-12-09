@@ -182,6 +182,10 @@ public class EndUserGUI extends JPanel implements ActionListener{
 		return currentlyShownMap;
 	}
 
+	public LinkedList<Node> getHistoricalNodes(){
+		return this.historicalNodes;
+	}
+
 	public void setStartClicked(boolean set){
 		startClicked = set;
 	}
@@ -659,8 +663,9 @@ public class EndUserGUI extends JPanel implements ActionListener{
 						}
 						currentMapFile = mapsForPaths.getFirst().getImage();
 						currentlyShownMap = mapsForPaths.getFirst();
+						mapPanel.setImage(currentlyShownMap.getImage());
 						totalMaps = mapsForPaths.size();
-
+						mapPanel.setEndNode(endNode);
 						if(mapsForPaths.size() > 1){
 							rightArrow.setEnabled(true);
 							mapNumber.setText(String.valueOf(1) + " of " + String.valueOf(totalMaps));
@@ -676,8 +681,9 @@ public class EndUserGUI extends JPanel implements ActionListener{
 							+ endNode.getMapName() + ", " + endRoomSEL.getSelectedItem() + "\n" + "\n" 
 							+ "Total Distance to Destination: " + totalDistance  + " ft" + "\n"+ "Time to Destination: " +
 							(double)totalDistance/4.11 +"mins" + "\n" + emailDirections);
-					repaint();
 					revalidate();
+					repaint();
+
 				}
 			}
 		});
@@ -694,8 +700,31 @@ public class EndUserGUI extends JPanel implements ActionListener{
 					listPath = pathCalc.nearestSpecialNode(startNode, NodeType.BLUETOWER);
 					updatePath = true;
 				}
-			}
-		});
+
+				endNode = listPath.get(listPath.size() - 1);
+				mapsForPaths = new LinkedList<Map>();
+				for (int i = 0; i < listPath.size(); i++){
+					for (int j = 0; j < maps.size(); j++){
+						nodesInMap = maps.get(j).getNodes();
+						for(int k = 0; k<nodesInMap.size(); k++){
+							if(listPath.get(i) == nodesInMap.get(k)){
+								if(!mapsForPaths.contains(maps.get(j))){
+									mapsForPaths.add(maps.get(j));
+								}
+							}
+						}
+					}
+					currentMapFile = mapsForPaths.getFirst().getImage();
+					currentlyShownMap = mapsForPaths.getFirst();
+					mapPanel.setImage(currentlyShownMap.getImage());
+					totalMaps = mapsForPaths.size();
+					mapPanel.setEndNode(endNode);
+					if(mapsForPaths.size() > 1){
+						rightArrow.setEnabled(true);
+						mapNumber.setText(String.valueOf(1) + " of " + String.valueOf(totalMaps));
+					}
+				}
+			}});
 
 		//Construct buttons and add action listener
 		searchButton.addActionListener(new ActionListener() {
@@ -753,8 +782,8 @@ public class EndUserGUI extends JPanel implements ActionListener{
 					for (k=1; k<listPath.size(); k++){
 						if(listPath.get(k-1).getMapName().equals(currentlyShownMap.getMapName())
 								&& listPath.get(k).getMapName().equals(currentlyShownMap.getMapName())){
-//						if(currentlyShownMap.getNodes().contains(listPath.get(k-1)) && 
-//								currentlyShownMap.getNodes().contains(listPath.get(k))){
+							//						if(currentlyShownMap.getNodes().contains(listPath.get(k-1)) && 
+							//								currentlyShownMap.getNodes().contains(listPath.get(k))){
 							path.lineTo(listPath.get(k).getX(),listPath.get(k).getY());
 							//path.transform(at);
 							//g2d.draw(path);
@@ -893,8 +922,8 @@ public class EndUserGUI extends JPanel implements ActionListener{
 				for (k=1; k<listPath.size(); k++){
 					if(listPath.get(k-1).getMapName().equals(currentlyShownMap.getMapName())
 							&& listPath.get(k).getMapName().equals(currentlyShownMap.getMapName())){
-//					if(currentlyShownMap.getNodes().contains(listPath.get(k-1)) && 
-//							currentlyShownMap.getNodes().contains(listPath.get(k))){
+						//					if(currentlyShownMap.getNodes().contains(listPath.get(k-1)) && 
+						//							currentlyShownMap.getNodes().contains(listPath.get(k))){
 						path.lineTo(listPath.get(k).getX(),listPath.get(k).getY());
 						//path.transform(at);
 						//g2d.draw(path);
