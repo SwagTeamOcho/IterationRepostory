@@ -1,10 +1,8 @@
-import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.RenderingHints;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
@@ -25,15 +23,7 @@ import javax.swing.JPanel;
 import javax.swing.*;
 
 import java.util.*;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.FileOutputStream;
 import java.io.File;
-
-import java.awt.image.BufferedImage;
-import java.beans.*;
 
 
 
@@ -102,7 +92,6 @@ public class DevGUI extends JPanel{
  public static void main(String[] args) {
  
   serialize = new Serialize();
-  
   
   
   
@@ -459,7 +448,7 @@ public class DevGUI extends JPanel{
      }
      if(editNodes){
     	 if(nodeIndex >= 0){
-    		 NodeEditor ne = new NodeEditor(uiPanel, nodesOnCurrentMap.get(nodeIndex));
+  //  		 NodeEditor ne = new NodeEditor(uiPanel, nodesOnCurrentMap.get(nodeIndex));
     	 }
      }
      if (evt.getClickCount() >= 2 && (createNodes || createSpecial)) {
