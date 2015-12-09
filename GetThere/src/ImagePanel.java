@@ -10,6 +10,7 @@ import java.awt.geom.AffineTransform;
 import java.awt.geom.GeneralPath;
 import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
+import java.util.LinkedList;
 
 import javax.swing.ImageIcon;
 import javax.swing.JPanel;
@@ -56,7 +57,21 @@ class ImagePanel extends JPanel
 				at.scale(scale, scale);
 				g2.drawRenderedImage(image, at);
 			
-
+				if(gui.getHistoricalNodes() != null){
+					LinkedList<Node> histNodes = gui.getHistoricalNodes();
+					for(int i = 0; i < histNodes.size(); i++){
+						Point2D before1 = new Point(), after1 = new Point(), before2 = new Point(), after2 = new Point();
+						Node n = histNodes.get(i);
+						before1.setLocation(n.getX()-(CircleDiam+3)/2, n.getY()-(CircleDiam+3)/2);
+						before2.setLocation(n.getX()-CircleDiam/2, n.getY()-CircleDiam/2);
+						at.transform(before1, after1);
+						at.transform(before2, after2);
+						g.setColor(Color.BLACK);
+						g.fillOval((int)after1.getX(), (int)after1.getY(), CircleDiam+3, CircleDiam+3);
+						g.setColor(Color.YELLOW);
+						g.fillOval((int)after2.getX(), (int)after2.getY(), CircleDiam, CircleDiam);
+					}
+				}
 			if(path != null){
 				path.transform(at);
 				g2.setColor(Color.BLACK);
