@@ -537,28 +537,24 @@ public class EndUserGUI extends JPanel implements ActionListener{
 				        doc.addAuthor("GetThere");
 				        doc.addTitle("This is title");
 				        doc.open();
-				        
-				        while(arrowCounter > 0){
-				        	System.out.println("LeftCLicking");
-				        	System.out.println(arrowCounter);
-				        	leftArrow.doClick();
-				        }
-				        
+				         
 				        //adding a local image and aligned RIGHT
 				        for(int i = 0; i < totalMaps; i++) {
-				        	System.out.println("Printing images");
-				        	rightArrow.doClick();
-				        	PanelCapture c = new PanelCapture(mapPanel, i);
-					        Image image = Image.getInstance("Screen"+i+".png");
+				        	new PanelCapture(mapPanel);
+					        Image image = Image.getInstance("Screen.png");
 				            doc.setPageSize(image);
 				            doc.newPage();
 				            image.setAbsolutePosition(0, 0);
 					        doc.add(image);
-					        rightArrow.doClick();
+					        if(i!=totalMaps-1){
+					        	rightArrow.getModel().setArmed(true);
+					        	rightArrow.getModel().setPressed(true);
+					        	rightArrow.getModel().setPressed(false);
+					        	
+					        }
+					        rightArrow.getModel().setArmed(false);
 				        }
 				
-				        System.out.println(arrowCounter);
-				        System.out.println(currentlyShownMap);
 				        doc.close();
 				        pdfFileout.close();
 				
@@ -613,7 +609,7 @@ public class EndUserGUI extends JPanel implements ActionListener{
 		});
 		//Object[] nearestSpots = {new ImageIcon("IconImages/bathroomIcon.png"), new ImageIcon("IconImages/blueTowerIcon.png")};
 		bathroomIcon = new ImageIcon("IconImages/bathroomIcon.png");
-		Icon bathroomIconBIG = new ImageIcon("IconImages/bathroomIconBIG.png");
+		final Icon bathroomIconBIG = new ImageIcon("IconImages/bathroomIconBIG.png");
 		nearestBathroom = new JButton(bathroomIcon);
 		nearestBathroom.setToolTipText("Find nearest Bathroom");
 		nearestBathroom.setBounds(1017, 632, 40, 40);
