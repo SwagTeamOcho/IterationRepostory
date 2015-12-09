@@ -112,6 +112,10 @@ private Node node;
 		saveButton.setBounds(762, 526, 132, 29);
 		uiPanel.add(saveButton);
 		
+		final JButton cancelButton = new JButton("Cancel");
+		cancelButton.setBounds(762, 496, 132, 29);
+		uiPanel.add(cancelButton);
+		
 		uiPanel.repaint();
 		uiPanel.revalidate();
 	
@@ -180,6 +184,25 @@ private Node node;
 			uiPanel.remove(typeLabel);
 			uiPanel.remove(typeBox);
 			uiPanel.remove(saveButton);
+			uiPanel.remove(cancelButton);
+			return;
+		}
+	});
+	
+	cancelButton.addActionListener(new ActionListener() {
+		public void actionPerformed(ActionEvent e) {
+			uiPanel.remove(nameLabel);
+			uiPanel.remove(nameText);
+			uiPanel.remove(xLabel);
+			uiPanel.remove(xText);
+			uiPanel.remove(yLabel);
+			uiPanel.remove(yText);
+			uiPanel.remove(typeLabel);
+			uiPanel.remove(typeBox);
+			uiPanel.remove(saveButton);
+			uiPanel.remove(cancelButton);
+			uiPanel.repaint();
+			uiPanel.revalidate();
 			return;
 		}
 	});
