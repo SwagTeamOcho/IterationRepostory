@@ -1,10 +1,8 @@
-import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.RenderingHints;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
@@ -25,15 +23,7 @@ import javax.swing.JPanel;
 import javax.swing.*;
 
 import java.util.*;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.FileOutputStream;
 import java.io.File;
-
-import java.awt.image.BufferedImage;
-import java.beans.*;
 
 
 
@@ -52,14 +42,14 @@ public class DevGUI extends JPanel{
 	public static LinkedList<Map> maps = new LinkedList<>();
 	private static LinkedList<Node> nodesOnCurrentMap = new LinkedList<>();
 	private static LinkedList<Edge> edgesOnCurrentMap = new LinkedList<>();
-	private String[] startRooms = new String[1000];
-	private String buildingSelectedSTART;   //track which building is selected to start in.
+	//private String[] startRooms = new String[1000];
+	//private String buildingSelectedSTART;   //track which building is selected to start in.
 	private String currentMapName;
 	private SelectMap loadMap;
 	static DevGUI window;
 	private ImageIcon currentMapFile;
 	private ImageIcon tempMapFile;
-	private NodeType currentType;
+	//private NodeType currentType;
 	private Node currentNode;
 
 
@@ -74,8 +64,9 @@ public class DevGUI extends JPanel{
 	boolean importPushed = true;
 	boolean updateMap = false;
 	boolean createMapLink = false;
+	boolean editNodes = false;
 	int indexOfCurrentMap;
-	private LinkedList<String> currentMapList;
+	//private LinkedList<String> currentMapList;
 	private static Serialize serialize;
 
 	public boolean developerMode = true;
@@ -88,7 +79,7 @@ public class DevGUI extends JPanel{
 	private JLabel buildingStart;
 
 	//Combo Boxes on the GUI
-	private JComboBox<String> startBuildingSEL;
+	//private JComboBox<String> startBuildingSEL;
 
 	/**
 	 * Create the application.
@@ -101,7 +92,6 @@ public class DevGUI extends JPanel{
 	public static void main(String[] args) {
 
 		serialize = new Serialize();
-
 
 
 
@@ -138,7 +128,7 @@ public class DevGUI extends JPanel{
 
 		//Frame operations
 		frame = new JFrame();
-		frame.setBounds(100, 100, 900, 700);
+		frame.setBounds(100, 100, 910, 700);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(new BoxLayout(frame.getContentPane(), BoxLayout.X_AXIS));
 		frame.setTitle("Get There");
@@ -166,15 +156,14 @@ public class DevGUI extends JPanel{
 		//Construct Combo boxes to select start point
 
 
-		JComboBox dropDown = new JComboBox(maps.toArray());
+		final JComboBox<Map> dropDown = new JComboBox<Map>(maps.toArray(new Map[maps.size()]));
 
 		dropDown.setBounds(762, 46, 132, 29);
 		dropDown.setVisible(true);
-		dropDown.setSelectedIndex(-1);
+		//  dropDown.setSelectedIndex(0);
 		dropDown.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e) {
-				JComboBox cb1 = (JComboBox)e.getSource();
-				selectedMap = (Map)cb1.getSelectedItem();
+				selectedMap = (Map) dropDown.getSelectedItem();
 				System.out.println();
 				System.out.println(selectedMap);
 				System.out.println(selectedMap.getNodes());
@@ -202,6 +191,7 @@ public class DevGUI extends JPanel{
 					loadMap.setVisible(true);
 					loadMap.setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 					updateMap = true;
+					editNodes = false;
 				}
 			});
 
@@ -215,6 +205,7 @@ public class DevGUI extends JPanel{
 					createSpecial = false;
 					createEdges = false;
 					createMapLink = false;
+					editNodes = false;
 
 				}
 			});
@@ -229,6 +220,7 @@ public class DevGUI extends JPanel{
 					createSpecial = true;
 					createEdges = false;
 					createMapLink = false;
+					editNodes = false;
 
 				}
 			});
@@ -245,12 +237,26 @@ public class DevGUI extends JPanel{
 					createSpecial = false;
 					createEdges = true;
 					createMapLink = false;
+					editNodes = false;
 				}
 			});
 
-
-
-
+			JButton btnEditor = new JButton("Node Editor");
+			btnEditor.setBounds(762, 256, 132, 29);;
+			uiPanel.add(btnEditor);
+			btnEditor.addActionListener(new ActionListener(){
+				public void actionPerformed(ActionEvent e){
+					System.out.println("Edit Nodes Pushed");
+					createNodes = false;
+					createSpecial = false;
+					createEdges = false;
+					createMapLink = false;
+					editNodes = true;
+				}
+			});
+			//   btnEditor.setVisible(true);
+			//   uiPanel.repaint();
+			//   uiPanel.revalidate();
 
 			//Construct button and add action listener
 			JButton btnExport = new JButton("Save Changes");
@@ -262,14 +268,16 @@ public class DevGUI extends JPanel{
 
 					serialize.doSerialize("MapList", maps);
 					if(updateMap){
+
+
+
+						dropDown.addItem(maps.getLast());
+
+					serialize.doSerialize("MapList", maps);
+					if(updateMap){
 						
 						
 				
-
-
-
-					//	dropDown.addItem(maps.getLast());
-
 
 						updateMap = false;
 					}
@@ -282,7 +290,7 @@ public class DevGUI extends JPanel{
 
 
 			JButton btnDeleteMap = new JButton("Delete Map");
-			btnDeleteMap.setBounds(762, 286, 132, 29);
+			btnDeleteMap.setBounds(762, 586, 132, 29);
 			uiPanel.add(btnDeleteMap);
 			btnDeleteMap.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e){
@@ -296,39 +304,22 @@ public class DevGUI extends JPanel{
 					} else if (response == JOptionPane.YES_OPTION) {
 						System.out.println("Yes button clicked");
 
+						System.out.println(maps);
+						System.out.println(selectedMap);
 
+						dropDown.removeItem(selectedMap);
 
-						
+						System.out.println(maps.remove(selectedMap));
 
-
-
-
-
-
-						if(maps.remove(selectedMap))
-						{
-							maps.remove(selectedMap);
-						}
-						
-						
-						
-						if(dropDown.getItemCount()>1){
-						
-						serialize.doSerialize("MapList", maps);
-						}
-							
-							
-
-		
 
 
 						updateMap = true;
 
 
-						dropDown.removeItem(selectedMap);
 
 
-						
+
+						serialize.doSerialize("MapList", maps);
 
 					} else if (response == JOptionPane.CLOSED_OPTION) {
 						System.out.println("JOptionPane closed");
@@ -437,6 +428,9 @@ public class DevGUI extends JPanel{
 										nodesOnCurrentMap.add(new Node(x, y, nodeName, NodeType.ROOM));
 										nodesOnCurrentMap.get(nodesOnCurrentMap.size() - 1).setMapName(currentMapName);
 										break;
+									case "Historical":
+										nodesOnCurrentMap.add(new Node(x, y, nodeName, NodeType.HISTORICAL));
+										nodesOnCurrentMap.get(nodesOnCurrentMap.size() - 1).setMapName(currentMapName);
 									default:
 										nodesOnCurrentMap.add(new Node(x, y, nodeName, NodeType.NOTYPE));
 										nodesOnCurrentMap.get(nodesOnCurrentMap.size() - 1).setMapName(currentMapName);
@@ -458,6 +452,13 @@ public class DevGUI extends JPanel{
 									nodesOnCurrentMap.get(nodeIndex),
 									(int) calcDistance(nodesOnCurrentMap.get(staringEdgeIndex), nodesOnCurrentMap.get(nodeIndex), maps.get(indexOfCurrentMap).getScale())));
 							count = 0;
+						}
+					}
+					if(editNodes){
+						if(nodeIndex >= 0){
+							NodeType typeOfNode = nodesOnCurrentMap.get(nodeIndex).getType();
+							if(typeOfNode != NodeType.ELEVATOR && typeOfNode != NodeType.STAIRS && typeOfNode != NodeType.DOOR && typeOfNode != NodeType.EMERGEXIT)
+								new NodeEditor(uiPanel, nodesOnCurrentMap.get(nodeIndex));
 						}
 					}
 					if (evt.getClickCount() >= 2 && (createNodes || createSpecial)) {
@@ -483,33 +484,80 @@ public class DevGUI extends JPanel{
 		public void makeLink(int x, int y, String nodeName, NodeType type){
 			Object[] mapNames = maps.toArray();
 
+			if(type == NodeType.ELEVATOR &&(JOptionPane.showConfirmDialog(
+					frame,
+					"Would you like to connect to an existing node?",
+					"Node Connection",
+					JOptionPane.YES_NO_OPTION)
+					== JOptionPane.YES_OPTION)){
+				Object connectingMap = JOptionPane.showInputDialog(null, 
+						"Choose a map to connect to",
+						"Input",
+						JOptionPane.INFORMATION_MESSAGE, null,
+						mapNames, mapNames[0]);
+				//int indexInListOfMaps = maps.indexOf(connectingMap);
 
-			Object connectingMap = JOptionPane.showInputDialog(null, 
-					"Choose a map to connect to",
-					"Input",
-					JOptionPane.INFORMATION_MESSAGE, null,
-					mapNames, mapNames[0]);
+				LinkedList<Node> possibleNodes = new LinkedList<Node>();
+				possibleNodes = maps.get(maps.indexOf(connectingMap)).getNodes();
+				int c = 0;
+				for(int d = 0; d < possibleNodes.size(); ++d){
+					if(possibleNodes.get(d).getType().equals(NodeType.ELEVATOR))
+						c++;
+				}
+				String[] nodeSelect = new String[c];
+				int k = 0;
+				for(int j = 0; j < possibleNodes.size(); ++j){
+					if(possibleNodes.get(j).getType().equals(NodeType.ELEVATOR)){
+						nodeSelect[k] = (possibleNodes.get(j).getName());
+						k++;
+					}
+				}
+				String s = (String)JOptionPane.showInputDialog(
+						frame,
+						"Choose Node to connect to \n",
+						"Choose Node",
+						JOptionPane.PLAIN_MESSAGE,
+						null, 
+						nodeSelect,
+						null);
+				for(int n = 0; n < possibleNodes.size(); ++n){
+					if(possibleNodes.get(n).getName().equals(s)){
+						currentNode = possibleNodes.get(n);
+					}
+				}
+				Node newNode = new Node(x, y, nodeName, type);
+				newNode.setMapName(selectedMap.getMapName());
+				maps.get(maps.indexOf(selectedMap)).getNodes().add(newNode);
+				maps.get(maps.indexOf(selectedMap)).getEdges().add(new Edge(newNode, currentNode, 0));
+				maps.get(maps.indexOf(connectingMap)).getEdges().add(new Edge(newNode, currentNode, 0));
+			}
+			else{
+				Object connectingMap = JOptionPane.showInputDialog(null, 
+						"Choose a map to connect to",
+						"Input",
+						JOptionPane.INFORMATION_MESSAGE, null,
+						mapNames, mapNames[0]);
 
 
 
-			System.out.println("First map: " + selectedMap);
-			System.out.println("Second map: " + connectingMap);
+				System.out.println("First map: " + selectedMap);
+				System.out.println("Second map: " + connectingMap);
 
-			int indexInListOfMaps = maps.indexOf(connectingMap);
+				//int indexInListOfMaps = maps.indexOf(connectingMap);
 
-			Node linkNode1 = new Node(x, y, nodeName, type);
-			linkNode1.setMapName(selectedMap.getMapName());
+				Node linkNode1 = new Node(x, y, nodeName, type);
+				linkNode1.setMapName(selectedMap.getMapName());
 
-			Node linkNode2 = new Node(x, y, nodeName, type);
-			linkNode2.setMapName(((Map)connectingMap).getMapName());
+				Node linkNode2 = new Node(x, y, nodeName, type);
+				linkNode2.setMapName(((Map)connectingMap).getMapName());
 
-			maps.get(maps.indexOf(selectedMap)).getNodes().add(linkNode1);
-			maps.get(maps.indexOf(connectingMap)).getNodes().add(linkNode2);
+				maps.get(maps.indexOf(selectedMap)).getNodes().add(linkNode1);
+				maps.get(maps.indexOf(connectingMap)).getNodes().add(linkNode2);
 
-			maps.get(maps.indexOf(selectedMap)).getEdges().add(new Edge(linkNode1, linkNode2, 0));
-			maps.get(maps.indexOf(connectingMap)).getEdges().add(new Edge(linkNode1, linkNode2, 0));
+				maps.get(maps.indexOf(selectedMap)).getEdges().add(new Edge(linkNode1, linkNode2, 0));
+				maps.get(maps.indexOf(connectingMap)).getEdges().add(new Edge(linkNode1, linkNode2, 0));
 
-
+			}
 			repaint();
 			revalidate();
 		}
@@ -589,7 +637,10 @@ public class DevGUI extends JPanel{
 					break;
 				case ROOM:
 					g.setColor(Color.DARK_GRAY);
-					break;  
+					break;
+				case HISTORICAL:
+					g.setColor(Color.MAGENTA);
+					break;
 
 
 				}
@@ -639,13 +690,21 @@ public class DevGUI extends JPanel{
 		}
 		public boolean isPortal(Node n)
 		{
-			switch ((NodeType)n.getType()){
+			switch (n.getType()){
 			case ELEVATOR:
 			case STAIRS:
 			case DOOR:
 			case EMERGEXIT:
 				return true;
-
+			case MBATHROOM:
+			case FBATHROOM:
+			case LECTUREHALL:
+			case BLUETOWER:
+			case OFFICE:
+			case ROOM:
+			case HISTORICAL:
+			case FOOD:
+			case NOTYPE:
 
 			}
 			return false;

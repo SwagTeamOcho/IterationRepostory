@@ -75,6 +75,7 @@ public class EndUserGUI extends JPanel implements ActionListener{
 
 	private boolean startClicked = false;
 	private boolean endClicked = false;
+	private boolean movedMap = false;
 	//private boolean startHoverFlag = false;
 	//private boolean endHoverFlag = false;
 
@@ -107,8 +108,6 @@ public class EndUserGUI extends JPanel implements ActionListener{
 	private XComboBox endRoomSEL;
 	//private JComboBox startFloorSEL;
 	
-	private ArrayList<String> sortedStartRooms = new ArrayList<String>();
-	private ArrayList<String> sortedEndRooms = new ArrayList<String>();
 
 	//Buttons on the UI
 	private JButton searchButton;
@@ -221,7 +220,7 @@ public class EndUserGUI extends JPanel implements ActionListener{
 	
 	private void initialize() {
 
-		MyGraphics graph = new MyGraphics();
+		final MyGraphics graph = new MyGraphics();
 		
 		
 		//Frame operations
@@ -243,7 +242,7 @@ public class EndUserGUI extends JPanel implements ActionListener{
 		tutView.setSize(1194,672);
 		uiPanel.add(tutView);
 
-		mapPanel = new ImagePanel();
+		mapPanel = new ImagePanel(this);
 		mapPanel.add(graph);
 		scrollMapPanel = new JScrollPane(mapPanel);
 		scrollMapPanel.setBounds(5, 5, 750, 620);
@@ -346,6 +345,7 @@ public class EndUserGUI extends JPanel implements ActionListener{
 				}
 
 				startRoomSEL.removeAllItems();
+				ArrayList<String> sortedStartRooms = new ArrayList<String>();
 				startRoomSEL.setMap(maps.get(indexOfCurrentMap));
 				for(int i = 0; i < currentStartNodes.size(); ++i){
 					startRooms[i] = currentStartNodes.get(i).getName();
@@ -414,6 +414,7 @@ public class EndUserGUI extends JPanel implements ActionListener{
 				endRoomSEL.setMap(maps.get(indexOfCurrentMap));
 				arrowCounter = 0;
 				mapsForPaths = null;
+				ArrayList<String> sortedEndRooms = new ArrayList<String>();
 
 				for(int i = 0; i < currentEndNodes.size(); i++){
 					endRooms[i] = currentEndNodes.get(i).getName();
@@ -443,7 +444,7 @@ public class EndUserGUI extends JPanel implements ActionListener{
 		tutorial.setBounds(6, 632, 40, 40);
 		uiPanel.add(tutorial);
 		count = 1;
-		ImageIcon icon = new ImageIcon("IconImages/Tut.png");
+		final ImageIcon icon = new ImageIcon("IconImages/Tut.png");
 		tutorial.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
 				if (count > 0)
@@ -507,13 +508,13 @@ public class EndUserGUI extends JPanel implements ActionListener{
 		uiPanel.add(scrollDire);
 
 		emergencyIcon = new ImageIcon("IconImages/emergencyIcon.png");
-		Icon emergencyIconBIG = new ImageIcon("IconImages/emergencyIconBIG.png");
+		final Icon emergencyIconBIG = new ImageIcon("IconImages/emergencyIconBIG.png");
 		emergency = new JButton();
 		emergency.setToolTipText("Emergency Information");
 		emergency.setIcon(emergencyIcon);
 		emergency.setBounds(872, 632, 40, 40);
 		uiPanel.add(emergency);
-		String emergencyInfo = "Call Campus Police:" + "\n" + "508-831-5555";
+		final String emergencyInfo = "Call Campus Police:" + "\n" + "508-831-5555";
 		emergency.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
 				JOptionPane.showMessageDialog(null, emergencyInfo, "Incase of emergency", JOptionPane.PLAIN_MESSAGE, emergencyIconBIG);
@@ -575,11 +576,11 @@ public class EndUserGUI extends JPanel implements ActionListener{
 		});
 
 		transportIcon = new ImageIcon("IconImages/transportIcon.png");
-		Icon transportIconBIG = new ImageIcon("IconImages/transportIconBIG.png");
-		Icon gatewaySchedule = new ImageIcon("IconImages/gatewaySchedule.png");
-		Icon eveningSchedule = new ImageIcon("IconImages/eveningSchedule.png");
-		Icon wpiumassSchedule = new ImageIcon("IconImages/wpi-umassSchedule.png");
-		Icon snapSchedule = new ImageIcon("IconImages/snapSchedule.png");
+		final Icon transportIconBIG = new ImageIcon("IconImages/transportIconBIG.png");
+		final Icon gatewaySchedule = new ImageIcon("IconImages/gatewaySchedule.png");
+		final Icon eveningSchedule = new ImageIcon("IconImages/eveningSchedule.png");
+		final Icon wpiumassSchedule = new ImageIcon("IconImages/wpi-umassSchedule.png");
+		final Icon snapSchedule = new ImageIcon("IconImages/snapSchedule.png");
 		transport = new JButton();
 		transport.setToolTipText("View Transport Schedule");
 		transport.setIcon(transportIcon);
@@ -647,7 +648,7 @@ public class EndUserGUI extends JPanel implements ActionListener{
 		});
 
 		historyIcon = new ImageIcon("IconImages/historyIcon.png");
-		ImageIcon historyIconBIG = new ImageIcon("IconImages/historyIconBIG.png");
+		final ImageIcon historyIconBIG = new ImageIcon("IconImages/historyIconBIG.png");
 		history = new JButton();
 		history.setToolTipText("...Coming Soon");
 		history.setIcon(historyIcon);
@@ -724,30 +725,26 @@ public class EndUserGUI extends JPanel implements ActionListener{
 		leftArrow.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
 				if(mapsForPaths!= null){
-					if(arrowCounter != 0){
-						rightArrow.setEnabled(true);
-						arrowCounter -= 1;
-						mapNumber.setText(String.valueOf(arrowCounter + 1) + " of " + String.valueOf(totalMaps));
-						currentMapFile = mapsForPaths.get(arrowCounter).getImage();
-						currentlyShownMap = mapsForPaths.get(arrowCounter);
-					}else if (arrowCounter == 0){
+					arrowCounter -= 1;
+					rightArrow.setEnabled(true);
+					mapNumber.setText(String.valueOf(arrowCounter + 1) + " of " + String.valueOf(totalMaps));
+					currentMapFile = mapsForPaths.get(arrowCounter).getImage();
+					currentlyShownMap = mapsForPaths.get(arrowCounter);
+					if (arrowCounter == 0)
 						leftArrow.setEnabled(false);
-					}
 				}
 			}
 		});
 		rightArrow.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
 				if(mapsForPaths != null){
-					if(arrowCounter != totalMaps-1){
-						leftArrow.setEnabled(true);
-						arrowCounter += 1;
-						mapNumber.setText(String.valueOf(arrowCounter + 1) + " of " + String.valueOf(totalMaps));
-						currentMapFile = mapsForPaths.get(arrowCounter).getImage();
-						currentlyShownMap = mapsForPaths.get(arrowCounter);
-					}else if (arrowCounter == totalMaps-1){
+					leftArrow.setEnabled(true);
+					arrowCounter += 1;
+					mapNumber.setText(String.valueOf(arrowCounter + 1) + " of " + String.valueOf(totalMaps));
+					currentMapFile = mapsForPaths.get(arrowCounter).getImage();
+					currentlyShownMap = mapsForPaths.get(arrowCounter);
+					if (arrowCounter == totalMaps-1)
 						rightArrow.setEnabled(false);
-					}
 				}
 			}
 		});

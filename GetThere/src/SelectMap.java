@@ -35,7 +35,11 @@ public class SelectMap extends JFrame {
 		openButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent ae) {
 				JFileChooser chooser = new JFileChooser();
+<<<<<<< HEAD
 				FileNameExtensionFilter filter = new FileNameExtensionFilter("JPG & Serialized Files", "jpg","ser");
+=======
+				FileNameExtensionFilter filter = new FileNameExtensionFilter("JPG Images", "jpg");
+>>>>>>> 29e3ecd5d29ef37d6bc959c9001dfd475342b6d4
 				chooser.setFileFilter(filter);
 				chooser.setAcceptAllFileFilterUsed(false);
 				chooser.setFileHidingEnabled(true);
@@ -52,6 +56,7 @@ public class SelectMap extends JFrame {
 
 		importButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent ae) {
+<<<<<<< HEAD
 				if(filePath != null)
 					if(filePath.endsWith(".ser")){
 
@@ -81,6 +86,25 @@ public class SelectMap extends JFrame {
 
 
 			}
+=======
+
+				try {
+					double formatedText = Double.parseDouble(scale.getText()) ;
+					Map newMap = new Map(filePath, mapName.getText(), formatedText);
+					DevGUI.maps.add(newMap);
+					System.out.println("TEST");  
+
+				} catch (Exception z) { 
+
+					scale.setText("");
+					return;
+				}
+				setVisible(false);
+
+			}
+
+		
+>>>>>>> 29e3ecd5d29ef37d6bc959c9001dfd475342b6d4
 		});
 
 
