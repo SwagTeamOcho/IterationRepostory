@@ -1,3 +1,5 @@
+package test;
+import src.*;
 public class TestNodes {
 
 	//Test map nodes
