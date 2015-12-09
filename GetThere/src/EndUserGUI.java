@@ -107,8 +107,6 @@ public class EndUserGUI extends JPanel implements ActionListener{
 	private XComboBox endRoomSEL;
 	//private JComboBox startFloorSEL;
 	
-	private ArrayList<String> sortedStartRooms = new ArrayList<String>();
-	private ArrayList<String> sortedEndRooms = new ArrayList<String>();
 
 	//Buttons on the UI
 	private JButton searchButton;
@@ -243,7 +241,7 @@ public class EndUserGUI extends JPanel implements ActionListener{
 		tutView.setSize(1194,672);
 		uiPanel.add(tutView);
 
-		mapPanel = new ImagePanel();
+		mapPanel = new ImagePanel(this);
 		mapPanel.add(graph);
 		scrollMapPanel = new JScrollPane(mapPanel);
 		scrollMapPanel.setBounds(5, 5, 750, 620);
@@ -346,6 +344,7 @@ public class EndUserGUI extends JPanel implements ActionListener{
 				}
 
 				startRoomSEL.removeAllItems();
+				ArrayList<String> sortedStartRooms = new ArrayList<String>();
 				startRoomSEL.setMap(maps.get(indexOfCurrentMap));
 				for(int i = 0; i < currentStartNodes.size(); ++i){
 					startRooms[i] = currentStartNodes.get(i).getName();
@@ -414,6 +413,7 @@ public class EndUserGUI extends JPanel implements ActionListener{
 				endRoomSEL.setMap(maps.get(indexOfCurrentMap));
 				arrowCounter = 0;
 				mapsForPaths = null;
+				ArrayList<String> sortedEndRooms = new ArrayList<String>();
 
 				for(int i = 0; i < currentEndNodes.size(); i++){
 					endRooms[i] = currentEndNodes.get(i).getName();
