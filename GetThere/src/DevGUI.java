@@ -1,10 +1,8 @@
-import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.RenderingHints;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
@@ -25,15 +23,7 @@ import javax.swing.JPanel;
 import javax.swing.*;
 
 import java.util.*;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.FileOutputStream;
 import java.io.File;
-
-import java.awt.image.BufferedImage;
-import java.beans.*;
 
 
 
@@ -52,14 +42,14 @@ public class DevGUI extends JPanel{
 	public static LinkedList<Map> maps = new LinkedList<>();
 	private static LinkedList<Node> nodesOnCurrentMap = new LinkedList<>();
 	private static LinkedList<Edge> edgesOnCurrentMap = new LinkedList<>();
-	private String[] startRooms = new String[1000];
-	private String buildingSelectedSTART;   //track which building is selected to start in.
+	//private String[] startRooms = new String[1000];
+	//private String buildingSelectedSTART;   //track which building is selected to start in.
 	private String currentMapName;
 	private SelectMap loadMap;
 	static DevGUI window;
 	private ImageIcon currentMapFile;
 	private ImageIcon tempMapFile;
-	private NodeType currentType;
+	//private NodeType currentType;
 	private Node currentNode;
 
 
@@ -76,7 +66,7 @@ public class DevGUI extends JPanel{
 	boolean createMapLink = false;
 	boolean editNodes = false;
 	int indexOfCurrentMap;
-	private LinkedList<String> currentMapList;
+	//private LinkedList<String> currentMapList;
 	private static Serialize serialize;
 
 	public boolean developerMode = true;
@@ -89,7 +79,7 @@ public class DevGUI extends JPanel{
 	private JLabel buildingStart;
 
 	//Combo Boxes on the GUI
-	private JComboBox<String> startBuildingSEL;
+	//private JComboBox<String> startBuildingSEL;
 
 	/**
 	 * Create the application.
@@ -102,7 +92,6 @@ public class DevGUI extends JPanel{
 	public static void main(String[] args) {
 
 		serialize = new Serialize();
-
 
 
 
@@ -167,15 +156,14 @@ public class DevGUI extends JPanel{
 		//Construct Combo boxes to select start point
 
 
-		final JComboBox dropDown = new JComboBox(maps.toArray());
+		final JComboBox<Map> dropDown = new JComboBox<Map>(maps.toArray(new Map[maps.size()]));
 
 		dropDown.setBounds(762, 46, 132, 29);
 		dropDown.setVisible(true);
 		//  dropDown.setSelectedIndex(0);
 		dropDown.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e) {
-				JComboBox cb1 = (JComboBox)e.getSource();
-				selectedMap = (Map)cb1.getSelectedItem();
+				selectedMap = (Map) dropDown.getSelectedItem();
 				System.out.println();
 				System.out.println(selectedMap);
 				System.out.println(selectedMap.getNodes());
@@ -218,6 +206,7 @@ public class DevGUI extends JPanel{
 					createEdges = false;
 					createMapLink = false;
 					editNodes = false;
+
 				}
 			});
 
@@ -232,6 +221,7 @@ public class DevGUI extends JPanel{
 					createEdges = false;
 					createMapLink = false;
 					editNodes = false;
+
 				}
 			});
 
@@ -251,7 +241,6 @@ public class DevGUI extends JPanel{
 				}
 			});
 
-
 			JButton btnEditor = new JButton("Node Editor");
 			btnEditor.setBounds(762, 256, 132, 29);;
 			uiPanel.add(btnEditor);
@@ -268,7 +257,6 @@ public class DevGUI extends JPanel{
 			//   btnEditor.setVisible(true);
 			//   uiPanel.repaint();
 			//   uiPanel.revalidate();
-
 
 			//Construct button and add action listener
 			JButton btnExport = new JButton("Save Changes");
@@ -435,6 +423,9 @@ public class DevGUI extends JPanel{
 										nodesOnCurrentMap.add(new Node(x, y, nodeName, NodeType.ROOM));
 										nodesOnCurrentMap.get(nodesOnCurrentMap.size() - 1).setMapName(currentMapName);
 										break;
+									case "Historical":
+										nodesOnCurrentMap.add(new Node(x, y, nodeName, NodeType.HISTORICAL));
+										nodesOnCurrentMap.get(nodesOnCurrentMap.size() - 1).setMapName(currentMapName);
 									default:
 										nodesOnCurrentMap.add(new Node(x, y, nodeName, NodeType.NOTYPE));
 										nodesOnCurrentMap.get(nodesOnCurrentMap.size() - 1).setMapName(currentMapName);
@@ -460,7 +451,7 @@ public class DevGUI extends JPanel{
 					}
 					if(editNodes){
 						if(nodeIndex >= 0){
-							//NodeEditor ne = new NodeEditor(uiPanel, nodesOnCurrentMap.get(nodeIndex));
+							new NodeEditor(uiPanel, nodesOnCurrentMap.get(nodeIndex));
 						}
 					}
 					if (evt.getClickCount() >= 2 && (createNodes || createSpecial)) {
@@ -497,7 +488,7 @@ public class DevGUI extends JPanel{
 						"Input",
 						JOptionPane.INFORMATION_MESSAGE, null,
 						mapNames, mapNames[0]);
-				int indexInListOfMaps = maps.indexOf(connectingMap);
+				//int indexInListOfMaps = maps.indexOf(connectingMap);
 
 				LinkedList<Node> possibleNodes = new LinkedList<Node>();
 				possibleNodes = maps.get(maps.indexOf(connectingMap)).getNodes();
@@ -545,7 +536,7 @@ public class DevGUI extends JPanel{
 				System.out.println("First map: " + selectedMap);
 				System.out.println("Second map: " + connectingMap);
 
-				int indexInListOfMaps = maps.indexOf(connectingMap);
+				//int indexInListOfMaps = maps.indexOf(connectingMap);
 
 				Node linkNode1 = new Node(x, y, nodeName, type);
 				linkNode1.setMapName(selectedMap.getMapName());
@@ -639,7 +630,10 @@ public class DevGUI extends JPanel{
 					break;
 				case ROOM:
 					g.setColor(Color.DARK_GRAY);
-					break;  
+					break;
+				case HISTORICAL:
+					g.setColor(Color.MAGENTA);
+					break;
 
 
 				}
@@ -689,13 +683,21 @@ public class DevGUI extends JPanel{
 		}
 		public boolean isPortal(Node n)
 		{
-			switch ((NodeType)n.getType()){
+			switch (n.getType()){
 			case ELEVATOR:
 			case STAIRS:
 			case DOOR:
 			case EMERGEXIT:
 				return true;
-
+			case MBATHROOM:
+			case FBATHROOM:
+			case LECTUREHALL:
+			case BLUETOWER:
+			case OFFICE:
+			case ROOM:
+			case HISTORICAL:
+			case FOOD:
+			case NOTYPE:
 
 			}
 			return false;
@@ -782,4 +784,5 @@ public class DevGUI extends JPanel{
 	public void setDeveloperMode(Boolean modeSelect){
 		this.developerMode = modeSelect;
 	}
+
 }
