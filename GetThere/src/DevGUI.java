@@ -166,15 +166,14 @@ public class DevGUI extends JPanel{
   //Construct Combo boxes to select start point
 
   
-  JComboBox dropDown = new JComboBox(maps.toArray());
+  final JComboBox<Map> dropDown = new JComboBox<Map>(maps.toArray(new Map[maps.size()]));
   
   dropDown.setBounds(762, 46, 132, 29);
   dropDown.setVisible(true);
 //  dropDown.setSelectedIndex(0);
   dropDown.addActionListener(new ActionListener(){
    public void actionPerformed(ActionEvent e) {
-    JComboBox cb1 = (JComboBox)e.getSource();
-    selectedMap = (Map)cb1.getSelectedItem();
+    selectedMap = (Map) dropDown.getSelectedItem();
     System.out.println();
     System.out.println(selectedMap);
     System.out.println(selectedMap.getNodes());
