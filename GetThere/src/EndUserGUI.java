@@ -76,6 +76,7 @@ public class EndUserGUI extends JPanel implements ActionListener{
 
 	private boolean startClicked = false;
 	private boolean endClicked = false;
+	private boolean movedMap = false;
 	//private boolean startHoverFlag = false;
 	//private boolean endHoverFlag = false;
 
@@ -728,30 +729,26 @@ public class EndUserGUI extends JPanel implements ActionListener{
 		leftArrow.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
 				if(mapsForPaths!= null){
-					if(arrowCounter != 0){
-						rightArrow.setEnabled(true);
-						arrowCounter -= 1;
-						mapNumber.setText(String.valueOf(arrowCounter + 1) + " of " + String.valueOf(totalMaps));
-						currentMapFile = mapsForPaths.get(arrowCounter).getImage();
-						currentlyShownMap = mapsForPaths.get(arrowCounter);
-					}else if (arrowCounter == 0){
+					arrowCounter -= 1;
+					rightArrow.setEnabled(true);
+					mapNumber.setText(String.valueOf(arrowCounter + 1) + " of " + String.valueOf(totalMaps));
+					currentMapFile = mapsForPaths.get(arrowCounter).getImage();
+					currentlyShownMap = mapsForPaths.get(arrowCounter);
+					if (arrowCounter == 0)
 						leftArrow.setEnabled(false);
-					}
 				}
 			}
 		});
 		rightArrow.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
 				if(mapsForPaths != null){
-					if(arrowCounter != totalMaps-1){
-						leftArrow.setEnabled(true);
-						arrowCounter += 1;
-						mapNumber.setText(String.valueOf(arrowCounter + 1) + " of " + String.valueOf(totalMaps));
-						currentMapFile = mapsForPaths.get(arrowCounter).getImage();
-						currentlyShownMap = mapsForPaths.get(arrowCounter);
-					}else if (arrowCounter == totalMaps-1){
+					leftArrow.setEnabled(true);
+					arrowCounter += 1;
+					mapNumber.setText(String.valueOf(arrowCounter + 1) + " of " + String.valueOf(totalMaps));
+					currentMapFile = mapsForPaths.get(arrowCounter).getImage();
+					currentlyShownMap = mapsForPaths.get(arrowCounter);
+					if (arrowCounter == totalMaps-1)
 						rightArrow.setEnabled(false);
-					}
 				}
 			}
 		});
