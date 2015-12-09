@@ -159,7 +159,7 @@ public class EndUserGUI extends JPanel implements ActionListener{
 		Serialize serialize = new Serialize();
 		Object tempMaps = serialize.deSerialize("MapList");
 		if(tempMaps instanceof LinkedList<?>){
-			maps = (LinkedList<Map>) serialize.deSerialize("MapList");
+			maps = (LinkedList<Map>) tempMaps;
 		}
 		startRoomSEL = new XComboBox(this);
 		endRoomSEL = new XComboBox(this);
@@ -358,6 +358,7 @@ public class EndUserGUI extends JPanel implements ActionListener{
 				uiPanel.add(zoom.getZoomInButton());
 				uiPanel.add(zoom.getZoomOutButton());
 				uiPanel.add(scrollMapPanel);
+				mapPanel.setPath(null);
 			}
 
 		});
@@ -418,16 +419,17 @@ public class EndUserGUI extends JPanel implements ActionListener{
 				for(int i = 0; i < sortedendRooms.size(); i++){
 					endRoomSEL.addItem(sortedendRooms.get(i));
 				}
-								mapPanel.setImage(currentlyShownMap.getImage());
-								mapPanel.add(graph);
-								zoom = new ImageZoom(mapPanel);
-								JLabel scaleLabel = new JLabel("Scale");
-								scaleLabel.setBounds(680, 630, 50, 30);
-								uiPanel.add(scaleLabel);
-								uiPanel.add(zoom.getZoomingSpinner());
-								uiPanel.add(zoom.getZoomInButton());
-								uiPanel.add(zoom.getZoomOutButton());
-								uiPanel.add(scrollMapPanel);
+				mapPanel.setImage(currentlyShownMap.getImage());
+				mapPanel.add(graph);
+				zoom = new ImageZoom(mapPanel);
+				JLabel scaleLabel = new JLabel("Scale");
+				scaleLabel.setBounds(680, 630, 50, 30);
+				uiPanel.add(scaleLabel);
+				uiPanel.add(zoom.getZoomingSpinner());
+				uiPanel.add(zoom.getZoomInButton());
+				uiPanel.add(zoom.getZoomOutButton());
+				uiPanel.add(scrollMapPanel);
+				mapPanel.setPath(null);
 
 			}
 
@@ -749,8 +751,10 @@ public class EndUserGUI extends JPanel implements ActionListener{
 					GeneralPath path = new GeneralPath();
 					path.moveTo(listPath.getFirst().getX(), listPath.getFirst().getY());
 					for (k=1; k<listPath.size(); k++){
-						if(currentlyShownMap.getNodes().contains(listPath.get(k-1)) && 
-								currentlyShownMap.getNodes().contains(listPath.get(k))){
+						if(listPath.get(k-1).getMapName().equals(currentlyShownMap.getMapName())
+								&& listPath.get(k).getMapName().equals(currentlyShownMap.getMapName())){
+//						if(currentlyShownMap.getNodes().contains(listPath.get(k-1)) && 
+//								currentlyShownMap.getNodes().contains(listPath.get(k))){
 							path.lineTo(listPath.get(k).getX(),listPath.get(k).getY());
 							//path.transform(at);
 							//g2d.draw(path);
@@ -887,8 +891,10 @@ public class EndUserGUI extends JPanel implements ActionListener{
 				path = new GeneralPath();
 				path.moveTo(listPath.getFirst().getX(), listPath.getFirst().getY());
 				for (k=1; k<listPath.size(); k++){
-					if(currentlyShownMap.getNodes().contains(listPath.get(k-1)) && 
-							currentlyShownMap.getNodes().contains(listPath.get(k))){
+					if(listPath.get(k-1).getMapName().equals(currentlyShownMap.getMapName())
+							&& listPath.get(k).getMapName().equals(currentlyShownMap.getMapName())){
+//					if(currentlyShownMap.getNodes().contains(listPath.get(k-1)) && 
+//							currentlyShownMap.getNodes().contains(listPath.get(k))){
 						path.lineTo(listPath.get(k).getX(),listPath.get(k).getY());
 						//path.transform(at);
 						//g2d.draw(path);
