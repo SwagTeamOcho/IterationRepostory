@@ -903,7 +903,7 @@ public class EndUserGUI extends JPanel implements ActionListener{
 
 				endNode = listPath.get(listPath.size() - 1);
 				
-				if(mapsForPaths != null){
+				if(mapsForPaths.size() > 0 && arrowCounter < mapsForPaths.size()){
 					if(mapsForPaths.get(arrowCounter).getNodes().contains(startNode)){
 						mapPanel.setStartNode(startNode);
 					}
