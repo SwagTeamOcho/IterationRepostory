@@ -241,7 +241,7 @@ public class EndUserGUI extends JPanel implements ActionListener{
 		tutView.setSize(1194,672);
 		uiPanel.add(tutView);
 
-		mapPanel = new ImagePanel();
+		mapPanel = new ImagePanel(this);
 		mapPanel.add(graph);
 		scrollMapPanel = new JScrollPane(mapPanel);
 		scrollMapPanel.setBounds(5, 5, 750, 620);

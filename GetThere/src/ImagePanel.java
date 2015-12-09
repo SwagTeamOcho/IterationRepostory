@@ -23,12 +23,13 @@ class ImagePanel extends JPanel
     GeneralPath path;
     Node startNode;
     Node endNode;
+    private EndUserGUI gui;
     
     
-    public ImagePanel()
+    public ImagePanel(EndUserGUI gui)
     {
     	
-    	
+    	this.gui = gui;
         scale = 1.0;
         setBackground(new Color(74, 1, 1));
         
@@ -63,7 +64,7 @@ class ImagePanel extends JPanel
 		g2.draw(path);
         	}
         
-        if(startNode != null){
+        if(startNode != null && gui.getCurrentlyShownMap().toString() == startNode.getMapName()){
         	Point2D before1 = new Point(), after1 = new Point(), before2 = new Point(), after2 = new Point();
         	
         	before1.setLocation(startNode.getX()-(CircleDiam+3)/2, startNode.getY()-(CircleDiam+3)/2);
@@ -76,7 +77,7 @@ class ImagePanel extends JPanel
 			g.fillOval((int)after2.getX(), (int)after2.getY(), CircleDiam, CircleDiam);
         }
         
-        if(endNode != null){
+        if(endNode != null && gui.getCurrentlyShownMap().toString() == endNode.getMapName()){
 Point2D before1 = new Point(), after1 = new Point(), before2 = new Point(), after2 = new Point();
         	
         	before1.setLocation(endNode.getX()-(CircleDiam+3)/2, endNode.getY()-(CircleDiam+3)/2);
