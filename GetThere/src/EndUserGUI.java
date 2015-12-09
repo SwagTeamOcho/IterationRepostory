@@ -1,3 +1,4 @@
+
 import java.awt.BasicStroke;
 
 import java.awt.Color;
@@ -140,11 +141,11 @@ public class EndUserGUI extends JPanel implements ActionListener{
 	private Icon emergencyIcon;
 	private JButton email;
 	private Icon emailIcon;
-	private Icon historyIcon;
-	private JButton history;
+	private Icon bluetowerIcon;
 	private JButton transport;
 	private Icon transportIcon;
 	private JButton nearestBathroom;
+	private JButton nearestBluetower;
 	private Icon bathroomIcon;
 
 	private JButton tutorial;
@@ -222,7 +223,6 @@ public class EndUserGUI extends JPanel implements ActionListener{
 	private void initialize() {
 
 		MyGraphics graph = new MyGraphics();
-		
 		
 		//Frame operations
 		frame = new JFrame();
@@ -476,16 +476,12 @@ public class EndUserGUI extends JPanel implements ActionListener{
             }
         });
 
-        
-
 		leftArrow = new JButton("<<");
 		leftArrow.setBounds(275, 630, 80, 29);
 		uiPanel.add(leftArrow);
 		if(arrowCounter == 0){
 			leftArrow.setEnabled(false);
 		}
-
-
 
 		rightArrow = new JButton(">>");
 		rightArrow.setBounds(412, 630, 80, 29);
@@ -610,12 +606,11 @@ public class EndUserGUI extends JPanel implements ActionListener{
 				}
 			}
 		});
-
+		//Object[] nearestSpots = {new ImageIcon("IconImages/bathroomIcon.png"), new ImageIcon("IconImages/blueTowerIcon.png")};
 		bathroomIcon = new ImageIcon("IconImages/bathroomIcon.png");
 		Icon bathroomIconBIG = new ImageIcon("IconImages/bathroomIconBIG.png");
-		nearestBathroom = new JButton();
+		nearestBathroom = new JButton(bathroomIcon);
 		nearestBathroom.setToolTipText("Find nearest Bathroom");
-		nearestBathroom.setIcon(bathroomIcon);
 		nearestBathroom.setBounds(1017, 632, 40, 40);
 		uiPanel.add(nearestBathroom);
 		nearestBathroom.addActionListener(new ActionListener() {
@@ -623,7 +618,7 @@ public class EndUserGUI extends JPanel implements ActionListener{
 			{
 				String[] bathroomTypes = {"Female", "Male"};
 				Object selectedValue = JOptionPane.showInputDialog(null, "Bathroom Type", "Select Gender",
-						JOptionPane.INFORMATION_MESSAGE, bathroomIcon, bathroomTypes, bathroomTypes[0]);
+						JOptionPane.INFORMATION_MESSAGE, bathroomIconBIG, bathroomTypes, bathroomTypes[0]);
 				if(selectedValue != null){
 					switch((String) selectedValue){
 					case "Female":
@@ -631,12 +626,15 @@ public class EndUserGUI extends JPanel implements ActionListener{
 						if(listPath != null && startNode != null){
 							listPath = pathCalc.nearestSpecialNode(startNode, NodeType.FBATHROOM);
 							updatePath = true;
+							findMapsForPaths();
 						}
 						break;
 					case "Male":
 						if(listPath != null && startNode != null){
 							listPath = pathCalc.nearestSpecialNode(startNode, NodeType.MBATHROOM);
 							updatePath = true;
+							findMapsForPaths();
+
 						}
 						break;
 					default:
@@ -646,16 +644,19 @@ public class EndUserGUI extends JPanel implements ActionListener{
 			}
 		});
 
-		historyIcon = new ImageIcon("IconImages/historyIcon.png");
-		ImageIcon historyIconBIG = new ImageIcon("IconImages/historyIconBIG.png");
-		history = new JButton();
-		history.setToolTipText("...Coming Soon");
-		history.setIcon(historyIcon);
-		history.setBounds(1064, 632, 40, 40);
-		uiPanel.add(history);
-		history.addActionListener(new ActionListener(){
+		bluetowerIcon = new ImageIcon("IconImages/blueTowerIcon.png");
+		nearestBluetower = new JButton();
+		nearestBluetower.setToolTipText("Find nearest Emergency Tower");
+		nearestBluetower.setIcon(bluetowerIcon);
+		nearestBluetower.setBounds(1064, 632, 40, 40);
+		uiPanel.add(nearestBluetower);
+		nearestBluetower.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
-				JOptionPane.showMessageDialog(null, "....Coming Soon", "...Coming Soon", JOptionPane.PLAIN_MESSAGE, historyIconBIG);
+				if(listPath != null && startNode != null){
+					listPath = pathCalc.nearestSpecialNode(startNode, NodeType.BLUETOWER);
+					updatePath = true;
+					findMapsForPaths();
+				}
 			}
 		});
 
@@ -668,6 +669,7 @@ public class EndUserGUI extends JPanel implements ActionListener{
 				uiPanel.setVisible(true);
 				frame.setVisible(true);
 				//pathCalc = new Djikstra();
+				
 				if(!startClicked && !endClicked){
 					for (i = 0; i < currentStartNodes.size(); i++){
 						if(startRoomSEL.getSelectedItem() == currentStartNodes.get(i).getName())
@@ -685,6 +687,7 @@ public class EndUserGUI extends JPanel implements ActionListener{
 				if(updatePath && startNode != null && endNode != null){
 					listPath = pathCalc.navigate(startNode, endNode);
 					mapsForPaths = new LinkedList<Map>();
+
 					for (i = 0; i < listPath.size(); i++){
 						for (int j = 0; j < maps.size(); j++){
 							nodesInMap = maps.get(j).getNodes();
@@ -720,7 +723,8 @@ public class EndUserGUI extends JPanel implements ActionListener{
 				}
 			}
 		});
-
+		
+		
 		leftArrow.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
 				if(mapsForPaths!= null){
@@ -753,9 +757,35 @@ public class EndUserGUI extends JPanel implements ActionListener{
 		});
 		uiPanel.setVisible(true);
 		frame.setVisible(true);
+
 		clear();
 	}
+	
+	public void findMapsForPaths(){
+		for (int i = 0; i < listPath.size(); i++){
+			for (int j = 0; j < maps.size(); j++){
+				nodesInMap = maps.get(j).getNodes();
+				for(int k = 0; k<nodesInMap.size(); k++){
+					if(listPath.get(i) == nodesInMap.get(k)){
+						if(mapsForPaths == null){
+							mapsForPaths.add(maps.get(j));
+						}else if (mapsForPaths !=null && !mapsForPaths.contains(maps.get(j))){
+							mapsForPaths.add(maps.get(j));
+						}
+					}
+				}
+			}
+			currentMapFile = mapsForPaths.getFirst().getImage();
+			currentlyShownMap = mapsForPaths.getFirst();
+			totalMaps = mapsForPaths.size();
 
+			if(mapsForPaths.size() > 1){
+				rightArrow.setEnabled(true);
+				mapNumber.setText(String.valueOf(1) + " of " + String.valueOf(totalMaps));
+			}
+		}
+	}
+	
 	public class MyGraphics extends JComponent implements MouseMotionListener{
 
 		private static final long serialVersionUID = 1L;
@@ -872,7 +902,6 @@ public class EndUserGUI extends JPanel implements ActionListener{
 				if(mapsForPaths != null){
 					if(mapsForPaths.get(arrowCounter).getNodes().contains(startNode)){
 						mapPanel.setStartNode(startNode);
-						
 					}
 	
 					if(mapsForPaths.get(arrowCounter).getNodes().contains(endNode)){
@@ -915,6 +944,7 @@ public class EndUserGUI extends JPanel implements ActionListener{
 					url = getClass().getResource("/historicalimages/default.jpg");
 				}
 				String tt = "<html><body><img src='" + url + "'></body></html>";
+				System.out.println(tt);
 				setToolTipText(tt);
 				ttManager.setEnabled(true);
 			} else{
