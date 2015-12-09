@@ -627,14 +627,12 @@ public class EndUserGUI extends JPanel implements ActionListener{
 						if(listPath != null && startNode != null){
 							listPath = pathCalc.nearestSpecialNode(startNode, NodeType.FBATHROOM);
 							updatePath = true;
-							findMapsForPaths();
 						}
 						break;
 					case "Male":
 						if(listPath != null && startNode != null){
 							listPath = pathCalc.nearestSpecialNode(startNode, NodeType.MBATHROOM);
 							updatePath = true;
-							findMapsForPaths();
 
 						}
 						break;
