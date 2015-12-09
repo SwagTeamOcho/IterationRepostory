@@ -767,9 +767,9 @@ public class EndUserGUI extends JPanel implements ActionListener{
 				nodesInMap = maps.get(j).getNodes();
 				for(int k = 0; k<nodesInMap.size(); k++){
 					if(listPath.get(i) == nodesInMap.get(k)){
-						if(mapsForPaths == null){
-							mapsForPaths.add(maps.get(j));
-						}else if (mapsForPaths !=null && !mapsForPaths.contains(maps.get(j))){
+						//if(mapsForPaths.size() == 0){
+						//	mapsForPaths.add(maps.get(j));
+						if (mapsForPaths !=null && !mapsForPaths.contains(maps.get(j))){
 							mapsForPaths.add(maps.get(j));
 						}
 					}
