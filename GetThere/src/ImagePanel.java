@@ -80,6 +80,7 @@ class ImagePanel extends JPanel
 				g2.draw(path);
 				g2.setColor(Color.BLUE);
 				g2.draw(path);
+				
 			}
 
 			if(startNode != null && gui.getCurrentlyShownMap().toString() == startNode.getMapName()){

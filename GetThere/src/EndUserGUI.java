@@ -654,7 +654,7 @@ public class EndUserGUI extends JPanel implements ActionListener{
 						for (int j = 0; j < maps.size(); j++){
 							nodesInMap = maps.get(j).getNodes();
 							for(int k = 0; k<nodesInMap.size(); k++){
-								if(listPath.get(i) == nodesInMap.get(k)){
+								if((listPath.get(i) == nodesInMap.get(k)) && !nodesInMap.get(k).getType().equals(NodeType.ELEVATOR)){
 									if(!mapsForPaths.contains(maps.get(j))){
 										mapsForPaths.add(maps.get(j));
 									}
@@ -667,6 +667,7 @@ public class EndUserGUI extends JPanel implements ActionListener{
 						totalMaps = mapsForPaths.size();
 						mapPanel.setEndNode(endNode);
 						if(mapsForPaths.size() > 1){
+							arrowCounter = 0;
 							rightArrow.setEnabled(true);
 							mapNumber.setText(String.valueOf(1) + " of " + String.valueOf(totalMaps));
 						}
@@ -707,7 +708,7 @@ public class EndUserGUI extends JPanel implements ActionListener{
 					for (int j = 0; j < maps.size(); j++){
 						nodesInMap = maps.get(j).getNodes();
 						for(int k = 0; k<nodesInMap.size(); k++){
-							if(listPath.get(i) == nodesInMap.get(k)){
+							if((listPath.get(i) == nodesInMap.get(k)) && !nodesInMap.get(k).getType().equals(NodeType.ELEVATOR)){
 								if(!mapsForPaths.contains(maps.get(j))){
 									mapsForPaths.add(maps.get(j));
 								}
@@ -720,6 +721,7 @@ public class EndUserGUI extends JPanel implements ActionListener{
 					totalMaps = mapsForPaths.size();
 					mapPanel.setEndNode(endNode);
 					if(mapsForPaths.size() > 1){
+						arrowCounter = 0;
 						rightArrow.setEnabled(true);
 						mapNumber.setText(String.valueOf(1) + " of " + String.valueOf(totalMaps));
 					}
@@ -759,7 +761,7 @@ public class EndUserGUI extends JPanel implements ActionListener{
 						for (int j = 0; j < maps.size(); j++){
 							nodesInMap = maps.get(j).getNodes();
 							for(int k = 0; k<nodesInMap.size(); k++){
-								if(listPath.get(i) == nodesInMap.get(k)){
+								if((listPath.get(i) == nodesInMap.get(k)) && !nodesInMap.get(k).getType().equals(NodeType.ELEVATOR)){
 									if(!mapsForPaths.contains(maps.get(j))){
 										mapsForPaths.add(maps.get(j));
 									}
