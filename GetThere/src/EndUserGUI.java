@@ -240,7 +240,7 @@ public class EndUserGUI extends JPanel implements ActionListener{
 		uiPanel = new JPanel();
 		frame.getContentPane().add(uiPanel);
 		uiPanel.setLayout(null);
-		uiPanel.setBackground(new Color(242,0, 222));
+		//uiPanel.setBackground(new Color(242,0, 222));
 
 		tutView = new JLabel("",JLabel.CENTER);    
 		tutView.setLocation(0, 0);
