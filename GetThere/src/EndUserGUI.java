@@ -69,8 +69,8 @@ public class EndUserGUI extends JPanel implements ActionListener{
 	//private static LinkedList<Edge> currentEndEdges = new LinkedList<Edge>();
 	private String[] startRooms;
 	private String[] endRooms;
-	//	private String buildingSelectedSTART;   //track which building is selected to start in.
-	//	private String buildingSelectedEND;
+	//private String buildingSelectedSTART;   //track which building is selected to start in.
+	//private String buildingSelectedEND;
 	//private String currentMapName;
 	private static ImageIcon currentMapFile;
 
