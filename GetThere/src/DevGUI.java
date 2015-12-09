@@ -161,7 +161,7 @@ public class DevGUI extends JPanel{
 
 		dropDown.setBounds(762, 46, 132, 29);
 		dropDown.setVisible(true);
-		//  dropDown.setSelectedIndex(0);
+		dropDown.setSelectedIndex(-1);
 		dropDown.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e) {
 				selectedMap = (Map) dropDown.getSelectedItem();
@@ -268,21 +268,29 @@ public class DevGUI extends JPanel{
 					System.out.println("Export Pushed");
 
 					serialize.doSerialize("MapList", maps);
-					if(updateMap){
 
 
+					for(int i = 0; i < maps.size(); i++)
+					{
+						if(!maps.contains(dropDown.getItemAt(i)))
+						{
+							dropDown.addItem(maps.get(i));
+						}
 
-						dropDown.addItem(maps.getLast());
+					}	
 
+					//	dropDown.addItem(maps.getLast());
 
-						updateMap = false;
-					}
 
 					uiPanel.repaint();
 					uiPanel.revalidate();
 
 				}
-			});
+
+
+
+			}
+					);
 
 
 			JButton btnDeleteMap = new JButton("Delete Map");
@@ -303,16 +311,9 @@ public class DevGUI extends JPanel{
 						System.out.println(maps);
 						System.out.println(selectedMap);
 
+						maps.remove(selectedMap);
+						if(dropDown.getItemCount()>1)
 						dropDown.removeItem(selectedMap);
-
-						System.out.println(maps.remove(selectedMap));
-
-
-
-						updateMap = true;
-
-
-
 
 
 						serialize.doSerialize("MapList", maps);
@@ -326,6 +327,7 @@ public class DevGUI extends JPanel{
 
 		uiPanel.setVisible(true);
 		frame.setVisible(true);
+
 
 
 	}
