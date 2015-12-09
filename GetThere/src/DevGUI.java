@@ -1,21 +1,20 @@
+import java.awt.BasicStroke;
 import java.awt.Color;
-import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.Rectangle;
+import java.awt.RenderingHints;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.*;
 import java.awt.geom.Line2D;
-import java.io.File;
-import java.util.LinkedList;
+
 
 import javax.swing.BoxLayout;
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
@@ -23,6 +22,18 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.*;
+
+import java.util.*;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.FileOutputStream;
+import java.io.File;
+
+import java.awt.image.BufferedImage;
+import java.beans.*;
 
 
 
@@ -33,6 +44,7 @@ import javax.swing.JPanel;
 //
 
 public class DevGUI extends JPanel{
+
 	/**
 	 * 
 	 */
@@ -46,7 +58,6 @@ public class DevGUI extends JPanel{
 	private SelectMap loadMap;
 	static DevGUI window;
 	private ImageIcon currentMapFile;
-	private ImageIcon defaultImage;
 	private ImageIcon tempMapFile;
 	private NodeType currentType;
 	private Node currentNode;
@@ -156,7 +167,7 @@ public class DevGUI extends JPanel{
 		//Construct Combo boxes to select start point
 
 
-		JComboBox dropDown = new JComboBox(maps.toArray());
+		final JComboBox dropDown = new JComboBox(maps.toArray());
 
 		dropDown.setBounds(762, 46, 132, 29);
 		dropDown.setVisible(true);
@@ -207,7 +218,6 @@ public class DevGUI extends JPanel{
 					createEdges = false;
 					createMapLink = false;
 					editNodes = false;
-
 				}
 			});
 
@@ -222,7 +232,6 @@ public class DevGUI extends JPanel{
 					createEdges = false;
 					createMapLink = false;
 					editNodes = false;
-
 				}
 			});
 
@@ -242,6 +251,7 @@ public class DevGUI extends JPanel{
 				}
 			});
 
+
 			JButton btnEditor = new JButton("Node Editor");
 			btnEditor.setBounds(762, 256, 132, 29);;
 			uiPanel.add(btnEditor);
@@ -258,6 +268,7 @@ public class DevGUI extends JPanel{
 			//   btnEditor.setVisible(true);
 			//   uiPanel.repaint();
 			//   uiPanel.revalidate();
+
 
 			//Construct button and add action listener
 			JButton btnExport = new JButton("Save Changes");
@@ -449,7 +460,7 @@ public class DevGUI extends JPanel{
 					}
 					if(editNodes){
 						if(nodeIndex >= 0){
-							// NodeEditor ne = new NodeEditor(uiPanel, nodesOnCurrentMap.get(nodeIndex));
+							//NodeEditor ne = new NodeEditor(uiPanel, nodesOnCurrentMap.get(nodeIndex));
 						}
 					}
 					if (evt.getClickCount() >= 2 && (createNodes || createSpecial)) {
@@ -561,8 +572,6 @@ public class DevGUI extends JPanel{
 			}
 			else
 			{
-				defaultImage = new ImageIcon("Final Maps - Get There/StartingImageDev.jpg");
-				g.drawImage(defaultImage.getImage(), 0, 0, this);
 				g.drawString("Select a map or load a new map to begin", 300,300);
 			}
 
