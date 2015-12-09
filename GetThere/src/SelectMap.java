@@ -6,6 +6,7 @@ import java.awt.event.*;
 import java.io.*;
 import javax.swing.*;
 import javax.swing.filechooser.*;
+import java.util.*;
 
 public class SelectMap extends JFrame {
 	/**
@@ -34,7 +35,9 @@ public class SelectMap extends JFrame {
 		openButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent ae) {
 				JFileChooser chooser = new JFileChooser();
-				FileNameExtensionFilter filter = new FileNameExtensionFilter("JPG Images", "jpg");
+
+				FileNameExtensionFilter filter = new FileNameExtensionFilter("JPG & Serialized Files", "jpg","ser");
+
 				chooser.setFileFilter(filter);
 				chooser.setAcceptAllFileFilterUsed(false);
 				chooser.setFileHidingEnabled(true);
@@ -52,23 +55,36 @@ public class SelectMap extends JFrame {
 		importButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent ae) {
 
-				try {
-					double formatedText = Double.parseDouble(scale.getText()) ;
-					Map newMap = new Map(filePath, mapName.getText(), formatedText);
-					DevGUI.maps.add(newMap);
-					System.out.println("TEST");  
+				if(filePath != null)
+					if(filePath.endsWith(".ser")){
 
-				} catch (Exception z) { 
+						System.out.println(filePath.substring(0, filePath.length()-4)); 
+						Serialize importSerialized = new Serialize();
 
-					scale.setText("");
-					return;
-				}
+						DevGUI.maps.addAll((LinkedList<Map>) importSerialized.deSerialize(filePath.substring(0, filePath.length()-4)));
+
+
+
+
+					}
+					else{
+						try {
+							double formatedText = Double.parseDouble(scale.getText()) ;
+							Map newMap = new Map(filePath, mapName.getText(), formatedText);
+							DevGUI.maps.add(newMap);
+
+							System.out.println("TEST");  
+
+						} catch (Exception z) { 
+
+							scale.setText("");
+							return;
+						}
+
+					}
 				setVisible(false);
 
-			}
-
-		
-		});
+			}});
 
 
 		c.add(openButton);
