@@ -718,6 +718,7 @@ public class DevGUI extends JPanel{
 	static DevGUI window;
 	private ImageIcon currentMapFile;
 	private ImageIcon tempMapFile;
+	private ImageIcon defaultImage;
 	//private NodeType currentType;
 	private Node currentNode;
 >>>>>>> 1a6e1ffdca58bebb39b18b45c5c7b51b361ec962
@@ -1235,7 +1236,8 @@ public class DevGUI extends JPanel{
 			}
 			else
 			{
-				g.drawString("Select a map or load a new map to begin", 300,300);
+				defaultImage = new ImageIcon ("Final Maps - Get There/StartingImageDev.jpg");
+				g.drawImage(defaultImage.getImage(), 0, 0, this);
 			}
 
 			// if(selectedMap.getImage() != null)
