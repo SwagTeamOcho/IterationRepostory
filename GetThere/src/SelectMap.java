@@ -1,4 +1,3 @@
-package src;
 // SelectMap.java
 // A simple file chooser to see what it takes to make one of these work.
 //
