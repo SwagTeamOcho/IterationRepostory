@@ -548,10 +548,10 @@ public class EndUserGUI extends JPanel implements ActionListener{
 						doc.addTitle("This is title");
 						doc.open();
 						while(arrowCounter!=0){
+							System.out.println(arrowCounter);
 							leftArrow.doClick();
 						}
-						repaint();
-						revalidate();
+						mapPanel.paint(mapPanel.getGraphics());
 
 						//adding a local image and aligned RIGHT
 						for(int i = 0; i < totalMaps; i++) {
@@ -562,6 +562,7 @@ public class EndUserGUI extends JPanel implements ActionListener{
 							image.setAbsolutePosition(0, 0);
 							doc.add(image);
 							rightArrow.doClick();
+							mapPanel.paint(mapPanel.getGraphics());
 						}
 
 						doc.close();
