@@ -142,6 +142,9 @@ public class EndUserGUI extends JPanel implements ActionListener{
 
 	private JButton tutorial;
 	private Icon tutIcon;
+
+	private JButton backToCampus;
+
 	int count;
 
 	private String emailDirections;
@@ -309,6 +312,11 @@ public class EndUserGUI extends JPanel implements ActionListener{
 		mapNumber.setAlignmentY(StyleConstants.ALIGN_CENTER);
 		uiPanel.add(mapNumber);
 
+		backToCampus = new JButton("Back to Campus");
+		backToCampus.setBounds(150, 630, 80, 29);
+		uiPanel.add(backToCampus);
+		backToCampus.setEnabled(true);
+		
 		//Construct Combo boxes to select start point
 		startBuildingSEL = new JComboBox<String>();
 		startBuildingSEL.setBounds(755, 50, 232, 29);
@@ -332,6 +340,11 @@ public class EndUserGUI extends JPanel implements ActionListener{
 				//currentStartEdges = maps.get(indexOfCurrentMap).getEdges();
 				currentMapFile = maps.get(indexOfCurrentMap).getImage();
 				currentlyShownMap = maps.get(indexOfCurrentMap);
+				if (!currentlyShownMap.getMapName().equals("WPI Campus Map")){
+					backToCampus.setEnabled(true);
+				} else{
+					backToCampus.setEnabled(false);
+				}
 				arrowCounter = 0;
 				mapsForPaths = null;
 
@@ -403,6 +416,11 @@ public class EndUserGUI extends JPanel implements ActionListener{
 				//currentendEdges = maps.get(indexOfCurrentMap).getEdges();
 				currentMapFile = maps.get(indexOfCurrentMap).getImage();
 				currentlyShownMap = maps.get(indexOfCurrentMap);
+				if (!currentlyShownMap.getMapName().equals("WPI Campus Map")){
+					backToCampus.setEnabled(true);
+				} else{
+					backToCampus.setEnabled(false);
+				}
 				arrowCounter = 0;
 				mapsForPaths = null;
 
@@ -664,6 +682,11 @@ public class EndUserGUI extends JPanel implements ActionListener{
 						}
 						currentMapFile = mapsForPaths.getFirst().getImage();
 						currentlyShownMap = mapsForPaths.getFirst();
+						if(!currentlyShownMap.getMapName().equals("WPI Campus Map")){
+							backToCampus.setEnabled(true);
+						} else{
+							backToCampus.setEnabled(false);
+						}
 						mapPanel.setImage(currentlyShownMap.getImage());
 						totalMaps = mapsForPaths.size();
 						mapPanel.setEndNode(endNode);
@@ -718,6 +741,11 @@ public class EndUserGUI extends JPanel implements ActionListener{
 					}
 					currentMapFile = mapsForPaths.getFirst().getImage();
 					currentlyShownMap = mapsForPaths.getFirst();
+					if(!currentlyShownMap.getMapName().equals("WPI Campus Map")){
+						backToCampus.setEnabled(true);
+					} else{
+						backToCampus.setEnabled(false);
+					}
 					mapPanel.setImage(currentlyShownMap.getImage());
 					totalMaps = mapsForPaths.size();
 					mapPanel.setEndNode(endNode);
@@ -771,6 +799,11 @@ public class EndUserGUI extends JPanel implements ActionListener{
 						}
 						currentMapFile = mapsForPaths.getFirst().getImage();
 						currentlyShownMap = mapsForPaths.getFirst();
+						if(!currentlyShownMap.getMapName().equals("WPI Campus Map")){
+							backToCampus.setEnabled(true);
+						} else{
+							backToCampus.setEnabled(false);
+						}
 						mapPanel.setImage(currentlyShownMap.getImage());
 						totalMaps = mapsForPaths.size();
 
@@ -829,6 +862,36 @@ public class EndUserGUI extends JPanel implements ActionListener{
 		});
 
 
+		backToCampus.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e){
+				for(int i = 0; i < maps.size(); i++){
+					if(maps.get(i).getMapName().equals("WPI Campus Map")){
+						currentlyShownMap = maps.get(i);
+						mapPanel.setImage(currentlyShownMap.getImage());
+						mapPanel.setPath(null);
+						backToCampus.setEnabled(false);
+						for(int j = 0; j < mapsForPaths.size(); j++){
+							if(mapsForPaths.get(j) == maps.get(i)){
+								arrowCounter = j;
+								if(arrowCounter == 0){
+									leftArrow.setEnabled(false);
+									rightArrow.setEnabled(true);
+								} else if(arrowCounter == (mapsForPaths.size() - 1)){
+									leftArrow.setEnabled(true);
+									rightArrow.setEnabled(false);
+								} else{
+									rightArrow.setEnabled(true);
+									leftArrow.setEnabled(true);
+								}
+								mapNumber.setText(String.valueOf(arrowCounter + 1) + " of " + String.valueOf(totalMaps));
+							}
+						}
+						return;
+					}
+				}
+			}
+		});
+
 		leftArrow.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
 				if(mapsForPaths!= null){
@@ -837,6 +900,11 @@ public class EndUserGUI extends JPanel implements ActionListener{
 					mapNumber.setText(String.valueOf(arrowCounter + 1) + " of " + String.valueOf(totalMaps));
 					currentMapFile = mapsForPaths.get(arrowCounter).getImage();
 					currentlyShownMap = mapsForPaths.get(arrowCounter);
+					if(!currentlyShownMap.getMapName().equals("WPI Campus Map")){
+						backToCampus.setEnabled(true);
+					} else{
+						backToCampus.setEnabled(false);
+					}
 					mapPanel.setImage(currentlyShownMap.getImage());
 					if (arrowCounter == 0)
 						leftArrow.setEnabled(false);
@@ -851,6 +919,11 @@ public class EndUserGUI extends JPanel implements ActionListener{
 					mapNumber.setText(String.valueOf(arrowCounter + 1) + " of " + String.valueOf(totalMaps));
 					currentMapFile = mapsForPaths.get(arrowCounter).getImage();
 					currentlyShownMap = mapsForPaths.get(arrowCounter);
+					if(!currentlyShownMap.getMapName().equals("WPI Campus Map")){
+						backToCampus.setEnabled(true);
+					} else{
+						backToCampus.setEnabled(false);
+					}
 					mapPanel.setImage(currentlyShownMap.getImage());
 					if (arrowCounter == totalMaps-1)
 						rightArrow.setEnabled(false);
