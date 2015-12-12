@@ -54,6 +54,7 @@ public class EMailDialogue extends JDialog{
     	setModalityType(ModalityType.APPLICATION_MODAL);
 
         setTitle("Email Directions");
+        getRootPane().setDefaultButton(sendButton);
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         setLocationRelativeTo(getParent());
     }
