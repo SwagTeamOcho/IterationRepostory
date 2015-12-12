@@ -313,7 +313,7 @@ public class DevGUI extends JPanel{
 
 						maps.remove(selectedMap);
 						if(dropDown.getItemCount()>1)
-						dropDown.removeItem(selectedMap);
+							dropDown.removeItem(selectedMap);
 
 
 						serialize.doSerialize("MapList", maps);
@@ -375,7 +375,7 @@ public class DevGUI extends JPanel{
 							} else {
 								String[] types = {"No Type", "Men's Bathroom", "Women's Bathroom", "Blue Tower", "Elevator", 
 										"Stairs", "Food", "Emergency Exit", "Lecture Hall", "Office", "Door",
-								"Room"};
+										"Room", "Historical"};
 								Object selectedValue = JOptionPane.showInputDialog(null,
 										"Choose a Node Type", "Input",
 										JOptionPane.INFORMATION_MESSAGE, null,
@@ -446,10 +446,12 @@ public class DevGUI extends JPanel{
 							count++;
 						} else if(count > 0 && nodeIndex >= 0){
 							System.out.println(nodeIndex);
-							edgesOnCurrentMap.add(new Edge(nodesOnCurrentMap.get(staringEdgeIndex), 
-									nodesOnCurrentMap.get(nodeIndex),
-									(int) calcDistance(nodesOnCurrentMap.get(staringEdgeIndex), nodesOnCurrentMap.get(nodeIndex), maps.get(indexOfCurrentMap).getScale())));
-							count = 0;
+							if(!nodesOnCurrentMap.get(staringEdgeIndex).equals(nodesOnCurrentMap.get(nodeIndex))){
+								edgesOnCurrentMap.add(new Edge(nodesOnCurrentMap.get(staringEdgeIndex), 
+										nodesOnCurrentMap.get(nodeIndex),
+										(int) calcDistance(nodesOnCurrentMap.get(staringEdgeIndex), nodesOnCurrentMap.get(nodeIndex), maps.get(indexOfCurrentMap).getScale())));
+								count = 0;
+							}
 						}
 					}
 					if(editNodes){
@@ -525,9 +527,11 @@ public class DevGUI extends JPanel{
 				}
 				Node newNode = new Node(x, y, nodeName, type);
 				newNode.setMapName(selectedMap.getMapName());
-				maps.get(maps.indexOf(selectedMap)).getNodes().add(newNode);
-				maps.get(maps.indexOf(selectedMap)).getEdges().add(new Edge(newNode, currentNode, 0));
-				maps.get(maps.indexOf(connectingMap)).getEdges().add(new Edge(newNode, currentNode, 0));
+				if(!(newNode.equals(currentNode))){
+					maps.get(maps.indexOf(selectedMap)).getNodes().add(newNode);
+					maps.get(maps.indexOf(selectedMap)).getEdges().add(new Edge(newNode, currentNode, 0));
+					maps.get(maps.indexOf(connectingMap)).getEdges().add(new Edge(newNode, currentNode, 0));
+				}
 			}
 			else{
 				Object connectingMap = JOptionPane.showInputDialog(null, 
@@ -549,12 +553,14 @@ public class DevGUI extends JPanel{
 				Node linkNode2 = new Node(x, y, nodeName, type);
 				linkNode2.setMapName(((Map)connectingMap).getMapName());
 
+
+
 				maps.get(maps.indexOf(selectedMap)).getNodes().add(linkNode1);
 				maps.get(maps.indexOf(connectingMap)).getNodes().add(linkNode2);
-
-				maps.get(maps.indexOf(selectedMap)).getEdges().add(new Edge(linkNode1, linkNode2, 0));
-				maps.get(maps.indexOf(connectingMap)).getEdges().add(new Edge(linkNode1, linkNode2, 0));
-
+				if(!(linkNode1.equals(linkNode2))){
+					maps.get(maps.indexOf(selectedMap)).getEdges().add(new Edge(linkNode1, linkNode2, 0));
+					maps.get(maps.indexOf(connectingMap)).getEdges().add(new Edge(linkNode1, linkNode2, 0));
+				}
 			}
 			repaint();
 			revalidate();
