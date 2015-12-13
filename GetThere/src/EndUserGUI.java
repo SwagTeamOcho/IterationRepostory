@@ -995,6 +995,19 @@ public class EndUserGUI extends JPanel implements ActionListener{
 
 					int x = evt.getX();
 					int y = evt.getY();
+					if (evt.getClickCount() == 2) {
+					    for(int i = 0; i < maps.size(); i++){
+					    	if(maps.get(i).getEasyLinks().size() > 0){
+						    	for(int j = 0; j < maps.get(i).getEasyLinks().size(); j++){
+						    		if(maps.get(i).getEasyLinks().get(j).getPoly().contains(x, y)){
+						    			currentlyShownMap = maps.get(i).getEasyLinks().get(j).getMap();
+										mapPanel.setImage(currentlyShownMap.getImage());
+										mapPanel.setPath(null);
+						    		}
+						    	}
+					    	}
+					    }
+					} 
 					if(!startClicked){
 						startNode = findClosestNode(x,y);
 						startClicked = true;
