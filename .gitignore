@@ -16,6 +16,7 @@ local.properties
 javax.mail.jar
 .DS_Store
 *.ser
+Screen.png
 Screen0.png
 Screen1.png
 Screen2.png

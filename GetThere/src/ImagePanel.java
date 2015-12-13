@@ -59,7 +59,6 @@ class ImagePanel extends JPanel
 			
 				if(gui.getHistoricalNodes() != null){
 					LinkedList<Node> histNodes = gui.getHistoricalNodes();
-					System.out.println("Got " + histNodes.size() + " historical nodes");
 					for(int i = 0; i < histNodes.size(); i++){
 						if(gui.getCurrentlyShownMap().getNodes().contains(histNodes.get(i))){
 						Point2D before1 = new Point(), after1 = new Point(), before2 = new Point(), after2 = new Point();
