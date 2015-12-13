@@ -60,6 +60,7 @@ class ImagePanel extends JPanel
 				if(gui.getHistoricalNodes() != null){
 					LinkedList<Node> histNodes = gui.getHistoricalNodes();
 					for(int i = 0; i < histNodes.size(); i++){
+						if(gui.getCurrentlyShownMap().getNodes().contains(histNodes.get(i))){
 						Point2D before1 = new Point(), after1 = new Point(), before2 = new Point(), after2 = new Point();
 						Node n = histNodes.get(i);
 						before1.setLocation(n.getX()-(CircleDiam+3)/2, n.getY()-(CircleDiam+3)/2);
@@ -70,6 +71,7 @@ class ImagePanel extends JPanel
 						g.fillOval((int)after1.getX(), (int)after1.getY(), CircleDiam+3, CircleDiam+3);
 						g.setColor(Color.YELLOW);
 						g.fillOval((int)after2.getX(), (int)after2.getY(), CircleDiam, CircleDiam);
+						}
 					}
 				}
 			if(path != null){
