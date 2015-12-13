@@ -9,6 +9,7 @@ import java.util.LinkedList;
 import javax.imageio.ImageIO;
 import javax.management.RuntimeErrorException;
 import javax.swing.ImageIcon;
+import java.awt.Polygon;
 
 public class Map implements Serializable{
 
@@ -19,6 +20,7 @@ public class Map implements Serializable{
 	private ImageIcon mapImage;
 	private LinkedList<Node> nodes;
 	private LinkedList<Edge> edges;
+	private LinkedList<EasyLink> easyLinks;
 	private String mapName;
 	private double scale;
 	
@@ -34,6 +36,7 @@ public class Map implements Serializable{
 		this.mapName = mapName;
 		nodes = new LinkedList<Node>();
 		edges = new LinkedList<Edge>();
+		easyLinks = new LinkedList<EasyLink>();
 		this.scale = s;
 	} 
 		
@@ -45,6 +48,7 @@ public class Map implements Serializable{
 		this.mapName = mapName;
 		nodes = new LinkedList<Node>();
 		edges = new LinkedList<Edge>();
+		easyLinks = new LinkedList<EasyLink>();
 	} 
 	
 	public ImageIcon getImage(){
@@ -54,6 +58,13 @@ public class Map implements Serializable{
 	//public void setImage(Image mapImage){
 	//	this.mapImage = mapImage;
 	//}
+	public LinkedList<EasyLink> getEasyLinks(){
+		return this.easyLinks;
+	}
+	
+	public void addEasyLink(EasyLink e){
+		easyLinks.add(e);
+	}
 	
 	public LinkedList<Node> getNodes(){
 		return this.nodes;
@@ -104,6 +115,6 @@ public class Map implements Serializable{
 
     @Override
     public String toString() {
-    return this.mapName;
- }
+	    return this.mapName;
+	 }
 }
