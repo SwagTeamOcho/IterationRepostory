@@ -42,6 +42,11 @@ public class DevGUI extends JPanel{
 	public static LinkedList<Map> maps = new LinkedList<>();
 	private static LinkedList<Node> nodesOnCurrentMap = new LinkedList<>();
 	private static LinkedList<Edge> edgesOnCurrentMap = new LinkedList<>();
+	private int[] xValues = new int[]{};
+	private int[] yValues = new int[]{};
+	private int numVertices;
+	private int easyLinkMax;
+	private Map easyLinkMap;
 	//private String[] startRooms = new String[1000];
 	//private String buildingSelectedSTART;   //track which building is selected to start in.
 	private String currentMapName;
@@ -65,6 +70,7 @@ public class DevGUI extends JPanel{
 	boolean importPushed = true;
 	boolean updateMap = false;
 	boolean createMapLink = false;
+	boolean createEasyLink = false;
 	boolean editNodes = false;
 	int indexOfCurrentMap;
 	//private LinkedList<String> currentMapList;
@@ -193,6 +199,7 @@ public class DevGUI extends JPanel{
 					loadMap.setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 					updateMap = true;
 					editNodes = false;
+					createEasyLink = false;
 				}
 			});
 
@@ -207,7 +214,7 @@ public class DevGUI extends JPanel{
 					createEdges = false;
 					createMapLink = false;
 					editNodes = false;
-
+					createEasyLink = false;
 				}
 			});
 
@@ -222,7 +229,7 @@ public class DevGUI extends JPanel{
 					createEdges = false;
 					createMapLink = false;
 					editNodes = false;
-
+					createEasyLink = false;
 				}
 			});
 
@@ -239,6 +246,7 @@ public class DevGUI extends JPanel{
 					createEdges = true;
 					createMapLink = false;
 					editNodes = false;
+					createEasyLink = false;
 				}
 			});
 
@@ -253,6 +261,7 @@ public class DevGUI extends JPanel{
 					createEdges = false;
 					createMapLink = false;
 					editNodes = true;
+					createEasyLink = false;
 				}
 			});
 			//   btnEditor.setVisible(true);
@@ -291,10 +300,60 @@ public class DevGUI extends JPanel{
 
 			}
 					);
-
+			
+			JButton btnEasyLink = new JButton("Easy Map Link");
+			btnEasyLink.setBounds(762, 586, 132, 29);
+			uiPanel.add(btnEasyLink);
+			btnEasyLink.addActionListener(new ActionListener(){
+				public void actionPerformed(ActionEvent e){
+					System.out.println("Easy Link Pushed");
+					createNodes = false;
+					createSpecial = false;
+					createEdges = false;
+					createMapLink = false;
+					editNodes = false;
+					
+					if(createEasyLink)
+						createEasyLink = false;
+					else
+						createEasyLink = true;
+					
+					if(createEasyLink){
+						
+						numVertices = 0;
+						String s = (String)JOptionPane.showInputDialog(
+			                    frame,
+			                    "Enter the number of vertices:",
+			                    "Customized Dialog",
+			                    JOptionPane.PLAIN_MESSAGE,
+			                    null,
+			                    null,
+			                    null);
+						if(s != null){
+							try {
+							    easyLinkMax = Integer.parseInt(s);
+							    //System.out.println("Number of vertices: " + hold);
+							    xValues = new int[easyLinkMax];
+							    yValues = new int[easyLinkMax];
+							    
+							    
+							} catch (NumberFormatException n) {
+							    //System.out.println("Invalid Value");
+							    JOptionPane.showMessageDialog(frame,
+							    	    "Invalid Number of Vertices.",
+							    	    "Error",
+							    	    JOptionPane.ERROR_MESSAGE);
+							}
+						}
+					} else {
+						
+					}
+										
+				}
+			});
 
 			JButton btnDeleteMap = new JButton("Delete Map");
-			btnDeleteMap.setBounds(762, 586, 132, 29);
+			btnDeleteMap.setBounds(762, 616, 132, 29);
 			uiPanel.add(btnDeleteMap);
 			btnDeleteMap.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e){
@@ -358,7 +417,31 @@ public class DevGUI extends JPanel{
 					System.out.println("\nX: " + x + "\t Y: " + y);
 					repaint();
 
-
+					if(createEasyLink){
+						Polygon poly;
+						EasyLink link;
+						Object[] mapNames;
+						if(numVertices < easyLinkMax - 1){
+							xValues[numVertices] = x;
+							yValues[numVertices] = y;
+							numVertices += 1;
+						} else {
+							xValues[numVertices] = x;
+							yValues[numVertices] = y;
+							poly = new Polygon(xValues, yValues, xValues.length);
+							mapNames = maps.toArray();
+							Object connectingMap = JOptionPane.showInputDialog(null, 
+									"Choose a map to connect to",
+									"Input",
+									JOptionPane.INFORMATION_MESSAGE, null,
+									mapNames, mapNames[0]);
+							easyLinkMap = maps.get(maps.indexOf(connectingMap));
+							link = new EasyLink(poly, easyLinkMap);
+							selectedMap.addEasyLink(link);
+						    numVertices = 0;
+							createEasyLink = false;
+						}
+					}
 					if(createNodes){
 						if (nodeIndex < 0){ // not inside a square
 							Node newNode = new Node(x, y);

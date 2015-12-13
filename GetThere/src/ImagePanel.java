@@ -111,6 +111,13 @@ class ImagePanel extends JPanel
 				g.setColor(Color.RED);
 				g.fillOval((int)after2.getX(), (int)after2.getY(), CircleDiam, CircleDiam);
 			}
+			
+			g.setColor(Color.BLUE);
+			for(int i = 0; i < gui.getCurrentlyShownMap().getEasyLinks().size(); i ++){
+				g.drawPolygon(gui.getCurrentlyShownMap().getEasyLinks().get(i).getPoly());
+			}
+	        
+
 		}
 	}
 
