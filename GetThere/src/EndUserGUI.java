@@ -317,7 +317,12 @@ public class EndUserGUI extends JPanel implements ActionListener{
 		backToCampus.setBounds(100, 630, 150, 29);
 		uiPanel.add(backToCampus);
 		backToCampus.setEnabled(true);
-
+		
+		for(int m = 0; m < currentStartNodes.size(); m++){
+			if(currentStartNodes.get(m).getType() == NodeType.HISTORICAL){
+				historicalNodes.add(currentStartNodes.get(m));
+			}
+		}
 		//Construct Combo boxes to select start point
 		startBuildingSEL = new JComboBox<String>();
 		startBuildingSEL.setBounds(755, 50, 232, 29);
@@ -906,7 +911,18 @@ public class EndUserGUI extends JPanel implements ActionListener{
 						currentlyShownMap = maps.get(i);
 						mapPanel.setImage(currentlyShownMap.getImage());
 						mapPanel.setPath(null);
+						System.out.println("Redrawing mapPanel");
+						mapPanel.revalidate();
+						mapPanel.repaint();
 						backToCampus.setEnabled(false);
+						historicalNodes = new LinkedList<Node>();
+						for(int m = 0; m < currentlyShownMap.getNodes().size(); m++){
+							if(currentlyShownMap.getNodes().get(m).getType() == NodeType.HISTORICAL){
+								historicalNodes.add(currentlyShownMap.getNodes().get(m));
+							}
+						}
+						
+						
 						if(mapsForPaths != null){
 							for(int j = 0; j < mapsForPaths.size(); j++){
 								if(mapsForPaths.get(j) == maps.get(i)){
