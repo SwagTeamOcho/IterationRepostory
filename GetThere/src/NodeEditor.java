@@ -101,13 +101,11 @@ private Node node;
 		
 		final JLabel typeLabel = new JLabel("Node Type");
 		typeLabel.setBounds(762, 421, 80, 25);
-		uiPanel.add(typeLabel);
 		
 		final JComboBox<String> typeBox = new JComboBox<String>(types);
 		typeBox.setSelectedIndex(typeIndex);
 		typeBox.setBounds(762, 441, 132, 25);
-		uiPanel.add(typeBox);
-
+		
 		final JButton saveButton = new JButton("Save Node");
 		saveButton.setBounds(762, 526, 132, 29);
 		uiPanel.add(saveButton);
@@ -115,6 +113,11 @@ private Node node;
 		final JButton cancelButton = new JButton("Cancel");
 		cancelButton.setBounds(762, 496, 132, 29);
 		uiPanel.add(cancelButton);
+		
+		if(node.getType() != NodeType.ELEVATOR && node.getType() != NodeType.STAIRS && node.getType() != NodeType.DOOR && node.getType() != NodeType.EMERGEXIT){
+			uiPanel.add(typeLabel);
+			uiPanel.add(typeBox);
+		}
 		
 		uiPanel.repaint();
 		uiPanel.revalidate();
@@ -185,6 +188,7 @@ private Node node;
 			uiPanel.remove(typeBox);
 			uiPanel.remove(saveButton);
 			uiPanel.remove(cancelButton);
+			
 			return;
 		}
 	});

@@ -29,7 +29,7 @@ import java.io.File;
 
 ///**
 //* Created by Lumbini on 11/7/2015.
-//* modified by Billy and Jeff
+//* modified by Billy, Joe and Jeff
 // * */
 //
 
@@ -539,8 +539,6 @@ public class DevGUI extends JPanel{
 					}
 					if(editNodes){
 						if(nodeIndex >= 0){
-							NodeType typeOfNode = nodesOnCurrentMap.get(nodeIndex).getType();
-							if(typeOfNode != NodeType.ELEVATOR && typeOfNode != NodeType.STAIRS && typeOfNode != NodeType.DOOR && typeOfNode != NodeType.EMERGEXIT)
 								new NodeEditor(uiPanel, nodesOnCurrentMap.get(nodeIndex));
 						}
 					}
