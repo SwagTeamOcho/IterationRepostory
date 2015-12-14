@@ -290,18 +290,9 @@ public class DevGUI extends JPanel{
 
 					serialize.doSerialize("MapList", maps);
 					
-					ArrayList<String> sortedMaps = new ArrayList<String>();
-					for(int i = 0; i < maps.size(); i++){
-						sortedMaps.add(maps.get(i).getMapName());
-					}
-					Collections.sort(sortedMaps);
 					for(int i = 0; i < maps.size(); i++){
 						if(!maps.contains(dropDown.getItemAt(i))){
-							for(int j = 0; j < sortedMaps.size(); j++){
-								if(sortedMaps.get(i).equals(maps.get(j).getMapName()))
-									dropDown.addItem(maps.get(j));
-							}
-							
+							dropDown.addItem(maps.get(i));
 						}
 					}	
 
