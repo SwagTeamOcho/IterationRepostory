@@ -113,7 +113,9 @@ class ImagePanel extends JPanel {
 			}
 
 			g.setColor(Color.BLUE);
+			g2.setTransform(at);
 			for(int i = 0; i < gui.getCurrentlyShownMap().getEasyLinks().size(); i ++){
+				
 				g.drawPolygon(gui.getCurrentlyShownMap().getEasyLinks().get(i).getPoly());
 			}
 
