@@ -3,10 +3,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import java.awt.Container;
-import java.awt.EventQueue;
-import java.awt.Font;
-import java.awt.Frame;
-import javax.swing.Box;
 import javax.swing.GroupLayout;
 import static javax.swing.GroupLayout.Alignment.CENTER;
 
@@ -21,6 +17,8 @@ import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 
 public class EMailDialogue extends JDialog{
+	
+	static final long serialVersionUID = 102910;
 
     JTextField addressField = new JTextField(20);
     

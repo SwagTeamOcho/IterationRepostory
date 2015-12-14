@@ -53,6 +53,7 @@ public class SelectMap extends JFrame {
 
 
 		importButton.addActionListener(new ActionListener() {
+			@SuppressWarnings("unchecked")
 			public void actionPerformed(ActionEvent ae) {
 
 				if(filePath != null)
