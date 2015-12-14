@@ -6,13 +6,15 @@
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
-import javax.swing.border.*;
-import java.util.*;
 
 public class FindProf extends JPanel implements ActionListener {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	static JFrame frame;
-	static JComboBox patternList;
+	static JComboBox<?> patternList;
 	JLabel result;
 	String currentProf;
 
@@ -811,7 +813,7 @@ public class FindProf extends JPanel implements ActionListener {
 		JLabel patternLabel1 = new JLabel("Enter the name of the professor");
 		JLabel patternLabel2 = new JLabel("");
 
-		patternList = new JComboBox(profName);
+		patternList = new JComboBox<Object>(profName);
 		patternList.setEditable(true);
 		patternList.setMaximumRowCount(5);
 		patternList.addActionListener(this);
@@ -852,7 +854,7 @@ public class FindProf extends JPanel implements ActionListener {
 	} //constructor
 
 	public void actionPerformed(ActionEvent e) {
-		JComboBox cb = (JComboBox)e.getSource();
+		JComboBox<?> cb = (JComboBox<?>)e.getSource();
 		String newSelection = (String)cb.getSelectedItem();
 		currentProf = newSelection;
 		findRoom();
