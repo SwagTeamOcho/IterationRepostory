@@ -179,7 +179,7 @@ public class Djikstra  {
 		Node previous, current, next;
 		String result = "";
 		int counter = 0;
-		String direction;
+		//String direction;
 		if (path.size() == 0 || path == null){
 			return "No path";
 		}
@@ -205,7 +205,7 @@ public class Djikstra  {
 			}
 			boolean straightFlag = false;
 			int straightValue = 0;
-			boolean straightPrintFlag = false;
+			//boolean straightPrintFlag = false;
 			while(path.size() > 0){
 
 				previous = current;

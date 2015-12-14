@@ -15,9 +15,10 @@ import java.util.LinkedList;
 import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 
-class ImagePanel extends JPanel 
+class ImagePanel extends JPanel {
 
-{
+	static final long serialVersionUID = 345629;
+
 	private static final int CircleDiam = 10;
 	BufferedImage image;
 	double scale;
@@ -25,7 +26,7 @@ class ImagePanel extends JPanel
 	Node startNode;
 	Node endNode;
 	private EndUserGUI gui;
-	
+
 
 	public ImagePanel(EndUserGUI gui)
 	{
@@ -43,24 +44,24 @@ class ImagePanel extends JPanel
 		Graphics2D g2 = (Graphics2D)g;
 		g2.setRenderingHint(RenderingHints.KEY_INTERPOLATION,
 				RenderingHints.VALUE_INTERPOLATION_BICUBIC);
-		
-			int w = getWidth();
-			int h = getHeight();
-			
-			if(image != null){
-				int imageWidth = image.getWidth();
-				int imageHeight = image.getHeight();
-				double x = (w - scale * imageWidth)/2;
-				double y = (h - scale * imageHeight)/2;
-				AffineTransform at;
-				at = AffineTransform.getTranslateInstance(x,y);
-				at.scale(scale, scale);
-				g2.drawRenderedImage(image, at);
-			
-				if(gui.getHistoricalNodes() != null){
-					LinkedList<Node> histNodes = gui.getHistoricalNodes();
-					for(int i = 0; i < histNodes.size(); i++){
-						if(gui.getCurrentlyShownMap().getNodes().contains(histNodes.get(i))){
+
+		int w = getWidth();
+		int h = getHeight();
+
+		if(image != null){
+			int imageWidth = image.getWidth();
+			int imageHeight = image.getHeight();
+			double x = (w - scale * imageWidth)/2;
+			double y = (h - scale * imageHeight)/2;
+			AffineTransform at;
+			at = AffineTransform.getTranslateInstance(x,y);
+			at.scale(scale, scale);
+			g2.drawRenderedImage(image, at);
+
+			if(gui.getHistoricalNodes() != null){
+				LinkedList<Node> histNodes = gui.getHistoricalNodes();
+				for(int i = 0; i < histNodes.size(); i++){
+					if(gui.getCurrentlyShownMap().getNodes().contains(histNodes.get(i))){
 						Point2D before1 = new Point(), after1 = new Point(), before2 = new Point(), after2 = new Point();
 						Node n = histNodes.get(i);
 						before1.setLocation(n.getX()-(CircleDiam+3)/2, n.getY()-(CircleDiam+3)/2);
@@ -71,9 +72,9 @@ class ImagePanel extends JPanel
 						g.fillOval((int)after1.getX(), (int)after1.getY(), CircleDiam+3, CircleDiam+3);
 						g.setColor(Color.YELLOW);
 						g.fillOval((int)after2.getX(), (int)after2.getY(), CircleDiam, CircleDiam);
-						}
 					}
 				}
+			}
 			if(path != null){
 				path.transform(at);
 				g2.setColor(Color.BLACK);
@@ -82,7 +83,7 @@ class ImagePanel extends JPanel
 				g2.draw(path);
 				g2.setColor(Color.BLUE);
 				g2.draw(path);
-				
+
 			}
 
 			if(startNode != null && gui.getCurrentlyShownMap().toString() == startNode.getMapName()){
@@ -110,12 +111,12 @@ class ImagePanel extends JPanel
 				g.setColor(Color.RED);
 				g.fillOval((int)after2.getX(), (int)after2.getY(), CircleDiam, CircleDiam);
 			}
-			
+
 			g.setColor(Color.BLUE);
 			for(int i = 0; i < gui.getCurrentlyShownMap().getEasyLinks().size(); i ++){
 				g.drawPolygon(gui.getCurrentlyShownMap().getEasyLinks().get(i).getPoly());
 			}
-	        
+
 
 		}
 	}
