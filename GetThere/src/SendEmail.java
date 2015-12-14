@@ -1,6 +1,4 @@
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.util.Date;
 import java.util.Properties;
@@ -17,9 +15,7 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
-import javax.swing.JButton;
-import javax.swing.JOptionPane;
- 
+
 public class SendEmail {
  
     private String userName;

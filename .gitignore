@@ -16,6 +16,19 @@ local.properties
 javax.mail.jar
 .DS_Store
 *.ser
+Screen.png
+Screen0.png
+Screen1.png
+Screen2.png
+Screen3.png
+Screen4.png
+Screen5.png
+Screen6.png
+Screen7.png
+Screen8.png
+Screen9.png
+Screen10.png
+Directions.pdf
 
 # Eclipse Core
 .project
