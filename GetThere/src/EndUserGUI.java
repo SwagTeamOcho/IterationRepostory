@@ -1,29 +1,21 @@
 
-import java.awt.BasicStroke;
 
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.RenderingHints;
-import java.awt.event.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionListener;
-import java.awt.geom.AffineTransform;
 import java.awt.geom.GeneralPath;
 import java.io.File;
 import java.io.FileOutputStream;
-import java.awt.image.BufferedImage;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedList;
 
-import javax.swing.*;
 import javax.swing.BoxLayout;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
@@ -41,14 +33,10 @@ import javax.swing.ScrollPaneConstants;
 import javax.swing.ToolTipManager;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
-import javax.swing.plaf.basic.ComboPopup;
 import javax.swing.text.StyleConstants;
 
 import com.itextpdf.text.Document;
 import com.itextpdf.text.Image;
-import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.pdf.PdfWriter;
 
 ///**
@@ -68,7 +56,7 @@ public class EndUserGUI extends JPanel implements ActionListener{
 	private String[] startRooms;
 	private String[] endRooms;
 
-	private static ImageIcon currentMapFile;
+	//private static ImageIcon currentMapFile;
 
 	private boolean startClicked = false;
 	private boolean endClicked = false;
@@ -125,7 +113,6 @@ public class EndUserGUI extends JPanel implements ActionListener{
 	private JTextPane mapNumber;
 	private Integer totalMaps = 1;
 	private int arrowCounter = 0;
-	private int floor = -1;
 
 	private Map currentlyShownMap;
 
@@ -340,7 +327,7 @@ public class EndUserGUI extends JPanel implements ActionListener{
 				currentStartNodes = maps.get(indexOfCurrentMap).getNodes();
 				startRooms = new String[currentStartNodes.size()];
 				//currentStartEdges = maps.get(indexOfCurrentMap).getEdges();
-				currentMapFile = maps.get(indexOfCurrentMap).getImage();
+				//currentMapFile = maps.get(indexOfCurrentMap).getImage();
 				currentlyShownMap = maps.get(indexOfCurrentMap);
 				if (!currentlyShownMap.getMapName().equals("WPI Campus Map")){
 					backToCampus.setEnabled(true);
@@ -416,7 +403,7 @@ public class EndUserGUI extends JPanel implements ActionListener{
 				currentEndNodes = maps.get(indexOfCurrentMap).getNodes();
 				endRooms = new String[currentEndNodes.size()];
 				//currentendEdges = maps.get(indexOfCurrentMap).getEdges();
-				currentMapFile = maps.get(indexOfCurrentMap).getImage();
+				//currentMapFile = maps.get(indexOfCurrentMap).getImage();
 				currentlyShownMap = maps.get(indexOfCurrentMap);
 				if (!currentlyShownMap.getMapName().equals("WPI Campus Map")){
 					backToCampus.setEnabled(true);
@@ -712,7 +699,7 @@ public class EndUserGUI extends JPanel implements ActionListener{
 								}
 							}
 						}
-						currentMapFile = mapsForPaths.getFirst().getImage();
+						//currentMapFile = mapsForPaths.getFirst().getImage();
 						currentlyShownMap = mapsForPaths.getFirst();
 						if(!currentlyShownMap.getMapName().equals("WPI Campus Map")){
 							backToCampus.setEnabled(true);
@@ -777,7 +764,7 @@ public class EndUserGUI extends JPanel implements ActionListener{
 							}
 						}
 					}
-					currentMapFile = mapsForPaths.getFirst().getImage();
+					//currentMapFile = mapsForPaths.getFirst().getImage();
 					currentlyShownMap = mapsForPaths.getFirst();
 					if(!currentlyShownMap.getMapName().equals("WPI Campus Map")){
 						backToCampus.setEnabled(true);
@@ -835,7 +822,7 @@ public class EndUserGUI extends JPanel implements ActionListener{
 								}
 							}
 						}
-						currentMapFile = mapsForPaths.getFirst().getImage();
+						//currentMapFile = mapsForPaths.getFirst().getImage();
 						currentlyShownMap = mapsForPaths.getFirst();
 						if(!currentlyShownMap.getMapName().equals("WPI Campus Map")){
 							backToCampus.setEnabled(true);
@@ -948,7 +935,7 @@ public class EndUserGUI extends JPanel implements ActionListener{
 					arrowCounter -= 1;
 					rightArrow.setEnabled(true);
 					mapNumber.setText(String.valueOf(arrowCounter + 1) + " of " + String.valueOf(totalMaps));
-					currentMapFile = mapsForPaths.get(arrowCounter).getImage();
+					//currentMapFile = mapsForPaths.get(arrowCounter).getImage();
 					currentlyShownMap = mapsForPaths.get(arrowCounter);
 					if(!currentlyShownMap.getMapName().equals("WPI Campus Map")){
 						backToCampus.setEnabled(true);
@@ -967,7 +954,7 @@ public class EndUserGUI extends JPanel implements ActionListener{
 					leftArrow.setEnabled(true);
 					arrowCounter += 1;
 					mapNumber.setText(String.valueOf(arrowCounter + 1) + " of " + String.valueOf(totalMaps));
-					currentMapFile = mapsForPaths.get(arrowCounter).getImage();
+					//currentMapFile = mapsForPaths.get(arrowCounter).getImage();
 					currentlyShownMap = mapsForPaths.get(arrowCounter);
 					if(!currentlyShownMap.getMapName().equals("WPI Campus Map")){
 						backToCampus.setEnabled(true);
@@ -991,7 +978,6 @@ public class EndUserGUI extends JPanel implements ActionListener{
 	public class MyGraphics extends JComponent implements MouseMotionListener{
 
 		private static final long serialVersionUID = 1L;
-		private static final int SquareWidth = 5;
 
 
 		MyGraphics() {
@@ -1099,7 +1085,6 @@ public class EndUserGUI extends JPanel implements ActionListener{
 
 		@Override
 		public void mouseDragged(MouseEvent e) {
-			// TODO Auto-generated method stub
 
 		}
 
@@ -1129,8 +1114,7 @@ public class EndUserGUI extends JPanel implements ActionListener{
 			}
 		}
 		public void mousePressed(MouseEvent e) {
-			int x = e.getX();
-			int y = e.getY();
+			
 		}
 
 
@@ -1138,7 +1122,6 @@ public class EndUserGUI extends JPanel implements ActionListener{
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		// TODO Auto-generated method stub
 
 	}
 
