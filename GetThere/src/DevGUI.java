@@ -178,7 +178,24 @@ public class DevGUI extends JPanel{
 
 		//Construct Combo boxes to select start point
 
+<<<<<<< HEAD
 		final JComboBox<Map> dropDown = new JComboBox<Map>(maps.toArray(new Map[maps.size()]));
+=======
+
+		final JComboBox<Map> dropDown = new JComboBox<Map>();
+		
+		ArrayList<String> sortedMaps = new ArrayList<String>();
+		for(int i = 0; i < maps.size(); i++){
+			sortedMaps.add(maps.get(i).getMapName());
+		}
+		Collections.sort(sortedMaps);
+		for(int i = 0; i < maps.size(); i++){
+			for(int j = 0; j < sortedMaps.size(); j++){
+				if(sortedMaps.get(i).equals(maps.get(j).getMapName()))
+					dropDown.addItem(maps.get(j));
+			}
+		}
+>>>>>>> 3b8d33a5c036c86ad1fd1bbd051cbb4db559a3e7
 
 		dropDown.setBounds(762, 26, 132, 29);
 		dropDown.setVisible(true);
@@ -312,15 +329,11 @@ public class DevGUI extends JPanel{
 					System.out.println("Export Pushed");
 
 					serialize.doSerialize("MapList", maps);
-
-
-					for(int i = 0; i < maps.size(); i++)
-					{
-						if(!maps.contains(dropDown.getItemAt(i)))
-						{
+					
+					for(int i = 0; i < maps.size(); i++){
+						if(!maps.contains(dropDown.getItemAt(i))){
 							dropDown.addItem(maps.get(i));
 						}
-
 					}	
 
 					//	dropDown.addItem(maps.getLast());
