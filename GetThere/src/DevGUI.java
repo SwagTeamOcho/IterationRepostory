@@ -178,11 +178,8 @@ public class DevGUI extends JPanel{
 
 		//Construct Combo boxes to select start point
 
-<<<<<<< HEAD
-		final JComboBox<Map> dropDown = new JComboBox<Map>(maps.toArray(new Map[maps.size()]));
-=======
 
-		final JComboBox<Map> dropDown = new JComboBox<Map>();
+		final JComboBox<Map> dropDown = new JComboBox<Map>(maps.toArray(new Map[maps.size()]));
 		
 		ArrayList<String> sortedMaps = new ArrayList<String>();
 		for(int i = 0; i < maps.size(); i++){
@@ -195,7 +192,7 @@ public class DevGUI extends JPanel{
 					dropDown.addItem(maps.get(j));
 			}
 		}
->>>>>>> 3b8d33a5c036c86ad1fd1bbd051cbb4db559a3e7
+
 
 		dropDown.setBounds(762, 26, 132, 29);
 		dropDown.setVisible(true);
