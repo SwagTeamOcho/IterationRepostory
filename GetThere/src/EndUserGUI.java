@@ -129,6 +129,8 @@ public class EndUserGUI extends JPanel implements ActionListener{
 
 	private Map currentlyShownMap;
 
+	private JButton about;
+	private Icon aboutIcon;
 	private JButton emergency;
 	private Icon emergencyIcon;
 	private JButton email;
@@ -247,7 +249,7 @@ public class EndUserGUI extends JPanel implements ActionListener{
 		frame.getContentPane().add(uiPanel);
 		uiPanel.setLayout(null);
 		tutView = new JLabel("",JLabel.CENTER);    
-		tutView.setLocation(0, 0);
+		tutView.setLocation(260, -12);
 		tutView.setSize(1194,672);
 		uiPanel.add(tutView);
 
@@ -539,6 +541,53 @@ public class EndUserGUI extends JPanel implements ActionListener{
 		scrollDire.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 		uiPanel.add(scrollDire);
 
+
+		about = new JButton();
+		about.setToolTipText("About");
+		about.addMouseMotionListener(new MouseMotionListener() {
+			public void mouseDragged(MouseEvent arg0) {}
+			public void mouseMoved(MouseEvent arg0) {
+				ttManager.setEnabled(true);
+			}
+		});
+		aboutIcon = new ImageIcon("IconImages/aboutIcon.png");
+		final Icon aboutIconBIG = new ImageIcon("IconImages/aboutIconBIG.png");
+		about.setIcon(aboutIcon);
+		about.setBounds(1153, 634, 40, 40);
+		uiPanel.add(about);
+		about.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e){
+				JOptionPane.showMessageDialog( 
+						frame,
+						"Worcester Polytechnic Institute\n"+ 
+						"CS3733 2015 B-Term/n"+ 
+						"\n"+
+						"Team Ocho\n"+
+						"Jeffrey J. Chaves\n"+
+						"Christopher S Griffin\n"+
+						"Joseph T Kaiser\n"+
+						"Lumbini Parnas\n"+
+						"Paul W. Peterson\n"+
+						"Alexander N Ruggiero\n" +
+						"William Sullivan\n"+
+						"Jean Marc A. Touma\n"+
+						"\n"+
+						"Prof. Wilson Wong\n"+
+						"Coach: Ted Mathmeyer",
+						"About",
+						JOptionPane.PLAIN_MESSAGE,
+						aboutIconBIG);
+			}
+		});
+		
+		
+		
+		
+		
+		
+		
+		
+		
 		emergencyIcon = new ImageIcon("IconImages/emergencyIcon.png");
 		final Icon emergencyIconBIG = new ImageIcon("IconImages/emergencyIconBIG.png");
 		emergency = new JButton();
