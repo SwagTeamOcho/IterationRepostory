@@ -1,9 +1,12 @@
 
+import javax.swing.text.html.StyleSheet;
+
 import java.awt.BasicStroke;
 
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.GradientPaint;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
@@ -39,6 +42,7 @@ import javax.swing.JTextArea;
 import javax.swing.JTextPane;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.ToolTipManager;
+import javax.swing.border.Border;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.event.ListSelectionEvent;
@@ -50,7 +54,9 @@ import com.itextpdf.text.Document;
 import com.itextpdf.text.Image;
 import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.pdf.PdfWriter;
+import com.thehowtotutorial.splashscreen.JSplash;
 
+import javafx.scene.layout.Background;
 ///**
 //* Created by Lumbini on 11/7/2015.
 // * */
@@ -72,8 +78,6 @@ public class EndUserGUI extends JPanel implements ActionListener{
 
 	private boolean startClicked = false;
 	private boolean endClicked = false;
-
-
 
 	private JTextArea directions;
 
@@ -151,11 +155,16 @@ public class EndUserGUI extends JPanel implements ActionListener{
 	private ToolTipManager ttManager;
 
 	private JScrollPane scrollMapPanel;
+	
+	private Color burgandy = new Color(74, 1, 1);
+	private Color beige = new Color(230, 224, 200);
 	/**
 	 * Create the application.
 	 */
 	@SuppressWarnings("unchecked")
 	public EndUserGUI(){
+		JSplash loadingScreen = new JSplash(LoadingScreen.class.getResource("loadingScreen.png"),
+								true, true, false, null, null, beige, burgandy);
 		Serialize serialize = new Serialize();
 		Object tempMaps = serialize.deSerialize("MapList");
 		if(tempMaps instanceof LinkedList<?>){
@@ -222,25 +231,43 @@ public class EndUserGUI extends JPanel implements ActionListener{
 
 
 	private void initialize() {
+		try{
+			JSplash loadingScreen = new JSplash(LoadingScreen.class.getResource("loadingScreen.png"), true, true, false, null, 
+					null, beige, burgandy);
+			loadingScreen.splashOn();
+			loadingScreen.setProgress(30);
+			Thread.sleep(1000);
+			loadingScreen.setProgress(60);
+			Thread.sleep(1000);
+			loadingScreen.setProgress(80);
+			Thread.sleep(1000);
+			loadingScreen.splashOff();
 
-
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		
 		final MyGraphics graph = new MyGraphics();
-
-
 		//Frame operations
 		frame = new JFrame();
 		frame.setBounds(100, 100, 1200, 700);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(new BoxLayout(frame.getContentPane(), BoxLayout.X_AXIS));
 		frame.setTitle("Get There");
+		frame.setUndecorated(true);
 		frame.setResizable(false);
 		frame.setVisible(true);
 
+		
 		//Panel Operations
 		uiPanel = new JPanel();
 		frame.getContentPane().add(uiPanel);
 		uiPanel.setLayout(null);
-		//uiPanel.setBackground(new Color(242,0, 222));
+		uiPanel.setBackground(new Color(74, 1, 1));
+//		ImageIcon backgroundImg = new ImageIcon("IconImages/uiBackground.jpg");
+//		BackgroundPanel thumb = new BackgroundPanel(backgroundImg.getImage(), BackgroundPanel.ACTUAL, 1.0f, 0.5f);
+//		thumb.setBackground(new Color(74, 1, 1));
+//		uiPanel.add(thumb);
 
 		tutView = new JLabel("",JLabel.CENTER);    
 		tutView.setLocation(0, 0);
@@ -250,42 +277,76 @@ public class EndUserGUI extends JPanel implements ActionListener{
 		mapPanel = new ImagePanel(this);
 		mapPanel.add(graph);
 		scrollMapPanel = new JScrollPane(mapPanel);
-		scrollMapPanel.setBounds(5, 5, 750, 620);
+		scrollMapPanel.setBounds(5, 20, 750, 620);
 		zoom = new ImageZoom(mapPanel);
+		scrollMapPanel.setBackground(burgandy);
+
 		//uiPanel.add(zoom.getUIPanel());
 		//uiPanel.add(mapPanel);
 
 		scrollMapPanel.getViewport().addChangeListener(new ChangeListener(){
-
-
 			@Override
 			public void stateChanged(ChangeEvent e) {
-
-
-
 			}
 		});
 		uiPanel.add(scrollMapPanel);
+		
+		//Customizing the Title Bar
+		JPanel titleBar = new JPanel();
+		titleBar.setBounds(0, 0, 1200, 15);
+		JLabel titleBackground = new JLabel();
+		titleBackground.setBounds(0, 0, 1200, 15);
+		
+	//ImageIcon backImg = new ImageIcon("IconImages/uiBackground.jpg");
+	//	titleBackground.setIcon(backImg);
+		titleBar.setBackground(burgandy);
+		uiPanel.add(titleBar);
+		titleBar.add(titleBackground);
 
-
+		JLabel closeButt = new JLabel("X");
+		closeButt.setForeground(beige);
+		closeButt.setFont(new Font("Helvetica Neue", Font.BOLD, 14));
+//		ImageIcon close = new ImageIcon("IconImages/close.png");
+//		closeButt.setIcon(close);
+		closeButt.setBounds(0, 0, 16, 16);
+		JLabel minButt = new JLabel();
+		ImageIcon minimize = new ImageIcon("IconImages/min.png");
+		minButt.setIcon(minimize);
+		minButt.setBounds(15, 0, 15, 15);
+		titleBar.add(minButt);
+		titleBar.add(closeButt);
+		
+		
 		//Creating Labels
 		startPoint = new JLabel("FROM");
-		startPoint.setBounds(780, 6, 132, 29);
+		startPoint.setForeground(beige);
+		startPoint.setFont(new Font("Helvetica Neue", Font.BOLD, 14));
+		startPoint.setBounds(780, 6+15, 132, 29);
 
 		buildingStart = new JLabel("Select Building:");
-		buildingStart.setBounds(762, 26, 132, 29);
+		buildingStart.setForeground(beige);
+		buildingStart.setFont(new Font("Helvetica Neue", Font.BOLD, 14));
+		buildingStart.setBounds(762, 26+15, 132, 29);
 
 		roomStart = new JLabel("Select Room:");
-		roomStart.setBounds(983, 26, 132, 29);
+		roomStart.setForeground(beige);
+		roomStart.setFont(new Font("Helvetica Neue", Font.BOLD, 14));
+		roomStart.setBounds(983, 26+15, 132, 29);
 
 		endPoint = new JLabel("TO");
-		endPoint.setBounds(780, 72, 132, 29);
+		endPoint.setForeground(beige);
+		endPoint.setFont(new Font("Helvetica Neue", Font.BOLD, 14));
+		endPoint.setBounds(780, 72+15, 132, 29);
 
 		buildingEnd = new JLabel("Select Building:");
-		buildingEnd.setBounds(762, 92, 132, 29);
+		buildingEnd.setForeground(beige);
+		buildingEnd.setFont(new Font("Helvetica Neue", Font.BOLD, 14));
+		buildingEnd.setBounds(762, 92+15, 132, 29);
 
 		roomEnd = new JLabel("Select Room:");
-		roomEnd.setBounds(983, 92, 132, 29);
+		roomEnd.setForeground(beige);
+		roomEnd.setFont(new Font("Helvetica Neue", Font.BOLD, 14));
+		roomEnd.setBounds(983, 92+15, 132, 29);
 
 		//Add Labels to the uiPanel
 		uiPanel.add(startPoint);
@@ -296,13 +357,13 @@ public class EndUserGUI extends JPanel implements ActionListener{
 		uiPanel.add(roomEnd);
 
 		//startRoomSEL.setModel(new DefaultComboBoxModel(new String[]{}));
-		startRoomSEL.setBounds(983, 50, 210, 29);
+		startRoomSEL.setBounds(983, 50+15, 210, 29);
 		startRoomSEL.setEditable(false);
 		startRoomSEL.setVisible(true);
 		startRoomSEL.setName("Start");
 
 		mapNumber = new JTextPane();
-		mapNumber.setBounds(360, 634, 47, 20);
+		mapNumber.setBounds(360, 634+15, 47, 20);
 		mapNumber.setEditable(false);
 		mapNumber.setFont(new Font("Helvetica Neue", Font.BOLD, 14));
 		mapNumber.setAlignmentX(StyleConstants.ALIGN_CENTER);
@@ -311,7 +372,7 @@ public class EndUserGUI extends JPanel implements ActionListener{
 
 		//Construct Combo boxes to select start point
 		startBuildingSEL = new JComboBox<String>();
-		startBuildingSEL.setBounds(755, 50, 232, 29);
+		startBuildingSEL.setBounds(755, 50+15, 232, 29);
 		startBuildingSEL.setEditable(false);
 		startBuildingSEL.setVisible(true);
 		startBuildingSEL.addActionListener(new ActionListener(){
@@ -357,7 +418,7 @@ public class EndUserGUI extends JPanel implements ActionListener{
 				mapPanel.add(graph);
 				zoom = new ImageZoom(mapPanel);
 				JLabel scaleLabel = new JLabel("Scale");
-				scaleLabel.setBounds(680, 630, 50, 30);
+				scaleLabel.setBounds(680, 630+15, 50, 30);
 				uiPanel.add(scaleLabel);
 				uiPanel.add(zoom.getZoomingSpinner());
 				uiPanel.add(zoom.getZoomInButton());
@@ -368,21 +429,20 @@ public class EndUserGUI extends JPanel implements ActionListener{
 
 		});
 
-
 		for (int i = 0; i < maps.size(); i++) {
 			if(maps.get(i).getMapName() != null)
 				startBuildingSEL.addItem(maps.get(i).getMapName());
 		}
 
 		//endRoomSEL.setModel(new DefaultComboBoxModel(new String[]{}));
-		endRoomSEL.setBounds(983, 116, 210, 29);
+		endRoomSEL.setBounds(983, 116+15, 210, 29);
 		endRoomSEL.setEditable(false);
 		endRoomSEL.setVisible(true);
 		endRoomSEL.setName("End");
 
 		//Construct Combo boxes to select end point
 		endBuildingSEL = new JComboBox<String>();
-		endBuildingSEL.setBounds(755, 116, 232, 29);
+		endBuildingSEL.setBounds(755, 116+15, 232, 29);
 		endBuildingSEL.setEditable(false);
 		endBuildingSEL.setVisible(true);
 		endBuildingSEL.addActionListener(new ActionListener(){
@@ -435,9 +495,7 @@ public class EndUserGUI extends JPanel implements ActionListener{
 				uiPanel.add(zoom.getZoomOutButton());
 				uiPanel.add(scrollMapPanel);
 				mapPanel.setPath(null);
-
 			}
-
 		});
 
 		for (int i = 0; i < maps.size(); i++) {
@@ -451,7 +509,7 @@ public class EndUserGUI extends JPanel implements ActionListener{
 		tutorial = new JButton();
 		tutorial.setToolTipText ("Tutorial");
 		tutorial.setIcon(tutIcon);
-		tutorial.setBounds(6, 632, 40, 40);
+		tutorial.setBounds(6, 632+15, 40, 40);
 		uiPanel.add(tutorial);
 		count = 1;
 		final ImageIcon icon = new ImageIcon("IconImages/Tut.png");
@@ -474,11 +532,11 @@ public class EndUserGUI extends JPanel implements ActionListener{
 
 		//Construct button and add button to uiPanel
 		searchButton = new JButton ("Search");
-		searchButton.setBounds(987, 150, 132, 30);
+		searchButton.setBounds(987, 150+15, 132, 30);
 		uiPanel.add(searchButton);
 
 		clearButton = new JButton ("Clear");
-		clearButton.setBounds(853, 150, 132, 30);
+		clearButton.setBounds(853, 150+15, 132, 30);
 		uiPanel.add(clearButton);
 		clearButton.addActionListener(new ActionListener()  {
 			public void actionPerformed(ActionEvent e)
@@ -488,28 +546,31 @@ public class EndUserGUI extends JPanel implements ActionListener{
 		});
 
 		leftArrow = new JButton("<<");
-		leftArrow.setBounds(275, 630, 80, 29);
+		leftArrow.setBounds(275, 630+15, 80, 29);
 		uiPanel.add(leftArrow);
 		if(arrowCounter == 0){
 			leftArrow.setEnabled(false);
 		}
 
 		rightArrow = new JButton(">>");
-		rightArrow.setBounds(412, 630, 80, 29);
+		rightArrow.setBounds(412, 630+15, 80, 29);
 		uiPanel.add(rightArrow);
 		rightArrow.setEnabled(false);
 
 		JLabel instructions = new JLabel("How to get there?");
-		instructions.setBounds(930, 180, 132, 29);
+		instructions.setForeground(beige);
+		instructions.setFont(new Font("Helvetica Neue", Font.BOLD, 14));
+		instructions.setBounds(930, 180+15, 132, 29);
 		uiPanel.add(instructions);
 
 		directions = new JTextArea();
-		directions.setBounds(762, 210, 255, 420);
+		directions.setBounds(762, 210+15, 255, 420);
 		directions.setFont(new Font("Helvetica Neue", Font.PLAIN, 13));
 		directions.setLineWrap(true);
 		directions.setEditable(false);
+		directions.setForeground(burgandy);
 		JScrollPane scrollDire = new JScrollPane(directions);
-		scrollDire.setBounds(835, 210, 300, 420);
+		scrollDire.setBounds(835, 210+15, 300, 420);
 		scrollDire.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 		uiPanel.add(scrollDire);
 
@@ -518,7 +579,7 @@ public class EndUserGUI extends JPanel implements ActionListener{
 		emergency = new JButton();
 		emergency.setToolTipText("Emergency Information");
 		emergency.setIcon(emergencyIcon);
-		emergency.setBounds(872, 632, 40, 40);
+		emergency.setBounds(872, 632+15, 40, 40);
 		uiPanel.add(emergency);
 		final String emergencyInfo = "Call Campus Police:" + "\n" + "508-831-5555";
 		emergency.addActionListener(new ActionListener(){
@@ -531,7 +592,7 @@ public class EndUserGUI extends JPanel implements ActionListener{
 		email = new JButton();
 		email.setToolTipText("Send Directions via Email");
 		email.setIcon(emailIcon);
-		email.setBounds(920, 632, 40, 40);
+		email.setBounds(920, 632+15, 40, 40);
 		uiPanel.add(email);
 		email.addActionListener(new ActionListener()  {
 			public void actionPerformed(ActionEvent e)
@@ -589,7 +650,7 @@ public class EndUserGUI extends JPanel implements ActionListener{
 		transport = new JButton();
 		transport.setToolTipText("View Transport Schedule");
 		transport.setIcon(transportIcon);
-		transport.setBounds(968, 632, 40, 40);
+		transport.setBounds(968, 632+15, 40, 40);
 		uiPanel.add(transport);
 		transport.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
@@ -622,7 +683,7 @@ public class EndUserGUI extends JPanel implements ActionListener{
 		final Icon bathroomIconBIG = new ImageIcon("IconImages/bathroomIconBIG.png");
 		nearestBathroom = new JButton(bathroomIcon);
 		nearestBathroom.setToolTipText("Find nearest Bathroom");
-		nearestBathroom.setBounds(1017, 632, 40, 40);
+		nearestBathroom.setBounds(1017, 632+15, 40, 40);
 		uiPanel.add(nearestBathroom);
 		nearestBathroom.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e)
@@ -694,7 +755,7 @@ public class EndUserGUI extends JPanel implements ActionListener{
 		nearestBluetower = new JButton();
 		nearestBluetower.setToolTipText("Find nearest Emergency Tower");
 		nearestBluetower.setIcon(bluetowerIcon);
-		nearestBluetower.setBounds(1064, 632, 40, 40);
+		nearestBluetower.setBounds(1064, 632+15, 40, 40);
 		uiPanel.add(nearestBluetower);
 		nearestBluetower.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
@@ -859,9 +920,7 @@ public class EndUserGUI extends JPanel implements ActionListener{
 		});
 		uiPanel.setVisible(true);
 		frame.setVisible(true);
-
 		clear();
-
 	}
 
 
@@ -916,7 +975,7 @@ public class EndUserGUI extends JPanel implements ActionListener{
 		@Override
 		public void paintComponent(Graphics g) {
 			GeneralPath path = null;
-
+			
 			if(path == null && updatePath == true && listPath.size() > 0){
 				removeAll();
 				int k;
