@@ -228,7 +228,7 @@ public class EndUserGUI extends JPanel implements ActionListener{
 
 
 		final MyGraphics graph = new MyGraphics();
-		
+
 		ttManager = ToolTipManager.sharedInstance();
 		ttManager.setEnabled(true);
 
@@ -317,8 +317,8 @@ public class EndUserGUI extends JPanel implements ActionListener{
 		backToCampus.setBounds(100, 630, 150, 29);
 		uiPanel.add(backToCampus);
 		backToCampus.setEnabled(true);
-		
-		
+
+
 		//Construct Combo boxes to select start point
 		startBuildingSEL = new JComboBox<String>();
 		startBuildingSEL.setBounds(755, 50, 232, 29);
@@ -916,8 +916,8 @@ public class EndUserGUI extends JPanel implements ActionListener{
 								historicalNodes.add(currentlyShownMap.getNodes().get(m));
 							}
 						}
-						
-						
+
+
 						if(mapsForPaths != null){
 							for(int j = 0; j < mapsForPaths.size(); j++){
 								if(mapsForPaths.get(j) == maps.get(i)){
@@ -1007,17 +1007,17 @@ public class EndUserGUI extends JPanel implements ActionListener{
 					int x = evt.getX();
 					int y = evt.getY();
 					if (evt.getClickCount() == 2) {
-					    for(int i = 0; i < maps.size(); i++){
-					    	if(maps.get(i).getEasyLinks().size() > 0){
-						    	for(int j = 0; j < maps.get(i).getEasyLinks().size(); j++){
-						    		if(maps.get(i).getEasyLinks().get(j).getPoly().contains(x, y)){
-						    			currentlyShownMap = maps.get(i).getEasyLinks().get(j).getMap();
+						for(int i = 0; i < maps.size(); i++){
+							if(maps.get(i).getEasyLinks().size() > 0){
+								for(int j = 0; j < maps.get(i).getEasyLinks().size(); j++){
+									if(maps.get(i).getEasyLinks().get(j).getPoly().contains(x, y)){
+										currentlyShownMap = maps.get(i).getEasyLinks().get(j).getMap();
 										mapPanel.setImage(currentlyShownMap.getImage());
 										mapPanel.setPath(null);
-						    		}
-						    	}
-					    	}
-					    }
+									}
+								}
+							}
+						}
 					} 
 					if(!startClicked){
 						startNode = findClosestNode(x,y);

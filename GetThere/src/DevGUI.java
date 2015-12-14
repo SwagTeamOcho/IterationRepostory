@@ -107,7 +107,7 @@ public class DevGUI extends JPanel{
 	public JPanel getuiPanel(){
 		return this.uiPanel;
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	public static void main(String[] args) {
 
@@ -147,7 +147,7 @@ public class DevGUI extends JPanel{
 	private void initialize() {
 
 		//Frame operations
-		
+
 		frame = new JFrame();
 		frame.setBounds(100, 100, 910, 700);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -160,7 +160,7 @@ public class DevGUI extends JPanel{
 		uiPanel = new JPanel();
 		frame.getContentPane().add(uiPanel);
 		uiPanel.setLayout(null);
-		
+
 		nodeEditor = new NodeEditor(this);
 
 		mapPanel = new JPanel();
@@ -177,7 +177,7 @@ public class DevGUI extends JPanel{
 		uiPanel.add(buildingStart);
 
 		//Construct Combo boxes to select start point
-		
+
 		final JComboBox<Map> dropDown = new JComboBox<Map>(maps.toArray(new Map[maps.size()]));
 
 		dropDown.setBounds(762, 26, 132, 29);
@@ -335,7 +335,7 @@ public class DevGUI extends JPanel{
 
 			}
 					);
-			
+
 			JButton btnEasyLink = new JButton("Easy Map Link");
 			btnEasyLink.setBounds(762, 586, 132, 29);
 			uiPanel.add(btnEasyLink);
@@ -351,43 +351,43 @@ public class DevGUI extends JPanel{
 					editNodes = false;
 					alignNodesX = false;
 					alignNodesY = false;
-					
+
 					if(createEasyLink)
 						createEasyLink = false;
 					else
 						createEasyLink = true;
-					
+
 					if(createEasyLink){
-						
+
 						numVertices = 0;
 						String s = (String)JOptionPane.showInputDialog(
-			                    frame,
-			                    "Enter the number of vertices:",
-			                    "Customized Dialog",
-			                    JOptionPane.PLAIN_MESSAGE,
-			                    null,
-			                    null,
-			                    null);
+								frame,
+								"Enter the number of vertices:",
+								"Customized Dialog",
+								JOptionPane.PLAIN_MESSAGE,
+								null,
+								null,
+								null);
 						if(s != null){
 							try {
-							    easyLinkMax = Integer.parseInt(s);
-							    //System.out.println("Number of vertices: " + hold);
-							    xValues = new int[easyLinkMax];
-							    yValues = new int[easyLinkMax];
-							    
-							    
+								easyLinkMax = Integer.parseInt(s);
+								//System.out.println("Number of vertices: " + hold);
+								xValues = new int[easyLinkMax];
+								yValues = new int[easyLinkMax];
+
+
 							} catch (NumberFormatException n) {
-							    System.out.println("Invalid Value");
-							    JOptionPane.showMessageDialog(frame,
-							    	    "Invalid Number of Vertices.",
-							    	    "Error",
-							    	    JOptionPane.ERROR_MESSAGE);
+								System.out.println("Invalid Value");
+								JOptionPane.showMessageDialog(frame,
+										"Invalid Number of Vertices.",
+										"Error",
+										JOptionPane.ERROR_MESSAGE);
 							}
 						}
 					} else {
-						
+
 					}
-										
+
 				}
 			});
 
@@ -477,7 +477,7 @@ public class DevGUI extends JPanel{
 							easyLinkMap = maps.get(maps.indexOf(connectingMap));
 							link = new EasyLink(poly, easyLinkMap);
 							selectedMap.addEasyLink(link);
-						    numVertices = 0;
+							numVertices = 0;
 							createEasyLink = false;
 						}
 					}
@@ -700,7 +700,7 @@ public class DevGUI extends JPanel{
 			repaint();
 			revalidate();
 		}
-		
+
 		@Override
 		public void paintComponent(Graphics g) {
 			super.paintComponent(g);
@@ -829,7 +829,7 @@ public class DevGUI extends JPanel{
 
 			System.out.println("\n");
 		}
-		
+
 		public double calcDistance(Node n1, Node n2, double scale)
 		{
 			return (Math.sqrt((n1.getX()-n2.getX())*(n1.getX()-n2.getX()) + (n1.getY()-n2.getY())*(n1.getY()-n2.getY())))/scale;
