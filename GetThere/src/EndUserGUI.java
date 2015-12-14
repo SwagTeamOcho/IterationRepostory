@@ -1,5 +1,3 @@
-
-
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
@@ -118,6 +116,8 @@ public class EndUserGUI extends JPanel implements ActionListener{
 
 	private JButton about;
 	private Icon aboutIcon;
+	private JButton findProf;
+	private Icon findProfIcon;
 	private JButton emergency;
 	private Icon emergencyIcon;
 	private JButton email;
@@ -236,7 +236,7 @@ public class EndUserGUI extends JPanel implements ActionListener{
 		frame.getContentPane().add(uiPanel);
 		uiPanel.setLayout(null);
 		tutView = new JLabel("",JLabel.CENTER);    
-		tutView.setLocation(260, -12);
+		tutView.setLocation(0, 0);
 		tutView.setSize(1194,672);
 		uiPanel.add(tutView);
 
@@ -527,53 +527,9 @@ public class EndUserGUI extends JPanel implements ActionListener{
 		scrollDire.setBounds(835, 210, 300, 420);
 		scrollDire.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 		uiPanel.add(scrollDire);
-
-
-		about = new JButton();
-		about.setToolTipText("About");
-		about.addMouseMotionListener(new MouseMotionListener() {
-			public void mouseDragged(MouseEvent arg0) {}
-			public void mouseMoved(MouseEvent arg0) {
-				ttManager.setEnabled(true);
-			}
-		});
 		aboutIcon = new ImageIcon("IconImages/aboutIcon.png");
 		final Icon aboutIconBIG = new ImageIcon("IconImages/aboutIconBIG.png");
-		about.setIcon(aboutIcon);
-		about.setBounds(1153, 634, 40, 40);
-		uiPanel.add(about);
-		about.addActionListener(new ActionListener(){
-			public void actionPerformed(ActionEvent e){
-				JOptionPane.showMessageDialog( 
-						frame,
-						"Worcester Polytechnic Institute\n"+ 
-						"CS3733 2015 B-Term/n"+ 
-						"\n"+
-						"Team Ocho\n"+
-						"Jeffrey J. Chaves\n"+
-						"Christopher S Griffin\n"+
-						"Joseph T Kaiser\n"+
-						"Lumbini Parnas\n"+
-						"Paul W. Peterson\n"+
-						"Alexander N Ruggiero\n" +
-						"William Sullivan\n"+
-						"Jean Marc A. Touma\n"+
-						"\n"+
-						"Prof. Wilson Wong\n"+
-						"Coach: Ted Mathmeyer",
-						"About",
-						JOptionPane.PLAIN_MESSAGE,
-						aboutIconBIG);
-			}
-		});
-		
-		
-		
-		
-		
-		
-		
-		
+		findProfIcon = new ImageIcon("IconImages/findProfIcon.png");
 		
 		emergencyIcon = new ImageIcon("IconImages/emergencyIcon.png");
 		final Icon emergencyIconBIG = new ImageIcon("IconImages/emergencyIconBIG.png");
@@ -586,7 +542,7 @@ public class EndUserGUI extends JPanel implements ActionListener{
 			}
 		});
 		emergency.setIcon(emergencyIcon);
-		emergency.setBounds(872, 632, 40, 40);
+		emergency.setBounds(850, 632, 40, 40);
 		uiPanel.add(emergency);
 		final String emergencyInfo = "Call Campus Police:" + "\n" + "508-831-5555";
 		emergency.addActionListener(new ActionListener(){
@@ -605,7 +561,7 @@ public class EndUserGUI extends JPanel implements ActionListener{
 			}
 		});
 		email.setIcon(emailIcon);
-		email.setBounds(920, 632, 40, 40);
+		email.setBounds(900, 632, 40, 40);
 		uiPanel.add(email);
 		email.addActionListener(new ActionListener()  {
 			public void actionPerformed(ActionEvent e)
@@ -669,7 +625,7 @@ public class EndUserGUI extends JPanel implements ActionListener{
 			}
 		});
 		transport.setIcon(transportIcon);
-		transport.setBounds(968, 632, 40, 40);
+		transport.setBounds(950, 632, 40, 40);
 		uiPanel.add(transport);
 		transport.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
@@ -708,7 +664,7 @@ public class EndUserGUI extends JPanel implements ActionListener{
 				ttManager.setEnabled(true);
 			}
 		});
-		nearestBathroom.setBounds(1017, 632, 40, 40);
+		nearestBathroom.setBounds(1000, 632, 40, 40);
 		uiPanel.add(nearestBathroom);
 		nearestBathroom.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e)
@@ -791,8 +747,68 @@ public class EndUserGUI extends JPanel implements ActionListener{
 			}
 		});
 		nearestBluetower.setIcon(bluetowerIcon);
-		nearestBluetower.setBounds(1064, 632, 40, 40);
+		nearestBluetower.setBounds(1050, 632, 40, 40);
 		uiPanel.add(nearestBluetower);
+		
+		//Find Professor button
+		findProf = new JButton();
+		findProf.setToolTipText("Find Professor");
+		findProf.setIcon(findProfIcon);
+		
+		findProf.setBounds(1100, 632, 40, 40);
+		uiPanel.add(findProf);
+		
+				//About button
+				about = new JButton();
+				about.setToolTipText("About");
+				about.addMouseMotionListener(new MouseMotionListener() {
+					public void mouseDragged(MouseEvent arg0) {}
+					public void mouseMoved(MouseEvent arg0) {
+						ttManager.setEnabled(true);
+					}
+				});
+				about.setIcon(aboutIcon);
+				about.setBounds(1150, 632, 40, 40);
+				uiPanel.add(about);
+				about.addActionListener(new ActionListener(){
+					public void actionPerformed(ActionEvent e){
+						JOptionPane.showMessageDialog( 
+								frame,
+								"Worcester Polytechnic Institute\n"+ 
+								"CS3733 2015 B-Term/n"+ 
+								"\n"+
+								"Team Ocho\n"+
+								"Jeffrey J. Chaves\n"+
+								"Christopher S Griffin\n"+
+								"Joseph T Kaiser\n"+
+								"Lumbini Parnas\n"+
+								"Paul W. Peterson\n"+
+								"Alexander N Ruggiero\n" +
+								"William Sullivan\n"+
+								"Jean Marc A. Touma\n"+
+								"\n"+
+								"Prof. Wilson Wong\n"+
+								"Coach: Ted Mathmeyer",
+								"About",
+								JOptionPane.PLAIN_MESSAGE,
+								aboutIconBIG);
+					}
+				});
+				about.addMouseMotionListener(new MouseMotionListener() {
+					public void mouseDragged(MouseEvent arg0) {}
+					public void mouseMoved(MouseEvent arg0) {
+						ttManager.setEnabled(true);
+					}
+				});
+		findProf.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e){
+				javax.swing.SwingUtilities.invokeLater(new Runnable() {
+					public void run() {
+						FindProf.createFindProf();
+					}
+				});
+			}
+		});
 		nearestBluetower.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
 				if(listPath != null && startNode != null){
