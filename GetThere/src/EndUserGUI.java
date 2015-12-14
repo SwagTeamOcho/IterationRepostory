@@ -1,29 +1,19 @@
-
-import java.awt.BasicStroke;
-
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.RenderingHints;
-import java.awt.event.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionListener;
-import java.awt.geom.AffineTransform;
 import java.awt.geom.GeneralPath;
 import java.io.File;
 import java.io.FileOutputStream;
-import java.awt.image.BufferedImage;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedList;
 
-import javax.swing.*;
 import javax.swing.BoxLayout;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
@@ -41,14 +31,10 @@ import javax.swing.ScrollPaneConstants;
 import javax.swing.ToolTipManager;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
-import javax.swing.plaf.basic.ComboPopup;
 import javax.swing.text.StyleConstants;
 
 import com.itextpdf.text.Document;
 import com.itextpdf.text.Image;
-import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.pdf.PdfWriter;
 
 ///**
@@ -68,7 +54,7 @@ public class EndUserGUI extends JPanel implements ActionListener{
 	private String[] startRooms;
 	private String[] endRooms;
 
-	private static ImageIcon currentMapFile;
+	//private static ImageIcon currentMapFile;
 
 	private boolean startClicked = false;
 	private boolean endClicked = false;
@@ -125,10 +111,13 @@ public class EndUserGUI extends JPanel implements ActionListener{
 	private JTextPane mapNumber;
 	private Integer totalMaps = 1;
 	private int arrowCounter = 0;
-	private int floor = -1;
 
 	private Map currentlyShownMap;
 
+	private JButton about;
+	private Icon aboutIcon;
+	private JButton findProf;
+	private Icon findProfIcon;
 	private JButton emergency;
 	private Icon emergencyIcon;
 	private JButton email;
@@ -317,7 +306,8 @@ public class EndUserGUI extends JPanel implements ActionListener{
 		backToCampus.setBounds(100, 630, 150, 29);
 		uiPanel.add(backToCampus);
 		backToCampus.setEnabled(true);
-
+		
+		
 		//Construct Combo boxes to select start point
 		startBuildingSEL = new JComboBox<String>();
 		startBuildingSEL.setBounds(755, 50, 232, 29);
@@ -339,7 +329,7 @@ public class EndUserGUI extends JPanel implements ActionListener{
 				currentStartNodes = maps.get(indexOfCurrentMap).getNodes();
 				startRooms = new String[currentStartNodes.size()];
 				//currentStartEdges = maps.get(indexOfCurrentMap).getEdges();
-				currentMapFile = maps.get(indexOfCurrentMap).getImage();
+				//currentMapFile = maps.get(indexOfCurrentMap).getImage();
 				currentlyShownMap = maps.get(indexOfCurrentMap);
 				if (!currentlyShownMap.getMapName().equals("WPI Campus Map")){
 					backToCampus.setEnabled(true);
@@ -415,7 +405,7 @@ public class EndUserGUI extends JPanel implements ActionListener{
 				currentEndNodes = maps.get(indexOfCurrentMap).getNodes();
 				endRooms = new String[currentEndNodes.size()];
 				//currentendEdges = maps.get(indexOfCurrentMap).getEdges();
-				currentMapFile = maps.get(indexOfCurrentMap).getImage();
+				//currentMapFile = maps.get(indexOfCurrentMap).getImage();
 				currentlyShownMap = maps.get(indexOfCurrentMap);
 				if (!currentlyShownMap.getMapName().equals("WPI Campus Map")){
 					backToCampus.setEnabled(true);
@@ -537,7 +527,10 @@ public class EndUserGUI extends JPanel implements ActionListener{
 		scrollDire.setBounds(835, 210, 300, 420);
 		scrollDire.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 		uiPanel.add(scrollDire);
-
+		aboutIcon = new ImageIcon("IconImages/aboutIcon.png");
+		final Icon aboutIconBIG = new ImageIcon("IconImages/aboutIconBIG.png");
+		findProfIcon = new ImageIcon("IconImages/findProfIcon.png");
+		
 		emergencyIcon = new ImageIcon("IconImages/emergencyIcon.png");
 		final Icon emergencyIconBIG = new ImageIcon("IconImages/emergencyIconBIG.png");
 		emergency = new JButton();
@@ -549,7 +542,7 @@ public class EndUserGUI extends JPanel implements ActionListener{
 			}
 		});
 		emergency.setIcon(emergencyIcon);
-		emergency.setBounds(872, 632, 40, 40);
+		emergency.setBounds(850, 632, 40, 40);
 		uiPanel.add(emergency);
 		final String emergencyInfo = "Call Campus Police:" + "\n" + "508-831-5555";
 		emergency.addActionListener(new ActionListener(){
@@ -568,7 +561,7 @@ public class EndUserGUI extends JPanel implements ActionListener{
 			}
 		});
 		email.setIcon(emailIcon);
-		email.setBounds(920, 632, 40, 40);
+		email.setBounds(900, 632, 40, 40);
 		uiPanel.add(email);
 		email.addActionListener(new ActionListener()  {
 			public void actionPerformed(ActionEvent e)
@@ -584,22 +577,21 @@ public class EndUserGUI extends JPanel implements ActionListener{
 						doc.addAuthor("GetThere");
 						doc.addTitle("This is title");
 						doc.open();
+						
+						while(arrowCounter!=0) {
+							leftArrow.doClick();
+						}
 
 						//adding a local image and aligned RIGHT
 						for(int i = 0; i < totalMaps; i++) {
+							mapPanel.paint(mapPanel.getGraphics());
 							new PanelCapture(mapPanel);
 							Image image = Image.getInstance("Screen.png");
 							doc.setPageSize(image);
 							doc.newPage();
 							image.setAbsolutePosition(0, 0);
 							doc.add(image);
-							if(i!=totalMaps-1){
-								rightArrow.getModel().setArmed(true);
-								rightArrow.getModel().setPressed(true);
-								rightArrow.getModel().setPressed(false);
-
-							}
-							rightArrow.getModel().setArmed(false);
+							rightArrow.doClick();
 						}
 
 						doc.close();
@@ -632,7 +624,7 @@ public class EndUserGUI extends JPanel implements ActionListener{
 			}
 		});
 		transport.setIcon(transportIcon);
-		transport.setBounds(968, 632, 40, 40);
+		transport.setBounds(950, 632, 40, 40);
 		uiPanel.add(transport);
 		transport.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
@@ -671,7 +663,7 @@ public class EndUserGUI extends JPanel implements ActionListener{
 				ttManager.setEnabled(true);
 			}
 		});
-		nearestBathroom.setBounds(1017, 632, 40, 40);
+		nearestBathroom.setBounds(1000, 632, 40, 40);
 		uiPanel.add(nearestBathroom);
 		nearestBathroom.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e)
@@ -712,7 +704,7 @@ public class EndUserGUI extends JPanel implements ActionListener{
 								}
 							}
 						}
-						currentMapFile = mapsForPaths.getFirst().getImage();
+						//currentMapFile = mapsForPaths.getFirst().getImage();
 						currentlyShownMap = mapsForPaths.getFirst();
 						if(!currentlyShownMap.getMapName().equals("WPI Campus Map")){
 							backToCampus.setEnabled(true);
@@ -755,8 +747,68 @@ public class EndUserGUI extends JPanel implements ActionListener{
 			}
 		});
 		nearestBluetower.setIcon(bluetowerIcon);
-		nearestBluetower.setBounds(1064, 632, 40, 40);
+		nearestBluetower.setBounds(1050, 632, 40, 40);
 		uiPanel.add(nearestBluetower);
+		
+		//Find Professor button
+		findProf = new JButton();
+		findProf.setToolTipText("Find Professor");
+		findProf.setIcon(findProfIcon);
+		
+		findProf.setBounds(1100, 632, 40, 40);
+		uiPanel.add(findProf);
+		
+				//About button
+				about = new JButton();
+				about.setToolTipText("About");
+				about.addMouseMotionListener(new MouseMotionListener() {
+					public void mouseDragged(MouseEvent arg0) {}
+					public void mouseMoved(MouseEvent arg0) {
+						ttManager.setEnabled(true);
+					}
+				});
+				about.setIcon(aboutIcon);
+				about.setBounds(1150, 632, 40, 40);
+				uiPanel.add(about);
+				about.addActionListener(new ActionListener(){
+					public void actionPerformed(ActionEvent e){
+						JOptionPane.showMessageDialog( 
+								frame,
+								"Worcester Polytechnic Institute\n"+ 
+								"CS3733 2015 B-Term/n"+ 
+								"\n"+
+								"Team Ocho\n"+
+								"Jeffrey J. Chaves\n"+
+								"Christopher S Griffin\n"+
+								"Joseph T Kaiser\n"+
+								"Lumbini Parnas\n"+
+								"Paul W. Peterson\n"+
+								"Alexander N Ruggiero\n" +
+								"William Sullivan\n"+
+								"Jean Marc A. Touma\n"+
+								"\n"+
+								"Prof. Wilson Wong\n"+
+								"Coach: Ted Mathmeyer",
+								"About",
+								JOptionPane.PLAIN_MESSAGE,
+								aboutIconBIG);
+					}
+				});
+				about.addMouseMotionListener(new MouseMotionListener() {
+					public void mouseDragged(MouseEvent arg0) {}
+					public void mouseMoved(MouseEvent arg0) {
+						ttManager.setEnabled(true);
+					}
+				});
+		findProf.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e){
+				javax.swing.SwingUtilities.invokeLater(new Runnable() {
+					public void run() {
+						FindProf.createFindProf();
+					}
+				});
+			}
+		});
 		nearestBluetower.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
 				if(listPath != null && startNode != null){
@@ -778,7 +830,7 @@ public class EndUserGUI extends JPanel implements ActionListener{
 							}
 						}
 					}
-					currentMapFile = mapsForPaths.getFirst().getImage();
+					//currentMapFile = mapsForPaths.getFirst().getImage();
 					currentlyShownMap = mapsForPaths.getFirst();
 					if(!currentlyShownMap.getMapName().equals("WPI Campus Map")){
 						backToCampus.setEnabled(true);
@@ -836,7 +888,7 @@ public class EndUserGUI extends JPanel implements ActionListener{
 								}
 							}
 						}
-						currentMapFile = mapsForPaths.getFirst().getImage();
+						//currentMapFile = mapsForPaths.getFirst().getImage();
 						currentlyShownMap = mapsForPaths.getFirst();
 						if(!currentlyShownMap.getMapName().equals("WPI Campus Map")){
 							backToCampus.setEnabled(true);
@@ -908,7 +960,17 @@ public class EndUserGUI extends JPanel implements ActionListener{
 						currentlyShownMap = maps.get(i);
 						mapPanel.setImage(currentlyShownMap.getImage());
 						mapPanel.setPath(null);
+						mapPanel.revalidate();
+						mapPanel.repaint();
 						backToCampus.setEnabled(false);
+						historicalNodes = new LinkedList<Node>();
+						for(int m = 0; m < currentlyShownMap.getNodes().size(); m++){
+							if(currentlyShownMap.getNodes().get(m).getType() == NodeType.HISTORICAL){
+								historicalNodes.add(currentlyShownMap.getNodes().get(m));
+							}
+						}
+						
+						
 						if(mapsForPaths != null){
 							for(int j = 0; j < mapsForPaths.size(); j++){
 								if(mapsForPaths.get(j) == maps.get(i)){
@@ -939,7 +1001,7 @@ public class EndUserGUI extends JPanel implements ActionListener{
 					arrowCounter -= 1;
 					rightArrow.setEnabled(true);
 					mapNumber.setText(String.valueOf(arrowCounter + 1) + " of " + String.valueOf(totalMaps));
-					currentMapFile = mapsForPaths.get(arrowCounter).getImage();
+					//currentMapFile = mapsForPaths.get(arrowCounter).getImage();
 					currentlyShownMap = mapsForPaths.get(arrowCounter);
 					if(!currentlyShownMap.getMapName().equals("WPI Campus Map")){
 						backToCampus.setEnabled(true);
@@ -958,7 +1020,7 @@ public class EndUserGUI extends JPanel implements ActionListener{
 					leftArrow.setEnabled(true);
 					arrowCounter += 1;
 					mapNumber.setText(String.valueOf(arrowCounter + 1) + " of " + String.valueOf(totalMaps));
-					currentMapFile = mapsForPaths.get(arrowCounter).getImage();
+					//currentMapFile = mapsForPaths.get(arrowCounter).getImage();
 					currentlyShownMap = mapsForPaths.get(arrowCounter);
 					if(!currentlyShownMap.getMapName().equals("WPI Campus Map")){
 						backToCampus.setEnabled(true);
@@ -982,7 +1044,6 @@ public class EndUserGUI extends JPanel implements ActionListener{
 	public class MyGraphics extends JComponent implements MouseMotionListener{
 
 		private static final long serialVersionUID = 1L;
-		private static final int SquareWidth = 5;
 
 
 		MyGraphics() {
@@ -1090,7 +1151,6 @@ public class EndUserGUI extends JPanel implements ActionListener{
 
 		@Override
 		public void mouseDragged(MouseEvent e) {
-			// TODO Auto-generated method stub
 
 		}
 
@@ -1120,8 +1180,7 @@ public class EndUserGUI extends JPanel implements ActionListener{
 			}
 		}
 		public void mousePressed(MouseEvent e) {
-			int x = e.getX();
-			int y = e.getY();
+			
 		}
 
 
@@ -1129,7 +1188,6 @@ public class EndUserGUI extends JPanel implements ActionListener{
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		// TODO Auto-generated method stub
 
 	}
 
