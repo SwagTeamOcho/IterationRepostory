@@ -55,6 +55,7 @@ class ImagePanel extends JPanel
 				AffineTransform at;
 				at = AffineTransform.getTranslateInstance(x,y);
 				at.scale(scale, scale);
+				
 				g2.drawRenderedImage(image, at);
 			
 				if(gui.getHistoricalNodes() != null){
@@ -110,7 +111,9 @@ class ImagePanel extends JPanel
 			}
 			
 			g.setColor(Color.BLUE);
+			g2.setTransform(at);
 			for(int i = 0; i < gui.getCurrentlyShownMap().getEasyLinks().size(); i ++){
+				
 				g.drawPolygon(gui.getCurrentlyShownMap().getEasyLinks().get(i).getPoly());
 			}
 	        

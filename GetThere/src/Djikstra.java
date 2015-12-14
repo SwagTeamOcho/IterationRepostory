@@ -10,6 +10,8 @@ public class Djikstra  {
 
 	public LinkedList<Node> navigate(Node start, Node goal){
 		if(start == null || goal == null){
+			JOptionPane.showMessageDialog(null, "Illegal Path Argument(s).", "No Path Found",
+					JOptionPane.ERROR_MESSAGE);
 			throw new IllegalArgumentException();
 		}
 
@@ -204,6 +206,7 @@ public class Djikstra  {
 				}
 			}
 			boolean straightFlag = false;
+			boolean elevatorFlag = false;
 			int straightValue = 0;
 			boolean straightPrintFlag = false;
 			while(path.size() > 0){
@@ -216,8 +219,11 @@ public class Djikstra  {
 					if(current.getType().equals(NodeType.STAIRS)){
 						result +=  "Take the stairs "+ "\n";
 					}
-					else if (current.getType().equals(NodeType.ELEVATOR)){
+					if (current.getType().equals(NodeType.ELEVATOR) && !elevatorFlag){
 						result +=   "Take the elevator"+ "\n";
+						elevatorFlag = true;
+					} else {
+						elevatorFlag = false;
 					}
 				}
 				//			double a = Math.sqrt((Math.pow(next.getX() - previous.getX(),2)) + (Math.pow(next.getY() - previous.getY(),2)));

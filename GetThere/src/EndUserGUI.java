@@ -698,7 +698,8 @@ public class EndUserGUI extends JPanel implements ActionListener{
 					default:
 						break;
 					}
-					endNode = listPath.get(listPath.size() - 1);
+					if(listPath.size() > 0)
+						endNode = listPath.get(listPath.size() - 1);
 					mapsForPaths = new LinkedList<Map>();
 					for (int i = 0; i < listPath.size(); i++){
 						for (int j = 0; j < maps.size(); j++){
@@ -762,8 +763,9 @@ public class EndUserGUI extends JPanel implements ActionListener{
 					listPath = pathCalc.nearestSpecialNode(startNode, NodeType.BLUETOWER);
 					updatePath = true;
 				}
-
-				endNode = listPath.get(listPath.size() - 1);
+				
+				if(listPath.size() > 0)
+					endNode = listPath.get(listPath.size() - 1);
 				mapsForPaths = new LinkedList<Map>();
 				for (int i = 0; i < listPath.size(); i++){
 					for (int j = 0; j < maps.size(); j++){
