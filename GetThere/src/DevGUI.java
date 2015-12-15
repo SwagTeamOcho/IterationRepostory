@@ -61,12 +61,8 @@ public class DevGUI extends JPanel{
 	
 	private SelectImage loadImage;
 
-
 	// //error1 
 	private Map selectedMap;
-
-
-
 	boolean createNodes = false;
 	boolean createSpecial = false;
 	boolean createEdges = false;
@@ -115,20 +111,10 @@ public class DevGUI extends JPanel{
 	public static void main(String[] args) {
 
 		serialize = new Serialize();
-
-
-
-
-
 		if(new File("MapList.ser").canRead()){
 			System.out.println("maplist exists");
 			maps.addAll((LinkedList<Map>) serialize.deSerialize("MapList"));
 		} 
-
-
-
-
-
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
@@ -140,9 +126,6 @@ public class DevGUI extends JPanel{
 			}
 		});
 	}
-
-
-
 	/**
 	 * Initialize the contents of the frame.
 	 */
@@ -216,8 +199,6 @@ public class DevGUI extends JPanel{
 			}
 		});
 		uiPanel.add(dropDown);
-
-
 
 		if(developerMode)
 		{
@@ -341,11 +322,7 @@ public class DevGUI extends JPanel{
 
 					uiPanel.repaint();
 					uiPanel.revalidate();
-
 				}
-
-
-
 			}
 					);
 
@@ -766,12 +743,7 @@ public class DevGUI extends JPanel{
 				}
 			}
 
-
-
-
 			for (int i = 0; i < nodesOnCurrentMap.size(); i++){
-
-
 				if(nodesOnCurrentMap.get(i).getType() == null)
 				{
 					System.out.println("The following node was null: " + nodesOnCurrentMap.get(i));
@@ -783,8 +755,6 @@ public class DevGUI extends JPanel{
 					System.out.println("The following map was null: " + nodesOnCurrentMap.get(i));
 					nodesOnCurrentMap.get(i).setMapName(selectedMap.getMapName());
 				}
-
-
 				switch ((NodeType)nodesOnCurrentMap.get(i).getType()){
 				case NOTYPE:
 					g.setColor(Color.BLACK);
@@ -825,14 +795,9 @@ public class DevGUI extends JPanel{
 				case HISTORICAL:
 					g.setColor(Color.MAGENTA);
 					break;
-
-
 				}
 
 				// System.out.println(nodesOnCurrentMap.get(i));
-
-
-
 				((Graphics2D)g).fill(new Rectangle (nodesOnCurrentMap.get(i).getX()-SquareWidth/2, 
 						nodesOnCurrentMap.get(i).getY()-SquareWidth/2,
 						SquareWidth, SquareWidth));
@@ -842,10 +807,7 @@ public class DevGUI extends JPanel{
 
 				g.setColor(Color.BLACK);
 			}
-
-
-
-
+			
 			for (int i = 0; i < edgesOnCurrentMap.size(); i++){
 				// if(!(isPortal(edgesOnCurrentMap.get(i).getNode1())&&isPortal(edgesOnCurrentMap.get(i).getNode2())))
 				if(edgesOnCurrentMap.get(i).getNode1().getMapName() == edgesOnCurrentMap.get(i).getNode2().getMapName())
@@ -854,10 +816,6 @@ public class DevGUI extends JPanel{
 				}
 				else
 					g.setColor(Color.RED);
-
-
-
-
 				if(!edgesOnCurrentMap.get(i).getNode1().isPortal()||!edgesOnCurrentMap.get(i).getNode2().isPortal())
 					((Graphics2D)g).draw(new Line2D.Double(edgesOnCurrentMap.get(i).getNode1().getX(), 
 							edgesOnCurrentMap.get(i).getNode1().getY(),
