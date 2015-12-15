@@ -84,6 +84,46 @@ class ImagePanel extends JPanel {
 				g2.draw(path);
 				g2.setColor(Color.BLUE);
 				g2.draw(path);
+				System.out.println("Start " + gui.getStartTransitionNodes().size());
+				System.out.println("End " + gui.getEndTransitionNodes().size());
+				if(gui.getStartTransitionNodes().size() > 0){
+					for(int i =0; i < gui.getStartTransitionNodes().size(); i++){
+						if(gui.getCurrentlyShownMap().getNodes().contains(gui.getStartTransitionNodes().get(i))){
+
+							Node n = gui.getStartTransitionNodes().get(i);
+							Point2D before1 = new Point(), after1 = new Point(), before2 = new Point(), after2 = new Point();
+
+							before1.setLocation(n.getX()-(CircleDiam+3)/2, n.getY()-(CircleDiam+3)/2);
+							before2.setLocation(n.getX()-CircleDiam/2, n.getY()-CircleDiam/2);
+							at.transform(before1, after1);
+							at.transform(before2, after2);
+							g.setColor(Color.BLACK);
+							g.fillOval((int)after1.getX(), (int)after1.getY(), CircleDiam+3, CircleDiam+3);
+							System.out.println("MAGENTA");
+							g.setColor(Color.magenta);
+							g.fillOval((int)after2.getX(), (int)after2.getY(), CircleDiam, CircleDiam);
+						}
+					}
+				}
+
+				if(gui.getEndTransitionNodes().size() > 0){
+					for(int i =0; i < gui.getEndTransitionNodes().size(); i++){
+						if(gui.getCurrentlyShownMap().getNodes().contains(gui.getEndTransitionNodes().get(i))){
+
+							Node n = gui.getEndTransitionNodes().get(i);
+							Point2D before1 = new Point(), after1 = new Point(), before2 = new Point(), after2 = new Point();
+
+							before1.setLocation(n.getX()-(CircleDiam+3)/2, n.getY()-(CircleDiam+3)/2);
+							before2.setLocation(n.getX()-CircleDiam/2, n.getY()-CircleDiam/2);
+							at.transform(before1, after1);
+							at.transform(before2, after2);
+							g.setColor(Color.BLACK);
+							g.fillOval((int)after1.getX(), (int)after1.getY(), CircleDiam+3, CircleDiam+3);
+							g.setColor(Color.CYAN);
+							g.fillOval((int)after2.getX(), (int)after2.getY(), CircleDiam, CircleDiam);
+						}
+					}
+				}
 
 			}
 
