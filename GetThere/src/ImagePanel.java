@@ -6,6 +6,7 @@ import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.Point;
 import java.awt.RenderingHints;
+import java.awt.Shape;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.GeneralPath;
 import java.awt.geom.Point2D;
@@ -112,11 +113,11 @@ class ImagePanel extends JPanel {
 				g.fillOval((int)after2.getX(), (int)after2.getY(), CircleDiam, CircleDiam);
 			}
 
-			g.setColor(Color.BLUE);
-			g2.setTransform(at);
+			g2.setColor(Color.BLUE);
+			//g2.setTransform(at);
+			g2.setStroke(new BasicStroke(2));
 			for(int i = 0; i < gui.getCurrentlyShownMap().getEasyLinks().size(); i ++){
-				
-				g.drawPolygon(gui.getCurrentlyShownMap().getEasyLinks().get(i).getPoly());
+				g2.draw(at.createTransformedShape(gui.getCurrentlyShownMap().getEasyLinks().get(i).getPoly()));
 			}
 
 
