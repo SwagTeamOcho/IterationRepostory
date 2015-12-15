@@ -433,11 +433,11 @@ public class DevGUI extends JPanel{
 				}
 			});   
 			
-			JLabel dragMoveON = new JLabel("ON");
+			final JLabel dragMoveON = new JLabel("ON");
 			dragMoveON.setBounds(440, 638, 80, 25);
 			uiPanel.add(dragMoveON);
 			
-			JLabel dragMoveOFF = new JLabel("OFF");
+			final JLabel dragMoveOFF = new JLabel("OFF");
 			dragMoveOFF.setBounds(440, 638, 80, 25);
 			uiPanel.add(dragMoveOFF);
 			dragMoveOFF.setVisible(!dragMoveMode);
