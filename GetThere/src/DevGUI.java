@@ -702,7 +702,7 @@ public class DevGUI extends JPanel{
 
 				maps.get(maps.indexOf(selectedMap)).getNodes().add(linkNode1);
 				maps.get(maps.indexOf(connectingMap)).getNodes().add(linkNode2);
-				if(!(linkNode1.equals(linkNode2))){
+				if(!(linkNode1 == linkNode2)){
 					maps.get(maps.indexOf(selectedMap)).getEdges().add(new Edge(linkNode1, linkNode2, 0));
 					maps.get(maps.indexOf(connectingMap)).getEdges().add(new Edge(linkNode1, linkNode2, 0));
 				}
