@@ -20,8 +20,8 @@ public class FindProf extends JPanel implements ActionListener {
 
 	//http://www.wpi.edu/academics/facultydir/facultyname.html
 	//http://wpi.collegeacronyms.org/buildings.html
-	String[] profName = {
-			"Select a Professor",
+	String[] searchNames = {
+			"Type here",
 			//A's  =======================================
 			"Abdullayev, Farhod ",
 			"Abraham, Jon",
@@ -34,7 +34,7 @@ public class FindProf extends JPanel implements ActionListener {
 			//"Ambay, Sakthikumar",
 			"Apelian, Diran",
 			//"Aravind, Padmanabhan K.",
-			//"Argüello, José M.",
+			//"Argï¿½ello, Josï¿½ M.",
 			"Arroyo, Ivron",
 			"Ault, Holly K.",
 			//B's  =====================================
@@ -256,7 +256,7 @@ public class FindProf extends JPanel implements ActionListener {
 			"Navabi, Zainalabedin",
 			//"Notarianni, Kathy A.",
 			//O's  ======================================
-			"O’Brien, Kymberlee M.",
+			"Oï¿½Brien, Kymberlee M.",
 			"Oates, Karen Kashmanian",
 			"Olinger, David J.",
 			"Olson, Sarah D.",
@@ -413,7 +413,7 @@ public class FindProf extends JPanel implements ActionListener {
 			//"Zizza, Keith",
 			"Zou, Jian",	
 	};
-	String[] profRoom = {
+	String[] roomNames = {
 			null,
 			//A's  ======================================
 			"SL405B",
@@ -810,16 +810,16 @@ public class FindProf extends JPanel implements ActionListener {
 		setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
 
 		//Set up the UI for selecting a pattern.
-		JLabel patternLabel1 = new JLabel("Enter the name of the professor");
+		JLabel patternLabel1 = new JLabel("Search your campus!");
 		JLabel patternLabel2 = new JLabel("");
 
-		patternList = new JComboBox<Object>(profName);
+		patternList = new JComboBox<Object>(searchNames);
 		patternList.setEditable(true);
 		patternList.setMaximumRowCount(5);
 		patternList.addActionListener(this);
 
 		//Create the UI for displaying result.
-		JLabel resultLabel = new JLabel("Professor's Office Number:",
+		JLabel resultLabel = new JLabel("Building Initials & Room Number:",
 				JLabel.LEADING); //== LEFT
 		result = new JLabel(" ");
 		result.setHorizontalAlignment(SwingConstants.CENTER);
@@ -861,9 +861,9 @@ public class FindProf extends JPanel implements ActionListener {
 	}
 
 	public void findRoom() {
-		for (int i = 0; i < profName.length; i++){
-			if(currentProf == profName[i]){
-				result.setText(profRoom[i]);
+		for (int i = 0; i < searchNames.length; i++){
+			if(currentProf == searchNames[i]){
+				result.setText(roomNames[i]);
 				break;
 			}
 		}
@@ -877,13 +877,12 @@ public class FindProf extends JPanel implements ActionListener {
 		//Create and set up the window.
 		JFrame frame = new JFrame("Find Profesor");
 		frame.setBounds(600, 300, 80, 40);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		//Create and set up the content pane.
 		JComponent newContentPane = new FindProf();
 		newContentPane.setOpaque(true); //content panes must be opaque
 		frame.setContentPane(newContentPane);
 		frame.setResizable(false);
-
 		AutoCompletion.enable(patternList);
 
 		//Display the window.
