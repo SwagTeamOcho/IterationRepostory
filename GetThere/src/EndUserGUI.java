@@ -1,20 +1,22 @@
-<<<<<<< HEAD
+
 
 import javax.swing.text.html.StyleSheet;
+
 
 import java.awt.BasicStroke;
 
 import java.awt.Color;
-=======
->>>>>>> bb844f6236b9b4d1957a3753d7e13af55b6f99bd
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GradientPaint;
 import java.awt.Graphics;
+import java.awt.MouseInfo;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionAdapter;
 import java.awt.event.MouseMotionListener;
 import java.awt.geom.GeneralPath;
 import java.io.File;
@@ -157,6 +159,14 @@ public class EndUserGUI extends JPanel implements ActionListener{
 	
 	private Color burgandy = new Color(74, 1, 1);
 	private Color beige = new Color(230, 224, 200);
+	int xMouse;
+	int yMouse;
+	
+	private ImageIcon currentAboutPage;
+	private int clkCount = 0;
+	
+	//About Panel Stuff]
+	
 	/**
 	 * Create the application.
 	 */
@@ -238,8 +248,8 @@ public class EndUserGUI extends JPanel implements ActionListener{
 			Thread.sleep(1000);
 			loadingScreen.setProgress(60);
 			Thread.sleep(1000);
-			loadingScreen.setProgress(80);
-			Thread.sleep(1000);
+			loadingScreen.setProgress(100);
+			Thread.sleep(600);
 			loadingScreen.splashOff();
 
 		}catch(Exception e){
@@ -247,18 +257,14 @@ public class EndUserGUI extends JPanel implements ActionListener{
 		}
 		
 		final MyGraphics graph = new MyGraphics();
-<<<<<<< HEAD
-=======
 
 		ttManager = ToolTipManager.sharedInstance();
 		ttManager.setEnabled(true);
 
 
->>>>>>> bb844f6236b9b4d1957a3753d7e13af55b6f99bd
 		//Frame operations
 		frame = new JFrame();
-		frame.setBounds(100, 100, 1200, 700);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setBounds(50, 50, 1200, 700);
 		frame.getContentPane().setLayout(new BoxLayout(frame.getContentPane(), BoxLayout.X_AXIS));
 		frame.setTitle("Get There");
 		frame.setUndecorated(true);
@@ -270,15 +276,13 @@ public class EndUserGUI extends JPanel implements ActionListener{
 		uiPanel = new JPanel();
 		frame.getContentPane().add(uiPanel);
 		uiPanel.setLayout(null);
-<<<<<<< HEAD
-		uiPanel.setBackground(new Color(74, 1, 1));
+
+		uiPanel.setBackground(beige);
 //		ImageIcon backgroundImg = new ImageIcon("IconImages/uiBackground.jpg");
 //		BackgroundPanel thumb = new BackgroundPanel(backgroundImg.getImage(), BackgroundPanel.ACTUAL, 1.0f, 0.5f);
 //		thumb.setBackground(new Color(74, 1, 1));
 //		uiPanel.add(thumb);
 
-=======
->>>>>>> bb844f6236b9b4d1957a3753d7e13af55b6f99bd
 		tutView = new JLabel("",JLabel.CENTER);    
 		tutView.setLocation(0, 0);
 		tutView.setSize(1194,672);
@@ -287,7 +291,7 @@ public class EndUserGUI extends JPanel implements ActionListener{
 		mapPanel = new ImagePanel(this);
 		mapPanel.add(graph);
 		scrollMapPanel = new JScrollPane(mapPanel);
-		scrollMapPanel.setBounds(5, 20, 750, 620);
+		scrollMapPanel.setBounds(5, 20+10, 750, 620);
 		zoom = new ImageZoom(mapPanel);
 		scrollMapPanel.setBackground(burgandy);
 
@@ -303,58 +307,214 @@ public class EndUserGUI extends JPanel implements ActionListener{
 		
 		//Customizing the Title Bar
 		JPanel titleBar = new JPanel();
-		titleBar.setBounds(0, 0, 1200, 15);
-		JLabel titleBackground = new JLabel();
-		titleBackground.setBounds(0, 0, 1200, 15);
-		
-	//ImageIcon backImg = new ImageIcon("IconImages/uiBackground.jpg");
-	//	titleBackground.setIcon(backImg);
-		titleBar.setBackground(burgandy);
-		uiPanel.add(titleBar);
-		titleBar.add(titleBackground);
+		titleBar.setLayout(null);
+		titleBar.setBounds(0, 0, 1200, 20);
 
-		JLabel closeButt = new JLabel("X");
-		closeButt.setForeground(beige);
-		closeButt.setFont(new Font("Helvetica Neue", Font.BOLD, 14));
-//		ImageIcon close = new ImageIcon("IconImages/close.png");
-//		closeButt.setIcon(close);
-		closeButt.setBounds(0, 0, 16, 16);
+		titleBar.setBackground(beige);
+		uiPanel.add(titleBar);
+		
+		//About Button Operation
+		JFrame aboutFrame = new JFrame();
+		aboutFrame.setBounds(50, 50, 900, 620);
+		aboutFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);;
+		ImageIcon aboutPg1 = new ImageIcon("IconImages/aboutPg1.png");
+		ImageIcon aboutPg2 = new ImageIcon("IconImages/aboutPg2.png");
+		ImageIcon[] aboutPages = {aboutPg1, aboutPg2};
+		currentAboutPage = aboutPages[1];
+		JPanel aboutPanel = new JPanel();
+		JLabel aboutLabel = new JLabel();
+		aboutPanel.add(aboutLabel);
+    	aboutLabel.setIcon(currentAboutPage);
+		aboutLabel.setBounds(0, 0, 900, 620);
+		aboutLabel.addMouseListener(new MouseListener() {
+	        public void mouseClicked(MouseEvent e) {
+	            if(clkCount == 0){
+	            	currentAboutPage = aboutPages[0];
+	            	aboutLabel.setIcon(currentAboutPage);
+	            	clkCount = 1;
+	            }else if(clkCount == 1){
+	            	currentAboutPage = aboutPages[1];
+	            	aboutLabel.setIcon(currentAboutPage);
+	            	clkCount = 0;
+	            }
+	        }
+
+			@Override
+			public void mousePressed(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void mouseExited(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+	    }); 
+
+		
+		JLabel about = new JLabel("about");
+		about.setFont(new Font("Calisto MT Bold Italic", Font.BOLD, 14));
+		about.setForeground(burgandy);
+		about.setBounds(1140, 0, 50, 24);
+		
+		about.addMouseListener(new MouseListener() {
+	        public void mouseClicked(MouseEvent e) {
+				aboutFrame.setVisible(true);
+				aboutFrame.getContentPane().add(aboutPanel);
+	        }
+
+			@Override
+			public void mousePressed(MouseEvent e) {				
+			}
+
+			@Override
+			public void mouseReleased(MouseEvent e) {				
+			}
+
+			@Override
+			public void mouseEntered(MouseEvent e) {				
+			}
+
+			@Override
+			public void mouseExited(MouseEvent e) {				
+			}
+	    }); 
+		titleBar.add(about);
+		
+	
+		
+		titleBar.addMouseListener(new MouseAdapter() {
+            public void mousePressed(MouseEvent me) {
+                // Get x,y and store them
+                xMouse = me.getX();
+                yMouse= me.getY();
+
+            }
+
+             public void mouseDragged(MouseEvent me) {
+                frame.setLocation(frame.getLocation().x + me.getX() - xMouse,
+                        frame.getLocation().y + me.getY() - yMouse);
+            }
+        });
+       
+		JLabel closeButt = new JLabel();
+		//closeButt.setForeground(beige);
+		//closeButt.setFont(new Font("Helvetica Neue", Font.BOLD, 14));
+		ImageIcon close = new ImageIcon("IconImages/close.png");
+		closeButt.setIcon(close);
+		closeButt.setBounds(7, 0, 24, 24);
+		closeButt.addMouseListener(new MouseListener() {
+	        public void mouseClicked(MouseEvent e) {
+	            // TODO Auto-generated method stub
+	        	System.exit(0);;
+	        }
+
+			@Override
+			public void mousePressed(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void mouseExited(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+	    }); 
 		JLabel minButt = new JLabel();
 		ImageIcon minimize = new ImageIcon("IconImages/min.png");
 		minButt.setIcon(minimize);
-		minButt.setBounds(15, 0, 15, 15);
+		minButt.setBounds(25, 5, 15, 15);
+		minButt.addMouseListener(new MouseListener() {
+	        public void mouseClicked(MouseEvent e) {
+	            // TODO Auto-generated method stub
+	        	frame.setState(frame.ICONIFIED);
+	        }
+
+			@Override
+			public void mousePressed(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void mouseExited(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+	    }); 
+		
 		titleBar.add(minButt);
 		titleBar.add(closeButt);
+		
+
 		
 		
 		//Creating Labels
 		startPoint = new JLabel("FROM");
-		startPoint.setForeground(beige);
+		startPoint.setForeground(burgandy);
 		startPoint.setFont(new Font("Helvetica Neue", Font.BOLD, 14));
 		startPoint.setBounds(780, 6+15, 132, 29);
 
 		buildingStart = new JLabel("Select Building:");
-		buildingStart.setForeground(beige);
+		buildingStart.setForeground(burgandy);
 		buildingStart.setFont(new Font("Helvetica Neue", Font.BOLD, 14));
 		buildingStart.setBounds(762, 26+15, 132, 29);
 
 		roomStart = new JLabel("Select Room:");
-		roomStart.setForeground(beige);
+		roomStart.setForeground(burgandy);
 		roomStart.setFont(new Font("Helvetica Neue", Font.BOLD, 14));
 		roomStart.setBounds(983, 26+15, 132, 29);
 
 		endPoint = new JLabel("TO");
-		endPoint.setForeground(beige);
+		endPoint.setForeground(burgandy);
 		endPoint.setFont(new Font("Helvetica Neue", Font.BOLD, 14));
 		endPoint.setBounds(780, 72+15, 132, 29);
 
 		buildingEnd = new JLabel("Select Building:");
-		buildingEnd.setForeground(beige);
+		buildingEnd.setForeground(burgandy);
 		buildingEnd.setFont(new Font("Helvetica Neue", Font.BOLD, 14));
 		buildingEnd.setBounds(762, 92+15, 132, 29);
 
 		roomEnd = new JLabel("Select Room:");
-		roomEnd.setForeground(beige);
+		roomEnd.setForeground(burgandy);
 		roomEnd.setFont(new Font("Helvetica Neue", Font.BOLD, 14));
 		roomEnd.setBounds(983, 92+15, 132, 29);
 
@@ -605,9 +765,11 @@ public class EndUserGUI extends JPanel implements ActionListener{
 		scrollDire.setBounds(835, 210+15, 300, 420);
 		scrollDire.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 		uiPanel.add(scrollDire);
+		
 		aboutIcon = new ImageIcon("IconImages/aboutIcon.png");
 		final Icon aboutIconBIG = new ImageIcon("IconImages/aboutIconBIG.png");
 		findProfIcon = new ImageIcon("IconImages/findProfIcon.png");
+		
 		
 		emergencyIcon = new ImageIcon("IconImages/emergencyIcon.png");
 		final Icon emergencyIconBIG = new ImageIcon("IconImages/emergencyIconBIG.png");
@@ -620,11 +782,8 @@ public class EndUserGUI extends JPanel implements ActionListener{
 			}
 		});
 		emergency.setIcon(emergencyIcon);
-<<<<<<< HEAD
 		emergency.setBounds(872, 632+15, 40, 40);
-=======
-		emergency.setBounds(850, 632, 40, 40);
->>>>>>> bb844f6236b9b4d1957a3753d7e13af55b6f99bd
+
 		uiPanel.add(emergency);
 		final String emergencyInfo = "Call Campus Police:" + "\n" + "508-831-5555";
 		emergency.addActionListener(new ActionListener(){
@@ -643,11 +802,7 @@ public class EndUserGUI extends JPanel implements ActionListener{
 			}
 		});
 		email.setIcon(emailIcon);
-<<<<<<< HEAD
 		email.setBounds(920, 632+15, 40, 40);
-=======
-		email.setBounds(900, 632, 40, 40);
->>>>>>> bb844f6236b9b4d1957a3753d7e13af55b6f99bd
 		uiPanel.add(email);
 		email.addActionListener(new ActionListener()  {
 			public void actionPerformed(ActionEvent e)
@@ -710,11 +865,8 @@ public class EndUserGUI extends JPanel implements ActionListener{
 			}
 		});
 		transport.setIcon(transportIcon);
-<<<<<<< HEAD
 		transport.setBounds(968, 632+15, 40, 40);
-=======
-		transport.setBounds(950, 632, 40, 40);
->>>>>>> bb844f6236b9b4d1957a3753d7e13af55b6f99bd
+
 		uiPanel.add(transport);
 		transport.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
@@ -747,17 +899,13 @@ public class EndUserGUI extends JPanel implements ActionListener{
 		final Icon bathroomIconBIG = new ImageIcon("IconImages/bathroomIconBIG.png");
 		nearestBathroom = new JButton(bathroomIcon);
 		nearestBathroom.setToolTipText("Find nearest Bathroom");
-<<<<<<< HEAD
 		nearestBathroom.setBounds(1017, 632+15, 40, 40);
-=======
 		nearestBathroom.addMouseMotionListener(new MouseMotionListener() {
 			public void mouseDragged(MouseEvent arg0) {}
 			public void mouseMoved(MouseEvent arg0) {
 				ttManager.setEnabled(true);
 			}
 		});
-		nearestBathroom.setBounds(1000, 632, 40, 40);
->>>>>>> bb844f6236b9b4d1957a3753d7e13af55b6f99bd
 		uiPanel.add(nearestBathroom);
 		nearestBathroom.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e)
@@ -841,11 +989,8 @@ public class EndUserGUI extends JPanel implements ActionListener{
 			}
 		});
 		nearestBluetower.setIcon(bluetowerIcon);
-<<<<<<< HEAD
 		nearestBluetower.setBounds(1064, 632+15, 40, 40);
-=======
-		nearestBluetower.setBounds(1050, 632, 40, 40);
->>>>>>> bb844f6236b9b4d1957a3753d7e13af55b6f99bd
+
 		uiPanel.add(nearestBluetower);
 		
 		//Find Professor button
@@ -856,48 +1001,7 @@ public class EndUserGUI extends JPanel implements ActionListener{
 		findProf.setBounds(1100, 632, 40, 40);
 		uiPanel.add(findProf);
 		
-				//About button
-				about = new JButton();
-				about.setToolTipText("About");
-				about.addMouseMotionListener(new MouseMotionListener() {
-					public void mouseDragged(MouseEvent arg0) {}
-					public void mouseMoved(MouseEvent arg0) {
-						ttManager.setEnabled(true);
-					}
-				});
-				about.setIcon(aboutIcon);
-				about.setBounds(1150, 632, 40, 40);
-				uiPanel.add(about);
-				about.addActionListener(new ActionListener(){
-					public void actionPerformed(ActionEvent e){
-						JOptionPane.showMessageDialog( 
-								frame,
-								"Worcester Polytechnic Institute\n"+ 
-								"CS3733 2015 B-Term/n"+ 
-								"\n"+
-								"Team Ocho\n"+
-								"Jeffrey J. Chaves\n"+
-								"Christopher S Griffin\n"+
-								"Joseph T Kaiser\n"+
-								"Lumbini Parnas\n"+
-								"Paul W. Peterson\n"+
-								"Alexander N Ruggiero\n" +
-								"William Sullivan\n"+
-								"Jean Marc A. Touma\n"+
-								"\n"+
-								"Prof. Wilson Wong\n"+
-								"Coach: Ted Mathmeyer",
-								"About",
-								JOptionPane.PLAIN_MESSAGE,
-								aboutIconBIG);
-					}
-				});
-				about.addMouseMotionListener(new MouseMotionListener() {
-					public void mouseDragged(MouseEvent arg0) {}
-					public void mouseMoved(MouseEvent arg0) {
-						ttManager.setEnabled(true);
-					}
-				});
+			
 		findProf.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
 				javax.swing.SwingUtilities.invokeLater(new Runnable() {

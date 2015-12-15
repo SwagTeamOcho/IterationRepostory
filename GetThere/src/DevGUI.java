@@ -783,15 +783,7 @@ public class DevGUI extends JPanel{
 				}
 				else
 					g.setColor(Color.RED);
-
-<<<<<<< HEAD
-				if(!isPortal(edgesOnCurrentMap.get(i).getNode1())||!isPortal(edgesOnCurrentMap.get(i).getNode2()))
-=======
-
-
-
 				if(!edgesOnCurrentMap.get(i).getNode1().isPortal()||!edgesOnCurrentMap.get(i).getNode2().isPortal())
->>>>>>> bb844f6236b9b4d1957a3753d7e13af55b6f99bd
 					((Graphics2D)g).draw(new Line2D.Double(edgesOnCurrentMap.get(i).getNode1().getX(), 
 							edgesOnCurrentMap.get(i).getNode1().getY(),
 							edgesOnCurrentMap.get(i).getNode2().getX(),

@@ -1,4 +1,5 @@
 import java.awt.BasicStroke;
+
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
@@ -26,12 +27,9 @@ class ImagePanel extends JPanel {
 	Node startNode;
 	Node endNode;
 	private EndUserGUI gui;
-<<<<<<< HEAD
+
 	private static ImageIcon startIcon = new ImageIcon("IconImages/startIcon.png");
 	private static ImageIcon endIcon = new ImageIcon("IconImages/endIcon.png");
-=======
-
->>>>>>> bb844f6236b9b4d1957a3753d7e13af55b6f99bd
 
 	public ImagePanel(EndUserGUI gui)
 	{
@@ -85,11 +83,7 @@ class ImagePanel extends JPanel {
 				g2.draw(path);
 				g2.setColor(Color.BLUE);
 				g2.draw(path);
-<<<<<<< HEAD
-=======
 
->>>>>>> bb844f6236b9b4d1957a3753d7e13af55b6f99bd
-			}
 
 			if(startNode != null && gui.getCurrentlyShownMap().toString() == startNode.getMapName()){
 				Point2D before1 = new Point(), after1 = new Point(), before2 = new Point(), after2 = new Point();
@@ -128,8 +122,7 @@ class ImagePanel extends JPanel {
 				
 				g.drawPolygon(gui.getCurrentlyShownMap().getEasyLinks().get(i).getPoly());
 			}
-
-
+			}
 		}
 	}
 
