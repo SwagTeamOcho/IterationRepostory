@@ -1,4 +1,5 @@
 import java.awt.BasicStroke;
+
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
@@ -28,15 +29,14 @@ class ImagePanel extends JPanel {
 	Node endNode;
 	private EndUserGUI gui;
 
+	private static ImageIcon startIcon = new ImageIcon("IconImages/startIcon.png");
+	private static ImageIcon endIcon = new ImageIcon("IconImages/endIcon.png");
 
 	public ImagePanel(EndUserGUI gui)
 	{
-
 		this.gui = gui;
 		scale = 1.0;
 		setBackground(new Color(74, 1, 1));
-
-
 	}
 
 	protected void paintComponent(Graphics g)
@@ -125,7 +125,6 @@ class ImagePanel extends JPanel {
 					}
 				}
 
-			}
 
 			if(startNode != null && gui.getCurrentlyShownMap().toString() == startNode.getMapName()){
 				Point2D before1 = new Point(), after1 = new Point(), before2 = new Point(), after2 = new Point();
@@ -134,10 +133,12 @@ class ImagePanel extends JPanel {
 				before2.setLocation(startNode.getX()-CircleDiam/2, startNode.getY()-CircleDiam/2);
 				at.transform(before1, after1);
 				at.transform(before2, after2);
-				g.setColor(Color.BLACK);
-				g.fillOval((int)after1.getX(), (int)after1.getY(), CircleDiam+3, CircleDiam+3);
-				g.setColor(Color.GREEN);
-				g.fillOval((int)after2.getX(), (int)after2.getY(), CircleDiam, CircleDiam);
+				
+				g.drawImage(startIcon.getImage(), (int)after1.getX()-9, (int)after1.getY()-24, this);
+//				g.setColor(Color.BLACK);
+//				g.fillOval((int)after1.getX(), (int)after1.getY(), CircleDiam+3, CircleDiam+3);
+//				g.setColor(Color.GREEN);
+//				g.fillOval((int)after2.getX(), (int)after2.getY(), CircleDiam, CircleDiam);
 			}
 
 			if(endNode != null && gui.getCurrentlyShownMap().toString() == endNode.getMapName()){
@@ -147,10 +148,13 @@ class ImagePanel extends JPanel {
 				before2.setLocation(endNode.getX()-CircleDiam/2, endNode.getY()-CircleDiam/2);
 				at.transform(before1, after1);
 				at.transform(before2, after2);
-				g.setColor(Color.BLACK);
-				g.fillOval((int)after1.getX(), (int)after1.getY(), CircleDiam+3, CircleDiam+3);
-				g.setColor(Color.RED);
-				g.fillOval((int)after2.getX(), (int)after2.getY(), CircleDiam, CircleDiam);
+				
+				g.drawImage(endIcon.getImage(), (int)after1.getX()-9, (int)after1.getY()-24, this);
+//
+//				g.setColor(Color.BLACK);
+//				g.fillOval((int)after1.getX(), (int)after1.getY(), CircleDiam+3, CircleDiam+3);
+//				g.setColor(Color.RED);
+//				g.fillOval((int)after2.getX(), (int)after2.getY(), CircleDiam, CircleDiam);
 			}
 
 			g2.setColor(Color.BLUE);
@@ -159,8 +163,7 @@ class ImagePanel extends JPanel {
 			for(int i = 0; i < gui.getCurrentlyShownMap().getEasyLinks().size(); i ++){
 				g2.draw(at.createTransformedShape(gui.getCurrentlyShownMap().getEasyLinks().get(i).getPoly()));
 			}
-
-
+			}
 		}
 	}
 
@@ -329,9 +332,4 @@ class ImagePanel extends JPanel {
 		}
 		return true;
 	}
-
-
-
-
-
 } 
