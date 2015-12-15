@@ -67,7 +67,7 @@ import javafx.scene.layout.Background;
 // * */
 //
 
-public class EndUserGUI extends JPanel implements ActionListener{
+public class EndUserGUI extends JPanel implements ActionListener, MouseMotionListener{
 
 	private static final long serialVersionUID = 2270760135813536905L;
 	private LinkedList<Map> maps = new LinkedList<Map>();
@@ -171,6 +171,10 @@ public class EndUserGUI extends JPanel implements ActionListener{
 	private Color beige = new Color(230, 224, 200);
 	int xMouse;
 	int yMouse;
+	double xframeLocation;
+	double yframeLocation;
+
+	
 	
 	private ImageIcon currentAboutPage;
 	
@@ -267,8 +271,6 @@ public class EndUserGUI extends JPanel implements ActionListener{
 		}catch(Exception e){
 			e.printStackTrace();
 		}
-		
-
 
 		final MyGraphics graph = new MyGraphics(this);
 		ttManager = ToolTipManager.sharedInstance();
@@ -277,7 +279,7 @@ public class EndUserGUI extends JPanel implements ActionListener{
 
 		//Frame operations
 		frame = new JFrame();
-		frame.setBounds(50, 50, 1200, 700);
+		frame.setBounds(50, 25, 1200, 700);
 		frame.getContentPane().setLayout(new BoxLayout(frame.getContentPane(), BoxLayout.X_AXIS));
 		frame.setTitle("Get There");
 		frame.setUndecorated(true);
@@ -318,17 +320,35 @@ public class EndUserGUI extends JPanel implements ActionListener{
 		JPanel titleBar = new JPanel();
 		titleBar.setLayout(null);
 		titleBar.setBounds(0, 0, 1200, 20);
-		titleBar.addMouseMotionListener(new MouseMotionListener() {
-            @SuppressWarnings("unused")
+		titleBar.addMouseListener(new MouseListener(){
+
+			@Override
+			public void mouseClicked(MouseEvent e) {}
+
+			@Override
 			public void mousePressed(MouseEvent e) {
-                // Get x,y and store them
-            	xMouse = e.getX();
+				xMouse = e.getX();
             	yMouse = e.getY();
-            }
+			}
+
+			@Override
+			public void mouseReleased(MouseEvent e) {}
+
+			@Override
+			public void mouseEntered(MouseEvent e) {}
+
+			@Override
+			public void mouseExited(MouseEvent e) {}
+			
+		});
+		titleBar.addMouseMotionListener(new MouseMotionListener() {
             public void mouseDragged(MouseEvent me) {
             	int x = me.getXOnScreen();
             	int y = me.getYOnScreen();
             	frame.setLocation(x-xMouse, y-yMouse);
+            	//System.out.println(x + y);
+            	xframeLocation = frame.getLocation().getX();
+            	yframeLocation = frame.getLocation().getY();
             }
 
 			public void mouseMoved(MouseEvent e) {
@@ -341,13 +361,16 @@ public class EndUserGUI extends JPanel implements ActionListener{
 		
 		//About Button Operation
 		JFrame aboutFrame = new JFrame();
-		aboutFrame.setBounds(100, 100, 920, 650);
-		aboutFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);;
+		aboutFrame.setBounds(100, 70, 920, 650);
+		aboutFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		
 		ImageIcon aboutPg1 = new ImageIcon("IconImages/aboutPg1.jpg");
 		ImageIcon aboutPg2 = new ImageIcon("IconImages/aboutPg2.jpg");
 		ImageIcon[] aboutPages = {aboutPg1, aboutPg2};
+		
 		currentAboutPage = aboutPages[0];
 		JPanel aboutPanel = new JPanel();
+		aboutPanel.setBackground(beige);
 		JLabel aboutLabel = new JLabel();
 		aboutPanel.add(aboutLabel);
     	aboutLabel.setIcon(currentAboutPage);
@@ -423,10 +446,6 @@ public class EndUserGUI extends JPanel implements ActionListener{
 	    }); 
 		titleBar.add(about);
 		
-	
-		
-		
-       
 		JLabel closeButt = new JLabel();
 		//closeButt.setForeground(beige);
 		//closeButt.setFont(new Font("Helvetica Neue", Font.BOLD, 14));
@@ -503,10 +522,6 @@ public class EndUserGUI extends JPanel implements ActionListener{
 		titleBar.add(minButt);
 		titleBar.add(closeButt);
 		
-
-		
-		
-
 //		scrollMapPanel.setBounds(5, 20+15, 750, 620);
 		scrollMapPanel.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);
         scrollMapPanel.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
@@ -568,7 +583,7 @@ public class EndUserGUI extends JPanel implements ActionListener{
 		startRoomSEL.setName("Start");
 
 		mapNumber = new JTextPane();
-		mapNumber.setBounds(360, 634+15, 47, 20);
+		mapNumber.setBounds(360, 634+30, 47, 20);
 		mapNumber.setEditable(false);
 		mapNumber.setFont(new Font("Helvetica Neue", Font.BOLD, 14));
 		mapNumber.setAlignmentX(StyleConstants.ALIGN_CENTER);
@@ -1529,6 +1544,18 @@ public class EndUserGUI extends JPanel implements ActionListener{
 			}
 		}
 		return null;
+	}
+
+	@Override
+	public void mouseDragged(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseMoved(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }
