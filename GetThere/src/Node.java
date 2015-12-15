@@ -131,7 +131,7 @@ public class Node implements Serializable{
 	}
 
 	public boolean equals(Node n){
-		return ((this.x == n.x) && (this.y == n.y));
+		return ((this.x == n.x) && (this.y == n.y) && (this.type.equals(n.getType()) && (this.name.equals(n.getName()))));
 	}
 
 	public String getName() {
