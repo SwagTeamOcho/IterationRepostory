@@ -1,3 +1,6 @@
+
+
+import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
@@ -5,7 +8,12 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
+
+import java.awt.event.MouseWheelEvent;
+
+
 import java.awt.geom.GeneralPath;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -29,8 +37,7 @@ import javax.swing.JTextArea;
 import javax.swing.JTextPane;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.ToolTipManager;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
+
 import javax.swing.text.StyleConstants;
 
 import com.itextpdf.text.Document;
@@ -143,6 +150,7 @@ public class EndUserGUI extends JPanel implements ActionListener{
 	private ToolTipManager ttManager;
 
 	private JScrollPane scrollMapPanel;
+	HandScrollListener scrollListener;
 	/**
 	 * Create the application.
 	 */
@@ -157,7 +165,11 @@ public class EndUserGUI extends JPanel implements ActionListener{
 		endRoomSEL = new XComboBox(this);
 		initialize();
 	}
-
+	
+	public JScrollPane getScrollMapPanel(){
+		return this.scrollMapPanel;
+	}
+	
 	public void setMaps(LinkedList<Map> maps){
 		this.maps = maps;
 	}
@@ -216,7 +228,9 @@ public class EndUserGUI extends JPanel implements ActionListener{
 	private void initialize() {
 
 
-		final MyGraphics graph = new MyGraphics();
+
+		final MyGraphics graph = new MyGraphics(this);
+		
 
 		ttManager = ToolTipManager.sharedInstance();
 		ttManager.setEnabled(true);
@@ -242,24 +256,22 @@ public class EndUserGUI extends JPanel implements ActionListener{
 
 		mapPanel = new ImagePanel(this);
 		mapPanel.add(graph);
+		zoom = new ImageZoom(mapPanel);
 		scrollMapPanel = new JScrollPane(mapPanel);
 		scrollMapPanel.setBounds(5, 5, 750, 620);
-		zoom = new ImageZoom(mapPanel);
+		scrollMapPanel.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);
+        scrollMapPanel.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+		
+
+		scrollListener = new HandScrollListener(mapPanel);
+		scrollMapPanel.getViewport().addMouseMotionListener(scrollListener);
+		scrollMapPanel.getViewport().addMouseListener(scrollListener);
+		
 		//uiPanel.add(zoom.getUIPanel());
 		//uiPanel.add(mapPanel);
 
-		scrollMapPanel.getViewport().addChangeListener(new ChangeListener(){
-
-
-			@Override
-			public void stateChanged(ChangeEvent e) {
-
-
-
-			}
-		});
+		
 		uiPanel.add(scrollMapPanel);
-
 
 		//Creating Labels
 		startPoint = new JLabel("FROM");
@@ -1041,16 +1053,23 @@ public class EndUserGUI extends JPanel implements ActionListener{
 	}
 
 
-	public class MyGraphics extends JComponent implements MouseMotionListener{
+	public class MyGraphics extends JComponent implements MouseMotionListener, MouseListener{
 
 		private static final long serialVersionUID = 1L;
+		private static final int SquareWidth = 5;
+		private EndUserGUI gui;
 
 
-		MyGraphics() {
+		MyGraphics(EndUserGUI gui) {
+			this.gui = gui;
 			setPreferredSize(new Dimension(760, 666));
 			addMouseMotionListener(this);
+			addMouseListener(this);
 
-
+			if(scrollMapPanel != null){
+			scrollMapPanel.getViewport().addMouseMotionListener(scrollListener);
+			scrollMapPanel.getViewport().addMouseListener(scrollListener);
+			}
 			addMouseListener(new MouseAdapter(){
 
 
@@ -1058,6 +1077,7 @@ public class EndUserGUI extends JPanel implements ActionListener{
 
 					int x = evt.getX();
 					int y = evt.getY();
+					
 					if (evt.getClickCount() == 2) {
 						for(int i = 0; i < maps.size(); i++){
 							if(maps.get(i).getEasyLinks().size() > 0){
@@ -1097,14 +1117,42 @@ public class EndUserGUI extends JPanel implements ActionListener{
 					}
 					return result;
 				}});
-			addMouseMotionListener(this);
+			//addMouseMotionListener(this);
+		
+			addMouseWheelListener(new MouseAdapter() {
 
+                
+                public void mouseWheelMoved(MouseWheelEvent e) {
+                	if(scrollMapPanel.contains(e.getX(), e.getY())){
+                    double delta = 0.03f * e.getWheelRotation();
+                    System.out.println(delta);
+                    System.out.println(mapPanel.scale);
+                    if((mapPanel.scale > 0.5 && mapPanel.scale < 1.5) || (mapPanel.scale < 0.5 && delta > 0) || (mapPanel.scale > 1.5 && delta < 0)){
+                    mapPanel.scale += delta;
+                    mapPanel.revalidate();
+                    mapPanel.repaint();
+                    }
+                	}
+                }
+
+            });
+			
+        }
+
+		public EndUserGUI getGui(){
+			return this.gui;
 		}
+		
+		
+
+		
+		
+		
 
 		@Override
 		public void paintComponent(Graphics g) {
 			GeneralPath path = null;
-
+			
 			if(path == null && updatePath == true && listPath.size() > 0){
 				removeAll();
 				int k;
@@ -1151,6 +1199,11 @@ public class EndUserGUI extends JPanel implements ActionListener{
 
 		@Override
 		public void mouseDragged(MouseEvent e) {
+			int x = e.getX();
+			int y = e.getY();
+			if(mapPanel.contains(x, y)){
+				scrollListener.mouseDragged(e);
+			}
 
 		}
 
@@ -1179,12 +1232,50 @@ public class EndUserGUI extends JPanel implements ActionListener{
 				}
 			}
 		}
+		
+		@Override
 		public void mousePressed(MouseEvent e) {
+			
+			int x = e.getX();
+			int y = e.getY();
+			if(mapPanel.contains(x, y)){
+				uiPanel.setCursor(new Cursor (Cursor.HAND_CURSOR));
+				scrollListener.mousePressed(e);
+			}
+			
+		}
+		
+		@Override
+		public void mouseReleased(MouseEvent e){
+			uiPanel.setCursor(new Cursor (Cursor.DEFAULT_CURSOR));
+			int x = e.getX();
+			int y = e.getY();
+			if(mapPanel.contains(x, y)){
+				scrollListener.mouseReleased(e);
+			}
+
+		}
+
+		@Override
+		public void mouseClicked(MouseEvent e) {
+			// TODO Auto-generated method stub
 			
 		}
 
+		@Override
+		public void mouseEntered(MouseEvent e) {
+			// TODO Auto-generated method stub
+			
+		}
 
-	}
+		@Override
+		public void mouseExited(MouseEvent e) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		
+}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
