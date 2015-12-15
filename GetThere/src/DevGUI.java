@@ -29,7 +29,7 @@ import java.io.File;
 
 ///**
 //* Created by Lumbini on 11/7/2015.
-//* modified by Billy and Jeff
+//* modified by Billy, Joe and Jeff
 // * */
 //
 
@@ -57,6 +57,7 @@ public class DevGUI extends JPanel{
 	private ImageIcon defaultImage;
 	//private NodeType currentType;
 	private Node currentNode;
+	private NodeEditor nodeEditor;
 
 
 	// //error1 
@@ -72,6 +73,8 @@ public class DevGUI extends JPanel{
 	boolean createMapLink = false;
 	boolean createEasyLink = false;
 	boolean editNodes = false;
+	boolean alignNodesX = false;
+	boolean alignNodesY = false;
 	int indexOfCurrentMap;
 	//private LinkedList<String> currentMapList;
 	private static Serialize serialize;
@@ -93,6 +96,16 @@ public class DevGUI extends JPanel{
 	 */
 	public DevGUI(){
 		initialize();
+	}
+
+	public void setCurrentNode(Node n){
+		this.currentNode = n;
+	}
+	public Node getCurrentNode(){
+		return this.currentNode;
+	}
+	public JPanel getuiPanel(){
+		return this.uiPanel;
 	}
 
 	@SuppressWarnings("unchecked")
@@ -134,6 +147,7 @@ public class DevGUI extends JPanel{
 	private void initialize() {
 
 		//Frame operations
+
 		frame = new JFrame();
 		frame.setBounds(100, 100, 910, 700);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -147,6 +161,8 @@ public class DevGUI extends JPanel{
 		frame.getContentPane().add(uiPanel);
 		uiPanel.setLayout(null);
 
+		nodeEditor = new NodeEditor(this);
+
 		mapPanel = new JPanel();
 		mapPanel.setBounds(5, 5, 750, 650);
 		uiPanel.add(mapPanel);
@@ -155,7 +171,7 @@ public class DevGUI extends JPanel{
 
 		//Creating Labels
 		buildingStart = new JLabel("Select Map:");
-		buildingStart.setBounds(762, 26, 132, 29);
+		buildingStart.setBounds(762, 6, 132, 29);
 
 		//Add Labels to the uiPanel
 		uiPanel.add(buildingStart);
@@ -164,8 +180,21 @@ public class DevGUI extends JPanel{
 
 
 		final JComboBox<Map> dropDown = new JComboBox<Map>(maps.toArray(new Map[maps.size()]));
+		
+		ArrayList<String> sortedMaps = new ArrayList<String>();
+		for(int i = 0; i < maps.size(); i++){
+			sortedMaps.add(maps.get(i).getMapName());
+		}
+		Collections.sort(sortedMaps);
+		for(int i = 0; i < maps.size(); i++){
+			for(int j = 0; j < sortedMaps.size(); j++){
+				if(sortedMaps.get(i).equals(maps.get(j).getMapName()))
+					dropDown.addItem(maps.get(j));
+			}
+		}
 
-		dropDown.setBounds(762, 46, 132, 29);
+
+		dropDown.setBounds(762, 26, 132, 29);
 		dropDown.setVisible(true);
 		dropDown.setSelectedIndex(-1);
 		dropDown.addActionListener(new ActionListener(){
@@ -190,78 +219,98 @@ public class DevGUI extends JPanel{
 		if(developerMode)
 		{
 			JButton newMap = new JButton("Load New Map");
-			newMap.setBounds(762, 76, 132, 29);
+			newMap.setBounds(762, 56, 132, 29);
 			uiPanel.add(newMap);
 			newMap.addActionListener(new ActionListener(){
 				public void actionPerformed(ActionEvent e){
+					if(nodeEditor.i)
+						nodeEditor.clear();
 					loadMap = new SelectMap(window);
 					loadMap.setVisible(true);
 					loadMap.setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 					updateMap = true;
 					editNodes = false;
 					createEasyLink = false;
+					alignNodesX = false;
+					alignNodesY = false;
 				}
 			});
 
 			JButton btnCreateNodes = new JButton("Create Nodes");
-			btnCreateNodes.setBounds(762, 136, 132, 29);
+			btnCreateNodes.setBounds(762, 106, 132, 29);
 			uiPanel.add(btnCreateNodes);
 			btnCreateNodes.addActionListener(new ActionListener(){
 				public void actionPerformed(ActionEvent e){
 					System.out.println("Create Nodes Pushed");
+					if(nodeEditor.i)
+						nodeEditor.clear();
 					createNodes = true;
 					createSpecial = false;
 					createEdges = false;
 					createMapLink = false;
 					editNodes = false;
 					createEasyLink = false;
+					alignNodesX = false;
+					alignNodesY = false;
 				}
 			});
 
 			JButton btnCreateSpecialNodes = new JButton("Create Special");
-			btnCreateSpecialNodes.setBounds(762, 166, 132, 29);
+			btnCreateSpecialNodes.setBounds(762, 136, 132, 29);
 			uiPanel.add(btnCreateSpecialNodes);
 			btnCreateSpecialNodes.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e){
 					System.out.println("Create Special Nodes Pushed.");
+					if(nodeEditor.i)
+						nodeEditor.clear();
 					createNodes = false;
 					createSpecial = true;
 					createEdges = false;
 					createMapLink = false;
 					editNodes = false;
 					createEasyLink = false;
+					alignNodesX = false;
+					alignNodesY = false;
 				}
 			});
 
 
 			//Construct button and add action listener
 			JButton btnMakeNeighbors = new JButton("Make Neighbors");
-			btnMakeNeighbors.setBounds(762, 196, 132, 29);
+			btnMakeNeighbors.setBounds(762, 166, 132, 29);
 			uiPanel.add(btnMakeNeighbors);
 			btnMakeNeighbors.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e){
 					System.out.println("Make Neighbors Pushed");
+					if(nodeEditor.i)
+						nodeEditor.clear();					
 					createNodes = false;
 					createSpecial = false;
 					createEdges = true;
 					createMapLink = false;
 					editNodes = false;
 					createEasyLink = false;
+					alignNodesX = false;
+					alignNodesY = false;
 				}
 			});
 
 			JButton btnEditor = new JButton("Node Editor");
-			btnEditor.setBounds(762, 256, 132, 29);;
+			btnEditor.setBounds(762, 226, 132, 29);;
 			uiPanel.add(btnEditor);
 			btnEditor.addActionListener(new ActionListener(){
 				public void actionPerformed(ActionEvent e){
 					System.out.println("Edit Nodes Pushed");
+					if(nodeEditor.i)
+						nodeEditor.clear();
 					createNodes = false;
 					createSpecial = false;
 					createEdges = false;
 					createMapLink = false;
 					editNodes = true;
 					createEasyLink = false;
+					alignNodesX = false;
+					alignNodesY = false;
 				}
 			});
 			//   btnEditor.setVisible(true);
@@ -270,22 +319,18 @@ public class DevGUI extends JPanel{
 
 			//Construct button and add action listener
 			JButton btnExport = new JButton("Save Changes");
-			btnExport.setBounds(762, 226, 132, 29);
+			btnExport.setBounds(762, 196, 132, 29);
 			uiPanel.add(btnExport);
 			btnExport.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e){
 					System.out.println("Export Pushed");
 
 					serialize.doSerialize("MapList", maps);
-
-
-					for(int i = 0; i < maps.size(); i++)
-					{
-						if(!maps.contains(dropDown.getItemAt(i)))
-						{
+					
+					for(int i = 0; i < maps.size(); i++){
+						if(!maps.contains(dropDown.getItemAt(i))){
 							dropDown.addItem(maps.get(i));
 						}
-
 					}	
 
 					//	dropDown.addItem(maps.getLast());
@@ -300,55 +345,59 @@ public class DevGUI extends JPanel{
 
 			}
 					);
-			
+
 			JButton btnEasyLink = new JButton("Easy Map Link");
 			btnEasyLink.setBounds(762, 586, 132, 29);
 			uiPanel.add(btnEasyLink);
 			btnEasyLink.addActionListener(new ActionListener(){
 				public void actionPerformed(ActionEvent e){
 					System.out.println("Easy Link Pushed");
+					if(nodeEditor.i)
+						nodeEditor.clear();
 					createNodes = false;
 					createSpecial = false;
 					createEdges = false;
 					createMapLink = false;
 					editNodes = false;
-					
+					alignNodesX = false;
+					alignNodesY = false;
+
 					if(createEasyLink)
 						createEasyLink = false;
 					else
 						createEasyLink = true;
-					
+
 					if(createEasyLink){
-						
+
 						numVertices = 0;
 						String s = (String)JOptionPane.showInputDialog(
-			                    frame,
-			                    "Enter the number of vertices:",
-			                    "Customized Dialog",
-			                    JOptionPane.PLAIN_MESSAGE,
-			                    null,
-			                    null,
-			                    null);
+								frame,
+								"Enter the number of vertices:",
+								"Customized Dialog",
+								JOptionPane.PLAIN_MESSAGE,
+								null,
+								null,
+								null);
 						if(s != null){
 							try {
-							    easyLinkMax = Integer.parseInt(s);
-							    //System.out.println("Number of vertices: " + hold);
-							    xValues = new int[easyLinkMax];
-							    yValues = new int[easyLinkMax];
-							    
-							    
+								easyLinkMax = Integer.parseInt(s);
+								//System.out.println("Number of vertices: " + hold);
+								xValues = new int[easyLinkMax];
+								yValues = new int[easyLinkMax];
+
+
 							} catch (NumberFormatException n) {
-							    //System.out.println("Invalid Value");
-							    JOptionPane.showMessageDialog(frame,
-							    	    "Invalid Number of Vertices.",
-							    	    "Error",
-							    	    JOptionPane.ERROR_MESSAGE);
+								System.out.println("Invalid Value");
+								JOptionPane.showMessageDialog(frame,
+										"Invalid Number of Vertices.",
+										"Error",
+										JOptionPane.ERROR_MESSAGE);
 							}
 						}
 					} else {
-						
+
 					}
-										
+
 				}
 			});
 
@@ -438,7 +487,7 @@ public class DevGUI extends JPanel{
 							easyLinkMap = maps.get(maps.indexOf(connectingMap));
 							link = new EasyLink(poly, easyLinkMap);
 							selectedMap.addEasyLink(link);
-						    numVertices = 0;
+							numVertices = 0;
 							createEasyLink = false;
 						}
 					}
@@ -539,9 +588,22 @@ public class DevGUI extends JPanel{
 					}
 					if(editNodes){
 						if(nodeIndex >= 0){
-							NodeType typeOfNode = nodesOnCurrentMap.get(nodeIndex).getType();
-							if(typeOfNode != NodeType.ELEVATOR && typeOfNode != NodeType.STAIRS && typeOfNode != NodeType.DOOR && typeOfNode != NodeType.EMERGEXIT)
-								new NodeEditor(uiPanel, nodesOnCurrentMap.get(nodeIndex));
+							currentNode = nodesOnCurrentMap.get(nodeIndex);
+							nodeEditor.initialize(currentNode);
+						}
+					}
+					if(alignNodesX){
+						if(nodeIndex >= 0){
+							currentNode.setX(nodesOnCurrentMap.get(nodeIndex).getX());
+							alignNodesX = false;
+							editNodes = true;
+						}
+					}
+					if(alignNodesY){
+						if(nodeIndex >= 0){
+							currentNode.setY(nodesOnCurrentMap.get(nodeIndex).getY());
+							alignNodesY = false;
+							editNodes = true;
 						}
 					}
 					if (evt.getClickCount() >= 2 && (createNodes || createSpecial)) {
@@ -648,6 +710,7 @@ public class DevGUI extends JPanel{
 			repaint();
 			revalidate();
 		}
+
 		@Override
 		public void paintComponent(Graphics g) {
 			super.paintComponent(g);
@@ -741,7 +804,7 @@ public class DevGUI extends JPanel{
 						nodesOnCurrentMap.get(i).getY()-SquareWidth/2,
 						SquareWidth, SquareWidth));
 
-				if(isPortal(nodesOnCurrentMap.get(i)))
+				if(nodesOnCurrentMap.get(i).isPortal())
 					g.drawString(nodesOnCurrentMap.get(i).getName(), nodesOnCurrentMap.get(i).getX(),nodesOnCurrentMap.get(i).getY());
 
 				g.setColor(Color.BLACK);
@@ -762,7 +825,7 @@ public class DevGUI extends JPanel{
 
 
 
-				if(!isPortal(edgesOnCurrentMap.get(i).getNode1())||!isPortal(edgesOnCurrentMap.get(i).getNode2()))
+				if(!edgesOnCurrentMap.get(i).getNode1().isPortal()||!edgesOnCurrentMap.get(i).getNode2().isPortal())
 					((Graphics2D)g).draw(new Line2D.Double(edgesOnCurrentMap.get(i).getNode1().getX(), 
 							edgesOnCurrentMap.get(i).getNode1().getY(),
 							edgesOnCurrentMap.get(i).getNode2().getX(),
@@ -776,28 +839,6 @@ public class DevGUI extends JPanel{
 
 			System.out.println("\n");
 		}
-		public boolean isPortal(Node n)
-		{
-			switch (n.getType()){
-			case ELEVATOR:
-			case STAIRS:
-			case DOOR:
-			case EMERGEXIT:
-				return true;
-			case MBATHROOM:
-			case FBATHROOM:
-			case LECTUREHALL:
-			case BLUETOWER:
-			case OFFICE:
-			case ROOM:
-			case HISTORICAL:
-			case FOOD:
-			case NOTYPE:
-
-			}
-			return false;
-		}
-
 
 		public double calcDistance(Node n1, Node n2, double scale)
 		{
