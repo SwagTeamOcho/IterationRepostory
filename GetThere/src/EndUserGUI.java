@@ -1,15 +1,14 @@
 
-
-<<<<<<< HEAD
 import javax.swing.text.html.StyleSheet;
+
 
 
 import java.awt.BasicStroke;
 
 import java.awt.Color;
-=======
+
 import java.awt.Cursor;
->>>>>>> ad93aca05a7308f82f7c94c4c152494363bd8d94
+
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GradientPaint;
@@ -20,10 +19,9 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-<<<<<<< HEAD
+
 import java.awt.event.MouseMotionAdapter;
-=======
->>>>>>> ad93aca05a7308f82f7c94c4c152494363bd8d94
+
 import java.awt.event.MouseMotionListener;
 
 import java.awt.event.MouseWheelEvent;
@@ -52,13 +50,10 @@ import javax.swing.JTextArea;
 import javax.swing.JTextPane;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.ToolTipManager;
-<<<<<<< HEAD
+
 import javax.swing.border.Border;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
-=======
-
->>>>>>> ad93aca05a7308f82f7c94c4c152494363bd8d94
 import javax.swing.text.StyleConstants;
 
 import com.itextpdf.text.Document;
@@ -171,7 +166,6 @@ public class EndUserGUI extends JPanel implements ActionListener{
 	private ToolTipManager ttManager;
 
 	private JScrollPane scrollMapPanel;
-<<<<<<< HEAD
 	
 	private Color burgandy = new Color(74, 1, 1);
 	private Color beige = new Color(230, 224, 200);
@@ -179,13 +173,8 @@ public class EndUserGUI extends JPanel implements ActionListener{
 	int yMouse;
 	
 	private ImageIcon currentAboutPage;
-	private int clkCount = 0;
 	
-	//About Panel Stuff]
-	
-=======
 	HandScrollListener scrollListener;
->>>>>>> ad93aca05a7308f82f7c94c4c152494363bd8d94
 	/**
 	 * Create the application.
 	 */
@@ -263,7 +252,6 @@ public class EndUserGUI extends JPanel implements ActionListener{
 
 
 	private void initialize() {
-<<<<<<< HEAD
 		try{
 			JSplash loadingScreen = new JSplash(LoadingScreen.class.getResource("loadingScreen.png"), true, true, false, null, 
 					null, beige, burgandy);
@@ -280,15 +268,9 @@ public class EndUserGUI extends JPanel implements ActionListener{
 			e.printStackTrace();
 		}
 		
-		final MyGraphics graph = new MyGraphics();
-=======
-
 
 
 		final MyGraphics graph = new MyGraphics(this);
-		
->>>>>>> ad93aca05a7308f82f7c94c4c152494363bd8d94
-
 		ttManager = ToolTipManager.sharedInstance();
 		ttManager.setEnabled(true);
 
@@ -309,11 +291,6 @@ public class EndUserGUI extends JPanel implements ActionListener{
 		uiPanel.setLayout(null);
 
 		uiPanel.setBackground(beige);
-//		ImageIcon backgroundImg = new ImageIcon("IconImages/uiBackground.jpg");
-//		BackgroundPanel thumb = new BackgroundPanel(backgroundImg.getImage(), BackgroundPanel.ACTUAL, 1.0f, 0.5f);
-//		thumb.setBackground(new Color(74, 1, 1));
-//		uiPanel.add(thumb);
-
 		tutView = new JLabel("",JLabel.CENTER);    
 		tutView.setLocation(0, 0);
 		tutView.setSize(1194,672);
@@ -323,8 +300,7 @@ public class EndUserGUI extends JPanel implements ActionListener{
 		mapPanel.add(graph);
 		zoom = new ImageZoom(mapPanel);
 		scrollMapPanel = new JScrollPane(mapPanel);
-<<<<<<< HEAD
-		scrollMapPanel.setBounds(5, 20+10, 750, 620);
+		scrollMapPanel.setBounds(5, 20+7, 750, 620);
 		zoom = new ImageZoom(mapPanel);
 		scrollMapPanel.setBackground(burgandy);
 
@@ -342,33 +318,53 @@ public class EndUserGUI extends JPanel implements ActionListener{
 		JPanel titleBar = new JPanel();
 		titleBar.setLayout(null);
 		titleBar.setBounds(0, 0, 1200, 20);
+		titleBar.addMouseMotionListener(new MouseMotionListener() {
+            @SuppressWarnings("unused")
+			public void mousePressed(MouseEvent e) {
+                // Get x,y and store them
+            	xMouse = e.getX();
+            	yMouse = e.getY();
+            }
+            public void mouseDragged(MouseEvent me) {
+            	int x = me.getXOnScreen();
+            	int y = me.getYOnScreen();
+            	frame.setLocation(x-xMouse, y-yMouse);
+            }
 
+			public void mouseMoved(MouseEvent e) {
+				
+			}
+			
+		});
 		titleBar.setBackground(beige);
 		uiPanel.add(titleBar);
 		
 		//About Button Operation
 		JFrame aboutFrame = new JFrame();
-		aboutFrame.setBounds(50, 50, 900, 620);
+		aboutFrame.setBounds(100, 100, 920, 650);
 		aboutFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);;
-		ImageIcon aboutPg1 = new ImageIcon("IconImages/aboutPg1.png");
-		ImageIcon aboutPg2 = new ImageIcon("IconImages/aboutPg2.png");
+		ImageIcon aboutPg1 = new ImageIcon("IconImages/aboutPg1.jpg");
+		ImageIcon aboutPg2 = new ImageIcon("IconImages/aboutPg2.jpg");
 		ImageIcon[] aboutPages = {aboutPg1, aboutPg2};
-		currentAboutPage = aboutPages[1];
+		currentAboutPage = aboutPages[0];
 		JPanel aboutPanel = new JPanel();
 		JLabel aboutLabel = new JLabel();
 		aboutPanel.add(aboutLabel);
     	aboutLabel.setIcon(currentAboutPage);
-		aboutLabel.setBounds(0, 0, 900, 620);
-		aboutLabel.addMouseListener(new MouseListener() {
+		aboutLabel.setBounds(50, 50, 900, 620);
+		aboutPanel.addMouseListener(new MouseListener() {
 	        public void mouseClicked(MouseEvent e) {
-	            if(clkCount == 0){
+	        	e.getClickCount();
+	            if(e.getClickCount() ==1){
+	            	
 	            	currentAboutPage = aboutPages[0];
+	            	//System.out.print(e.getClickCount());
 	            	aboutLabel.setIcon(currentAboutPage);
-	            	clkCount = 1;
-	            }else if(clkCount == 1){
+	            	
+	            }else if(e.getClickCount() == 2){
 	            	currentAboutPage = aboutPages[1];
 	            	aboutLabel.setIcon(currentAboutPage);
-	            	clkCount = 0;
+	            	//System.out.print(e.getClickCount());
 	            }
 	        }
 
@@ -402,7 +398,7 @@ public class EndUserGUI extends JPanel implements ActionListener{
 		about.setFont(new Font("Calisto MT Bold Italic", Font.BOLD, 14));
 		about.setForeground(burgandy);
 		about.setBounds(1140, 0, 50, 24);
-		
+		about.setCursor(new Cursor(Cursor.HAND_CURSOR));
 		about.addMouseListener(new MouseListener() {
 	        public void mouseClicked(MouseEvent e) {
 				aboutFrame.setVisible(true);
@@ -429,19 +425,7 @@ public class EndUserGUI extends JPanel implements ActionListener{
 		
 	
 		
-		titleBar.addMouseListener(new MouseAdapter() {
-            public void mousePressed(MouseEvent me) {
-                // Get x,y and store them
-                xMouse = me.getX();
-                yMouse= me.getY();
-
-            }
-
-             public void mouseDragged(MouseEvent me) {
-                frame.setLocation(frame.getLocation().x + me.getX() - xMouse,
-                        frame.getLocation().y + me.getY() - yMouse);
-            }
-        });
+		
        
 		JLabel closeButt = new JLabel();
 		//closeButt.setForeground(beige);
@@ -449,6 +433,7 @@ public class EndUserGUI extends JPanel implements ActionListener{
 		ImageIcon close = new ImageIcon("IconImages/close.png");
 		closeButt.setIcon(close);
 		closeButt.setBounds(7, 0, 24, 24);
+		closeButt.setCursor(new Cursor(Cursor.HAND_CURSOR));
 		closeButt.addMouseListener(new MouseListener() {
 	        public void mouseClicked(MouseEvent e) {
 	            // TODO Auto-generated method stub
@@ -483,6 +468,7 @@ public class EndUserGUI extends JPanel implements ActionListener{
 		ImageIcon minimize = new ImageIcon("IconImages/min.png");
 		minButt.setIcon(minimize);
 		minButt.setBounds(25, 5, 15, 15);
+		minButt.setCursor(new Cursor(Cursor.HAND_CURSOR));
 		minButt.addMouseListener(new MouseListener() {
 	        public void mouseClicked(MouseEvent e) {
 	            // TODO Auto-generated method stub
@@ -520,8 +506,8 @@ public class EndUserGUI extends JPanel implements ActionListener{
 
 		
 		
-=======
-		scrollMapPanel.setBounds(5, 5, 750, 620);
+
+//		scrollMapPanel.setBounds(5, 20+15, 750, 620);
 		scrollMapPanel.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);
         scrollMapPanel.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		
@@ -536,7 +522,6 @@ public class EndUserGUI extends JPanel implements ActionListener{
 		
 		uiPanel.add(scrollMapPanel);
 
->>>>>>> ad93aca05a7308f82f7c94c4c152494363bd8d94
 		//Creating Labels
 		startPoint = new JLabel("FROM");
 		startPoint.setForeground(burgandy);
@@ -577,11 +562,7 @@ public class EndUserGUI extends JPanel implements ActionListener{
 		uiPanel.add(roomEnd);
 
 		//startRoomSEL.setModel(new DefaultComboBoxModel(new String[]{}));
-<<<<<<< HEAD
 		startRoomSEL.setBounds(983, 50+15, 210, 29);
-=======
-		startRoomSEL.setBounds(983, 50, 200, 29);
->>>>>>> ad93aca05a7308f82f7c94c4c152494363bd8d94
 		startRoomSEL.setEditable(false);
 		startRoomSEL.setVisible(true);
 		startRoomSEL.setName("Start");
@@ -595,18 +576,14 @@ public class EndUserGUI extends JPanel implements ActionListener{
 		uiPanel.add(mapNumber);
 
 		backToCampus = new JButton("Back to Campus");
-		backToCampus.setBounds(100, 630, 150, 29);
+		backToCampus.setBounds(100, 630 +30, 150, 29);
 		uiPanel.add(backToCampus);
 		backToCampus.setEnabled(true);
 
 
 		//Construct Combo boxes to select start point
 		startBuildingSEL = new JComboBox<String>();
-<<<<<<< HEAD
 		startBuildingSEL.setBounds(755, 50+15, 232, 29);
-=======
-		startBuildingSEL.setBounds(755, 50, 200, 29);
->>>>>>> ad93aca05a7308f82f7c94c4c152494363bd8d94
 		startBuildingSEL.setEditable(false);
 		startBuildingSEL.setVisible(true);
 		startBuildingSEL.addActionListener(new ActionListener(){
@@ -658,10 +635,10 @@ public class EndUserGUI extends JPanel implements ActionListener{
 				zoom = new ImageZoom(mapPanel);
 				JLabel scaleLabel = new JLabel("Scale");
 				scaleLabel.setBounds(680, 630+15, 50, 30);
-				uiPanel.add(scaleLabel);
-				uiPanel.add(zoom.getZoomingSpinner());
-				uiPanel.add(zoom.getZoomInButton());
-				uiPanel.add(zoom.getZoomOutButton());
+				//uiPanel.add(scaleLabel);
+				//uiPanel.add(zoom.getZoomingSpinner());
+				//uiPanel.add(zoom.getZoomInButton());
+				//uiPanel.add(zoom.getZoomOutButton());
 				uiPanel.add(scrollMapPanel);
 				mapPanel.setPath(null);
 			}
@@ -674,22 +651,14 @@ public class EndUserGUI extends JPanel implements ActionListener{
 		}
 
 		//endRoomSEL.setModel(new DefaultComboBoxModel(new String[]{}));
-<<<<<<< HEAD
 		endRoomSEL.setBounds(983, 116+15, 210, 29);
-=======
-		endRoomSEL.setBounds(983, 116, 200, 29);
->>>>>>> ad93aca05a7308f82f7c94c4c152494363bd8d94
 		endRoomSEL.setEditable(false);
 		endRoomSEL.setVisible(true);
 		endRoomSEL.setName("End");
 
 		//Construct Combo boxes to select end point
 		endBuildingSEL = new JComboBox<String>();
-<<<<<<< HEAD
 		endBuildingSEL.setBounds(755, 116+15, 232, 29);
-=======
-		endBuildingSEL.setBounds(755, 116, 200, 29);
->>>>>>> ad93aca05a7308f82f7c94c4c152494363bd8d94
 		endBuildingSEL.setEditable(false);
 		endBuildingSEL.setVisible(true);
 		endBuildingSEL.addActionListener(new ActionListener(){
@@ -767,7 +736,7 @@ public class EndUserGUI extends JPanel implements ActionListener{
 			}
 		});
 		tutorial.setIcon(tutIcon);
-		tutorial.setBounds(6, 632+15, 40, 40);
+		tutorial.setBounds(6, 632+20, 40, 40);
 		uiPanel.add(tutorial);
 		count = 1;
 		final ImageIcon icon = new ImageIcon("IconImages/Tut.png");
@@ -804,19 +773,19 @@ public class EndUserGUI extends JPanel implements ActionListener{
 		});
 
 		leftArrow = new JButton("<<");
-		leftArrow.setBounds(275, 630+15, 80, 29);
+		leftArrow.setBounds(275, 630+30, 80, 29);
 		uiPanel.add(leftArrow);
 		if(arrowCounter == 0){
 			leftArrow.setEnabled(false);
 		}
 
 		rightArrow = new JButton(">>");
-		rightArrow.setBounds(412, 630+15, 80, 29);
+		rightArrow.setBounds(412, 630+30, 80, 29);
 		uiPanel.add(rightArrow);
 		rightArrow.setEnabled(false);
 
 		JLabel instructions = new JLabel("How to get there?");
-		instructions.setForeground(beige);
+		instructions.setForeground(burgandy);
 		instructions.setFont(new Font("Helvetica Neue", Font.BOLD, 14));
 		instructions.setBounds(930, 180+15, 132, 29);
 		uiPanel.add(instructions);
@@ -848,7 +817,7 @@ public class EndUserGUI extends JPanel implements ActionListener{
 			}
 		});
 		emergency.setIcon(emergencyIcon);
-		emergency.setBounds(872, 632+15, 40, 40);
+		emergency.setBounds(872, 632+20, 40, 40);
 
 		uiPanel.add(emergency);
 		final String emergencyInfo = "Call Campus Police:" + "\n" + "508-831-5555";
@@ -868,7 +837,7 @@ public class EndUserGUI extends JPanel implements ActionListener{
 			}
 		});
 		email.setIcon(emailIcon);
-		email.setBounds(920, 632+15, 40, 40);
+		email.setBounds(920, 632+20, 40, 40);
 		uiPanel.add(email);
 		email.addActionListener(new ActionListener()  {
 			public void actionPerformed(ActionEvent e)
@@ -931,7 +900,7 @@ public class EndUserGUI extends JPanel implements ActionListener{
 			}
 		});
 		transport.setIcon(transportIcon);
-		transport.setBounds(968, 632+15, 40, 40);
+		transport.setBounds(968, 632+20, 40, 40);
 
 		uiPanel.add(transport);
 		transport.addActionListener(new ActionListener(){
@@ -965,7 +934,7 @@ public class EndUserGUI extends JPanel implements ActionListener{
 		final Icon bathroomIconBIG = new ImageIcon("IconImages/bathroomIconBIG.png");
 		nearestBathroom = new JButton(bathroomIcon);
 		nearestBathroom.setToolTipText("Find nearest Bathroom");
-		nearestBathroom.setBounds(1017, 632+15, 40, 40);
+		nearestBathroom.setBounds(1017, 632+20, 40, 40);
 		nearestBathroom.addMouseMotionListener(new MouseMotionListener() {
 			public void mouseDragged(MouseEvent arg0) {}
 			public void mouseMoved(MouseEvent arg0) {
@@ -1055,7 +1024,7 @@ public class EndUserGUI extends JPanel implements ActionListener{
 			}
 		});
 		nearestBluetower.setIcon(bluetowerIcon);
-		nearestBluetower.setBounds(1064, 632+15, 40, 40);
+		nearestBluetower.setBounds(1064, 632+20, 40, 40);
 
 		uiPanel.add(nearestBluetower);
 		
@@ -1065,7 +1034,7 @@ public class EndUserGUI extends JPanel implements ActionListener{
 		findProf.setIcon(findProfIcon);
 		
 		findProf.setBounds(1100, 632, 40, 40);
-		uiPanel.add(findProf);
+		//uiPanel.add(findProf);
 		
 			
 		findProf.addActionListener(new ActionListener(){
