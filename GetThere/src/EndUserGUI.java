@@ -1,11 +1,15 @@
 
 
+<<<<<<< HEAD
 import javax.swing.text.html.StyleSheet;
 
 
 import java.awt.BasicStroke;
 
 import java.awt.Color;
+=======
+import java.awt.Cursor;
+>>>>>>> ad93aca05a7308f82f7c94c4c152494363bd8d94
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GradientPaint;
@@ -16,8 +20,15 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+<<<<<<< HEAD
 import java.awt.event.MouseMotionAdapter;
+=======
+>>>>>>> ad93aca05a7308f82f7c94c4c152494363bd8d94
 import java.awt.event.MouseMotionListener;
+
+import java.awt.event.MouseWheelEvent;
+
+
 import java.awt.geom.GeneralPath;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -41,9 +52,13 @@ import javax.swing.JTextArea;
 import javax.swing.JTextPane;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.ToolTipManager;
+<<<<<<< HEAD
 import javax.swing.border.Border;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+=======
+
+>>>>>>> ad93aca05a7308f82f7c94c4c152494363bd8d94
 import javax.swing.text.StyleConstants;
 
 import com.itextpdf.text.Document;
@@ -156,6 +171,7 @@ public class EndUserGUI extends JPanel implements ActionListener{
 	private ToolTipManager ttManager;
 
 	private JScrollPane scrollMapPanel;
+<<<<<<< HEAD
 	
 	private Color burgandy = new Color(74, 1, 1);
 	private Color beige = new Color(230, 224, 200);
@@ -167,6 +183,9 @@ public class EndUserGUI extends JPanel implements ActionListener{
 	
 	//About Panel Stuff]
 	
+=======
+	HandScrollListener scrollListener;
+>>>>>>> ad93aca05a7308f82f7c94c4c152494363bd8d94
 	/**
 	 * Create the application.
 	 */
@@ -183,7 +202,11 @@ public class EndUserGUI extends JPanel implements ActionListener{
 		endRoomSEL = new XComboBox(this);
 		initialize();
 	}
-
+	
+	public JScrollPane getScrollMapPanel(){
+		return this.scrollMapPanel;
+	}
+	
 	public void setMaps(LinkedList<Map> maps){
 		this.maps = maps;
 	}
@@ -240,6 +263,7 @@ public class EndUserGUI extends JPanel implements ActionListener{
 
 
 	private void initialize() {
+<<<<<<< HEAD
 		try{
 			JSplash loadingScreen = new JSplash(LoadingScreen.class.getResource("loadingScreen.png"), true, true, false, null, 
 					null, beige, burgandy);
@@ -257,6 +281,13 @@ public class EndUserGUI extends JPanel implements ActionListener{
 		}
 		
 		final MyGraphics graph = new MyGraphics();
+=======
+
+
+
+		final MyGraphics graph = new MyGraphics(this);
+		
+>>>>>>> ad93aca05a7308f82f7c94c4c152494363bd8d94
 
 		ttManager = ToolTipManager.sharedInstance();
 		ttManager.setEnabled(true);
@@ -290,7 +321,9 @@ public class EndUserGUI extends JPanel implements ActionListener{
 
 		mapPanel = new ImagePanel(this);
 		mapPanel.add(graph);
+		zoom = new ImageZoom(mapPanel);
 		scrollMapPanel = new JScrollPane(mapPanel);
+<<<<<<< HEAD
 		scrollMapPanel.setBounds(5, 20+10, 750, 620);
 		zoom = new ImageZoom(mapPanel);
 		scrollMapPanel.setBackground(burgandy);
@@ -487,6 +520,23 @@ public class EndUserGUI extends JPanel implements ActionListener{
 
 		
 		
+=======
+		scrollMapPanel.setBounds(5, 5, 750, 620);
+		scrollMapPanel.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);
+        scrollMapPanel.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+		
+
+		scrollListener = new HandScrollListener(mapPanel);
+		scrollMapPanel.getViewport().addMouseMotionListener(scrollListener);
+		scrollMapPanel.getViewport().addMouseListener(scrollListener);
+		
+		//uiPanel.add(zoom.getUIPanel());
+		//uiPanel.add(mapPanel);
+
+		
+		uiPanel.add(scrollMapPanel);
+
+>>>>>>> ad93aca05a7308f82f7c94c4c152494363bd8d94
 		//Creating Labels
 		startPoint = new JLabel("FROM");
 		startPoint.setForeground(burgandy);
@@ -527,7 +577,11 @@ public class EndUserGUI extends JPanel implements ActionListener{
 		uiPanel.add(roomEnd);
 
 		//startRoomSEL.setModel(new DefaultComboBoxModel(new String[]{}));
+<<<<<<< HEAD
 		startRoomSEL.setBounds(983, 50+15, 210, 29);
+=======
+		startRoomSEL.setBounds(983, 50, 200, 29);
+>>>>>>> ad93aca05a7308f82f7c94c4c152494363bd8d94
 		startRoomSEL.setEditable(false);
 		startRoomSEL.setVisible(true);
 		startRoomSEL.setName("Start");
@@ -548,7 +602,11 @@ public class EndUserGUI extends JPanel implements ActionListener{
 
 		//Construct Combo boxes to select start point
 		startBuildingSEL = new JComboBox<String>();
+<<<<<<< HEAD
 		startBuildingSEL.setBounds(755, 50+15, 232, 29);
+=======
+		startBuildingSEL.setBounds(755, 50, 200, 29);
+>>>>>>> ad93aca05a7308f82f7c94c4c152494363bd8d94
 		startBuildingSEL.setEditable(false);
 		startBuildingSEL.setVisible(true);
 		startBuildingSEL.addActionListener(new ActionListener(){
@@ -616,14 +674,22 @@ public class EndUserGUI extends JPanel implements ActionListener{
 		}
 
 		//endRoomSEL.setModel(new DefaultComboBoxModel(new String[]{}));
+<<<<<<< HEAD
 		endRoomSEL.setBounds(983, 116+15, 210, 29);
+=======
+		endRoomSEL.setBounds(983, 116, 200, 29);
+>>>>>>> ad93aca05a7308f82f7c94c4c152494363bd8d94
 		endRoomSEL.setEditable(false);
 		endRoomSEL.setVisible(true);
 		endRoomSEL.setName("End");
 
 		//Construct Combo boxes to select end point
 		endBuildingSEL = new JComboBox<String>();
+<<<<<<< HEAD
 		endBuildingSEL.setBounds(755, 116+15, 232, 29);
+=======
+		endBuildingSEL.setBounds(755, 116, 200, 29);
+>>>>>>> ad93aca05a7308f82f7c94c4c152494363bd8d94
 		endBuildingSEL.setEditable(false);
 		endBuildingSEL.setVisible(true);
 		endBuildingSEL.addActionListener(new ActionListener(){
@@ -1241,16 +1307,23 @@ public class EndUserGUI extends JPanel implements ActionListener{
 	}
 
 
-	public class MyGraphics extends JComponent implements MouseMotionListener{
+	public class MyGraphics extends JComponent implements MouseMotionListener, MouseListener{
 
 		private static final long serialVersionUID = 1L;
+		private static final int SquareWidth = 5;
+		private EndUserGUI gui;
 
 
-		MyGraphics() {
+		MyGraphics(EndUserGUI gui) {
+			this.gui = gui;
 			setPreferredSize(new Dimension(760, 666));
 			addMouseMotionListener(this);
+			addMouseListener(this);
 
-
+			if(scrollMapPanel != null){
+			scrollMapPanel.getViewport().addMouseMotionListener(scrollListener);
+			scrollMapPanel.getViewport().addMouseListener(scrollListener);
+			}
 			addMouseListener(new MouseAdapter(){
 
 
@@ -1258,6 +1331,7 @@ public class EndUserGUI extends JPanel implements ActionListener{
 
 					int x = evt.getX();
 					int y = evt.getY();
+					
 					if (evt.getClickCount() == 2) {
 						for(int i = 0; i < maps.size(); i++){
 							if(maps.get(i).getEasyLinks().size() > 0){
@@ -1297,9 +1371,37 @@ public class EndUserGUI extends JPanel implements ActionListener{
 					}
 					return result;
 				}});
-			addMouseMotionListener(this);
+			//addMouseMotionListener(this);
+		
+			addMouseWheelListener(new MouseAdapter() {
 
+                
+                public void mouseWheelMoved(MouseWheelEvent e) {
+                	if(scrollMapPanel.contains(e.getX(), e.getY())){
+                    double delta = 0.03f * e.getWheelRotation();
+                    System.out.println(delta);
+                    System.out.println(mapPanel.scale);
+                    if((mapPanel.scale > 0.5 && mapPanel.scale < 1.5) || (mapPanel.scale < 0.5 && delta > 0) || (mapPanel.scale > 1.5 && delta < 0)){
+                    mapPanel.scale += delta;
+                    mapPanel.revalidate();
+                    mapPanel.repaint();
+                    }
+                	}
+                }
+
+            });
+			
+        }
+
+		public EndUserGUI getGui(){
+			return this.gui;
 		}
+		
+		
+
+		
+		
+		
 
 		@Override
 		public void paintComponent(Graphics g) {
@@ -1351,6 +1453,11 @@ public class EndUserGUI extends JPanel implements ActionListener{
 
 		@Override
 		public void mouseDragged(MouseEvent e) {
+			int x = e.getX();
+			int y = e.getY();
+			if(mapPanel.contains(x, y)){
+				scrollListener.mouseDragged(e);
+			}
 
 		}
 
@@ -1379,12 +1486,50 @@ public class EndUserGUI extends JPanel implements ActionListener{
 				}
 			}
 		}
+		
+		@Override
 		public void mousePressed(MouseEvent e) {
+			
+			int x = e.getX();
+			int y = e.getY();
+			if(mapPanel.contains(x, y)){
+				uiPanel.setCursor(new Cursor (Cursor.HAND_CURSOR));
+				scrollListener.mousePressed(e);
+			}
+			
+		}
+		
+		@Override
+		public void mouseReleased(MouseEvent e){
+			uiPanel.setCursor(new Cursor (Cursor.DEFAULT_CURSOR));
+			int x = e.getX();
+			int y = e.getY();
+			if(mapPanel.contains(x, y)){
+				scrollListener.mouseReleased(e);
+			}
+
+		}
+
+		@Override
+		public void mouseClicked(MouseEvent e) {
+			// TODO Auto-generated method stub
 			
 		}
 
+		@Override
+		public void mouseEntered(MouseEvent e) {
+			// TODO Auto-generated method stub
+			
+		}
 
-	}
+		@Override
+		public void mouseExited(MouseEvent e) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		
+}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
