@@ -26,6 +26,7 @@ class ImagePanel extends JPanel {
 	Node startNode;
 	Node endNode;
 	private EndUserGUI gui;
+	AffineTransform at;
 
 
 	public ImagePanel(EndUserGUI gui)
@@ -38,6 +39,10 @@ class ImagePanel extends JPanel {
 
 	}
 
+	public AffineTransform getAT(){
+		return this.at;
+	}
+	
 	protected void paintComponent(Graphics g)
 	{
 		super.paintComponent(g);
@@ -53,7 +58,7 @@ class ImagePanel extends JPanel {
 			int imageHeight = image.getHeight();
 			double x = (w - scale * imageWidth)/2;
 			double y = (h - scale * imageHeight)/2;
-			AffineTransform at;
+
 			at = AffineTransform.getTranslateInstance(x,y);
 			at.scale(scale, scale);
 			g2.drawRenderedImage(image, at);

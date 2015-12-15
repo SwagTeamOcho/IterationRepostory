@@ -4,6 +4,7 @@ import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
+import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
@@ -15,6 +16,7 @@ import java.awt.event.MouseWheelEvent;
 
 
 import java.awt.geom.GeneralPath;
+import java.awt.geom.Point2D;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.net.URL;
@@ -1294,11 +1296,16 @@ public class EndUserGUI extends JPanel implements ActionListener{
 	}
 
 	public Node nearHistoricalNode(int x, int y){
+		Point2D before1 = new Point(), after1 = new Point();
 		if(historicalNodes != null){
 			if(historicalNodes.size() > 0){
 				for(int i = 0; i < historicalNodes.size(); i++){
-					if(((x - historicalNodes.get(i).getX()) < 6) && ((y - historicalNodes.get(i).getY()) < 6)){
-						if(((historicalNodes.get(i).getX() - x) < 6) && ((historicalNodes.get(i).getY() - y) < 6)){
+					before1.setLocation(historicalNodes.get(i).getX(), historicalNodes.get(i).getY());
+					mapPanel.getAT().transform(before1, after1);
+					if(Math.abs(y - after1.getY()) < 6){
+						System.out.println("passed first");
+						if(Math.abs(x - after1.getX()) < 6){
+							System.out.println("passed second");
 							return historicalNodes.get(i);
 						}
 					}
