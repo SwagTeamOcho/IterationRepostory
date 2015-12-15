@@ -301,7 +301,7 @@ public class EndUserGUI extends JPanel implements ActionListener{
 		uiPanel.add(roomEnd);
 
 		//startRoomSEL.setModel(new DefaultComboBoxModel(new String[]{}));
-		startRoomSEL.setBounds(983, 50, 210, 29);
+		startRoomSEL.setBounds(983, 50, 200, 29);
 		startRoomSEL.setEditable(false);
 		startRoomSEL.setVisible(true);
 		startRoomSEL.setName("Start");
@@ -322,7 +322,7 @@ public class EndUserGUI extends JPanel implements ActionListener{
 
 		//Construct Combo boxes to select start point
 		startBuildingSEL = new JComboBox<String>();
-		startBuildingSEL.setBounds(755, 50, 232, 29);
+		startBuildingSEL.setBounds(755, 50, 200, 29);
 		startBuildingSEL.setEditable(false);
 		startBuildingSEL.setVisible(true);
 		startBuildingSEL.addActionListener(new ActionListener(){
@@ -391,14 +391,14 @@ public class EndUserGUI extends JPanel implements ActionListener{
 		}
 
 		//endRoomSEL.setModel(new DefaultComboBoxModel(new String[]{}));
-		endRoomSEL.setBounds(983, 116, 210, 29);
+		endRoomSEL.setBounds(983, 116, 200, 29);
 		endRoomSEL.setEditable(false);
 		endRoomSEL.setVisible(true);
 		endRoomSEL.setName("End");
 
 		//Construct Combo boxes to select end point
 		endBuildingSEL = new JComboBox<String>();
-		endBuildingSEL.setBounds(755, 116, 232, 29);
+		endBuildingSEL.setBounds(755, 116, 200, 29);
 		endBuildingSEL.setEditable(false);
 		endBuildingSEL.setVisible(true);
 		endBuildingSEL.addActionListener(new ActionListener(){
