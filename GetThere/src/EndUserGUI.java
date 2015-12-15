@@ -141,6 +141,8 @@ public class EndUserGUI extends JPanel implements ActionListener{
 	private JButton tutorial;
 	private Icon tutIcon;
 
+	private JLabel specialToolTips;
+
 	private JButton backToCampus;
 
 	int count;
@@ -167,11 +169,11 @@ public class EndUserGUI extends JPanel implements ActionListener{
 		endRoomSEL = new XComboBox(this);
 		initialize();
 	}
-	
+
 	public JScrollPane getScrollMapPanel(){
 		return this.scrollMapPanel;
 	}
-	
+
 	public void setMaps(LinkedList<Map> maps){
 		this.maps = maps;
 	}
@@ -232,7 +234,7 @@ public class EndUserGUI extends JPanel implements ActionListener{
 
 
 		final MyGraphics graph = new MyGraphics(this);
-		
+
 
 		ttManager = ToolTipManager.sharedInstance();
 		ttManager.setEnabled(true);
@@ -246,6 +248,7 @@ public class EndUserGUI extends JPanel implements ActionListener{
 		frame.setTitle("Get There");
 		frame.setResizable(false);
 		frame.setVisible(true);
+		
 
 		//Panel Operations
 		uiPanel = new JPanel();
@@ -262,17 +265,21 @@ public class EndUserGUI extends JPanel implements ActionListener{
 		scrollMapPanel = new JScrollPane(mapPanel);
 		scrollMapPanel.setBounds(5, 5, 750, 620);
 		scrollMapPanel.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);
-        scrollMapPanel.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-		
+		scrollMapPanel.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+
 
 		scrollListener = new HandScrollListener(mapPanel);
 		scrollMapPanel.getViewport().addMouseMotionListener(scrollListener);
 		scrollMapPanel.getViewport().addMouseListener(scrollListener);
 		
+		specialToolTips = new JLabel();
+		uiPanel.add(specialToolTips);
+		specialToolTips.setVisible(false);
+
 		//uiPanel.add(zoom.getUIPanel());
 		//uiPanel.add(mapPanel);
 
-		
+
 		uiPanel.add(scrollMapPanel);
 
 		//Creating Labels
@@ -544,7 +551,7 @@ public class EndUserGUI extends JPanel implements ActionListener{
 		aboutIcon = new ImageIcon("IconImages/aboutIcon.png");
 		final Icon aboutIconBIG = new ImageIcon("IconImages/aboutIconBIG.png");
 		findProfIcon = new ImageIcon("IconImages/findProfIcon.png");
-		
+
 		emergencyIcon = new ImageIcon("IconImages/emergencyIcon.png");
 		final Icon emergencyIconBIG = new ImageIcon("IconImages/emergencyIconBIG.png");
 		emergency = new JButton();
@@ -591,7 +598,7 @@ public class EndUserGUI extends JPanel implements ActionListener{
 						doc.addAuthor("GetThere");
 						doc.addTitle("This is title");
 						doc.open();
-						
+
 						while(arrowCounter!=0) {
 							leftArrow.doClick();
 						}
@@ -763,32 +770,32 @@ public class EndUserGUI extends JPanel implements ActionListener{
 		nearestBluetower.setIcon(bluetowerIcon);
 		nearestBluetower.setBounds(1050, 632, 40, 40);
 		uiPanel.add(nearestBluetower);
-		
+
 		//Find Professor button
 		findProf = new JButton();
 		findProf.setToolTipText("Find Professor");
 		findProf.setIcon(findProfIcon);
-		
+
 		findProf.setBounds(1100, 632, 40, 40);
 		uiPanel.add(findProf);
-		
-				//About button
-				about = new JButton();
-				about.setToolTipText("About");
-				about.addMouseMotionListener(new MouseMotionListener() {
-					public void mouseDragged(MouseEvent arg0) {}
-					public void mouseMoved(MouseEvent arg0) {
-						ttManager.setEnabled(true);
-					}
-				});
-				about.setIcon(aboutIcon);
-				about.setBounds(1150, 632, 40, 40);
-				uiPanel.add(about);
-				about.addActionListener(new ActionListener(){
-					public void actionPerformed(ActionEvent e){
-						JOptionPane.showMessageDialog( 
-								frame,
-								"Worcester Polytechnic Institute\n"+ 
+
+		//About button
+		about = new JButton();
+		about.setToolTipText("About");
+		about.addMouseMotionListener(new MouseMotionListener() {
+			public void mouseDragged(MouseEvent arg0) {}
+			public void mouseMoved(MouseEvent arg0) {
+				ttManager.setEnabled(true);
+			}
+		});
+		about.setIcon(aboutIcon);
+		about.setBounds(1150, 632, 40, 40);
+		uiPanel.add(about);
+		about.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e){
+				JOptionPane.showMessageDialog( 
+						frame,
+						"Worcester Polytechnic Institute\n"+ 
 								"CS3733 2015 B-Term/n"+ 
 								"\n"+
 								"Team Ocho\n"+
@@ -806,14 +813,14 @@ public class EndUserGUI extends JPanel implements ActionListener{
 								"About",
 								JOptionPane.PLAIN_MESSAGE,
 								aboutIconBIG);
-					}
-				});
-				about.addMouseMotionListener(new MouseMotionListener() {
-					public void mouseDragged(MouseEvent arg0) {}
-					public void mouseMoved(MouseEvent arg0) {
-						ttManager.setEnabled(true);
-					}
-				});
+			}
+		});
+		about.addMouseMotionListener(new MouseMotionListener() {
+			public void mouseDragged(MouseEvent arg0) {}
+			public void mouseMoved(MouseEvent arg0) {
+				ttManager.setEnabled(true);
+			}
+		});
 		findProf.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
 				javax.swing.SwingUtilities.invokeLater(new Runnable() {
@@ -829,7 +836,7 @@ public class EndUserGUI extends JPanel implements ActionListener{
 					listPath = pathCalc.nearestSpecialNode(startNode, NodeType.BLUETOWER);
 					updatePath = true;
 				}
-				
+
 				if(listPath.size() > 0)
 					endNode = listPath.get(listPath.size() - 1);
 				mapsForPaths = new LinkedList<Map>();
@@ -1069,8 +1076,8 @@ public class EndUserGUI extends JPanel implements ActionListener{
 			addMouseListener(this);
 
 			if(scrollMapPanel != null){
-			scrollMapPanel.getViewport().addMouseMotionListener(scrollListener);
-			scrollMapPanel.getViewport().addMouseListener(scrollListener);
+				scrollMapPanel.getViewport().addMouseMotionListener(scrollListener);
+				scrollMapPanel.getViewport().addMouseListener(scrollListener);
 			}
 			addMouseListener(new MouseAdapter(){
 
@@ -1079,7 +1086,7 @@ public class EndUserGUI extends JPanel implements ActionListener{
 
 					int x = evt.getX();
 					int y = evt.getY();
-					
+
 					if (evt.getClickCount() == 2) {
 						for(int i = 0; i < maps.size(); i++){
 							if(maps.get(i).getEasyLinks().size() > 0){
@@ -1120,41 +1127,41 @@ public class EndUserGUI extends JPanel implements ActionListener{
 					return result;
 				}});
 			//addMouseMotionListener(this);
-		
+
 			addMouseWheelListener(new MouseAdapter() {
 
-                
-                public void mouseWheelMoved(MouseWheelEvent e) {
-                	if(scrollMapPanel.contains(e.getX(), e.getY())){
-                    double delta = 0.03f * e.getWheelRotation();
-                    System.out.println(delta);
-                    System.out.println(mapPanel.scale);
-                    if((mapPanel.scale > 0.5 && mapPanel.scale < 1.5) || (mapPanel.scale < 0.5 && delta > 0) || (mapPanel.scale > 1.5 && delta < 0)){
-                    mapPanel.scale += delta;
-                    mapPanel.revalidate();
-                    mapPanel.repaint();
-                    }
-                	}
-                }
 
-            });
-			
-        }
+				public void mouseWheelMoved(MouseWheelEvent e) {
+					if(scrollMapPanel.contains(e.getX(), e.getY())){
+						double delta = 0.03f * e.getWheelRotation();
+						System.out.println(delta);
+						System.out.println(mapPanel.scale);
+						if((mapPanel.scale > 0.5 && mapPanel.scale < 1.5) || (mapPanel.scale < 0.5 && delta > 0) || (mapPanel.scale > 1.5 && delta < 0)){
+							mapPanel.scale += delta;
+							mapPanel.revalidate();
+							mapPanel.repaint();
+						}
+					}
+				}
+
+			});
+
+		}
 
 		public EndUserGUI getGui(){
 			return this.gui;
 		}
-		
-		
 
-		
-		
-		
+
+
+
+
+
 
 		@Override
 		public void paintComponent(Graphics g) {
 			GeneralPath path = null;
-			
+
 			if(path == null && updatePath == true && listPath.size() > 0){
 				removeAll();
 				int k;
@@ -1214,39 +1221,50 @@ public class EndUserGUI extends JPanel implements ActionListener{
 			int x = e.getX();
 			int y = e.getY();
 
-			if(ttManager == null){
-				ttManager = ToolTipManager.sharedInstance();
-			}
+//			if(ttManager == null){
+//				ttManager = ToolTipManager.sharedInstance();
+//			}
 
 			if(nearHistoricalNode(x, y) != null){
-				// + nearHistoricalNode(x, y).getName() + 
-				URL url = getClass().getResource("/historicalimages/" + nearHistoricalNode(x, y).getName() + ".jpg");
-				if(url == null){
-					url = getClass().getResource("/historicalimages/default.jpg");
-				}
-				String tt = "<html><body><img src='" + url + "'></body></html>";
-				System.out.println(tt);
-				setToolTipText(tt);
-				ttManager.setEnabled(true);
+				Point2D before1 = new Point(), after1 = new Point();
+				before1.setLocation(nearHistoricalNode(x, y).getX(), nearHistoricalNode(x, y).getY());
+				mapPanel.getAT().transform(before1, after1);
+				specialToolTips.setIcon(nearHistoricalNode(x, y).getHistoricalImage());
+				specialToolTips.setBounds((int) after1.getX(), (int) after1.getY(), 100, 50);
+				specialToolTips.setVisible(true);
+				//				// + nearHistoricalNode(x, y).getName() + 
+				//				URL url = getClass().getResource("/historicalimages/" + nearHistoricalNode(x, y).getName() + ".jpg");
+				//				if(url == null){
+				//					url = getClass().getResource("/historicalimages/default.jpg");
+				//				}
+				//				String tt = "<html><body><img src='" + url + "'></body></html>";
+				//				System.out.println(tt);
+				//				setToolTipText(tt);
+				//				ttManager.setEnabled(true);
+			} else if(insideEasyLink(x, y) != null){
+				specialToolTips.setIcon(insideEasyLink(x, y).getStreetViewImage());
+				specialToolTips.setBounds(x, y, 100, 50);
+				specialToolTips.setVisible(true);
 			} else{
-				if(ttManager.isEnabled()){
-					ttManager.setEnabled(false);
-				}
+//				if(ttManager.isEnabled()){
+//					ttManager.setEnabled(false);
+//				}
+				specialToolTips.setVisible(false);
 			}
 		}
-		
+
 		@Override
 		public void mousePressed(MouseEvent e) {
-			
+
 			int x = e.getX();
 			int y = e.getY();
 			if(mapPanel.contains(x, y)){
 				uiPanel.setCursor(new Cursor (Cursor.HAND_CURSOR));
 				scrollListener.mousePressed(e);
 			}
-			
+
 		}
-		
+
 		@Override
 		public void mouseReleased(MouseEvent e){
 			uiPanel.setCursor(new Cursor (Cursor.DEFAULT_CURSOR));
@@ -1261,23 +1279,23 @@ public class EndUserGUI extends JPanel implements ActionListener{
 		@Override
 		public void mouseClicked(MouseEvent e) {
 			// TODO Auto-generated method stub
-			
+
 		}
 
 		@Override
 		public void mouseEntered(MouseEvent e) {
 			// TODO Auto-generated method stub
-			
+
 		}
 
 		@Override
 		public void mouseExited(MouseEvent e) {
 			// TODO Auto-generated method stub
-			
+
 		}
 
-		
-}
+
+	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
@@ -1302,12 +1320,25 @@ public class EndUserGUI extends JPanel implements ActionListener{
 				for(int i = 0; i < historicalNodes.size(); i++){
 					before1.setLocation(historicalNodes.get(i).getX(), historicalNodes.get(i).getY());
 					mapPanel.getAT().transform(before1, after1);
-					if(Math.abs(y - after1.getY()) < 6){
+					if(Math.abs(y - after1.getY()) < 10){
 						System.out.println("passed first");
-						if(Math.abs(x - after1.getX()) < 6){
+						if(Math.abs(x - after1.getX()) < 10){
 							System.out.println("passed second");
 							return historicalNodes.get(i);
 						}
+					}
+				}
+			}
+		}
+		return null;
+	}
+
+	public EasyLink insideEasyLink(int x, int y){
+		for(int i = 0; i < maps.size(); i++){
+			if(maps.get(i).getEasyLinks().size() > 0){
+				for(int j = 0; j < maps.get(i).getEasyLinks().size(); j++){
+					if(maps.get(i).getEasyLinks().get(j).getPoly().contains(x, y)){
+						return maps.get(i).getEasyLinks().get(j);
 					}
 				}
 			}
