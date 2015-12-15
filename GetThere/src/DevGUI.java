@@ -75,6 +75,7 @@ public class DevGUI extends JPanel{
 	boolean editNodes = false;
 	boolean alignNodesX = false;
 	boolean alignNodesY = false;
+	boolean dragMoveMode = true;
 	int indexOfCurrentMap;
 	//private LinkedList<String> currentMapList;
 	private static Serialize serialize;
@@ -164,7 +165,7 @@ public class DevGUI extends JPanel{
 		nodeEditor = new NodeEditor(this);
 
 		mapPanel = new JPanel();
-		mapPanel.setBounds(5, 5, 750, 650);
+		mapPanel.setBounds(5, 5, 750, 630);
 		uiPanel.add(mapPanel);
 		MouseEvents m1 = new MouseEvents();
 		mapPanel.add(m1);
@@ -179,7 +180,7 @@ public class DevGUI extends JPanel{
 		//Construct Combo boxes to select start point
 
 
-		final JComboBox<Map> dropDown = new JComboBox<Map>(maps.toArray(new Map[maps.size()]));
+		final JComboBox<Map> dropDown = new JComboBox<Map>();
 		
 		ArrayList<String> sortedMaps = new ArrayList<String>();
 		for(int i = 0; i < maps.size(); i++){
@@ -430,7 +431,28 @@ public class DevGUI extends JPanel{
 						System.out.println("JOptionPane closed");
 					} 
 				}
-			});     
+			});   
+			
+			final JLabel dragMoveON = new JLabel("ON");
+			dragMoveON.setBounds(440, 638, 80, 25);
+			uiPanel.add(dragMoveON);
+			
+			final JLabel dragMoveOFF = new JLabel("OFF");
+			dragMoveOFF.setBounds(440, 638, 80, 25);
+			uiPanel.add(dragMoveOFF);
+			dragMoveOFF.setVisible(!dragMoveMode);
+			
+			JButton dragMoveToggle = new JButton("Drag-to-Move");
+			dragMoveToggle.setBounds(280, 640, 130, 20);
+			uiPanel.add(dragMoveToggle);
+			dragMoveToggle.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e){
+					System.out.println("Toggle Drag-to-Move Pushed");
+					dragMoveMode = !dragMoveMode;
+					dragMoveOFF.setVisible(!dragMoveMode);
+					dragMoveON.setVisible(dragMoveMode);
+				}
+			});
 		}    
 
 		uiPanel.setVisible(true);
@@ -902,15 +924,17 @@ public class DevGUI extends JPanel{
 		}
 
 		public void mouseDragged(MouseEvent evt) {
-			repaint();
-			revalidate();
+			if(dragMoveMode){
+				repaint();
+				revalidate();
 
-			int x = evt.getX();
-			int y = evt.getY();
+				int x = evt.getX();
+				int y = evt.getY();
 
-			if(nodeIndex >= 0) {
-				nodesOnCurrentMap.get(nodeIndex).setX(x);
-				nodesOnCurrentMap.get(nodeIndex).setY(y);
+				if(nodeIndex >= 0) {
+					nodesOnCurrentMap.get(nodeIndex).setX(x);
+					nodesOnCurrentMap.get(nodeIndex).setY(y);
+				}
 			}
 		}
 	}
