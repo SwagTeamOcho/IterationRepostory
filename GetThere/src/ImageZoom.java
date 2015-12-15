@@ -2,11 +2,11 @@
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseWheelEvent;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
 import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.event.ChangeEvent;
@@ -23,6 +23,7 @@ class ImageZoom
 	{
 
 		imagePanel = ip;
+		
 	}
 	public JSpinner getZoomingSpinner(){
 		SpinnerNumberModel model = new SpinnerNumberModel(1.0, 0.8, 1.4, .01);
