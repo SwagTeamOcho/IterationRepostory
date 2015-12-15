@@ -65,7 +65,7 @@ public class EndUserGUI extends JPanel implements ActionListener{
 	private JFrame frame;		//Creates the main frame for the GUI
 	private JPanel uiPanel;		//Panel to hold the interface buttons
 	private ImagePanel mapPanel;	//Panel to hold the map
-	private ImageZoom zoom;
+	//private ImageZoom zoom;
 	//Represents the map to be chosen
 	//private Image pathImage;	//Image that draws the path on the map
 
@@ -283,10 +283,9 @@ public class EndUserGUI extends JPanel implements ActionListener{
 
 		mapPanel = new ImagePanel(this);
 		mapPanel.add(graph);
-		zoom = new ImageZoom(mapPanel);
+		//zoom = new ImageZoom(mapPanel);
 		scrollMapPanel = new JScrollPane(mapPanel);
 		scrollMapPanel.setBounds(5, 20+7, 750, 620);
-		zoom = new ImageZoom(mapPanel);
 		scrollMapPanel.setBackground(burgandy);
 
 		//uiPanel.add(zoom.getUIPanel());
@@ -628,9 +627,9 @@ public class EndUserGUI extends JPanel implements ActionListener{
 				}
 				mapPanel.setImage(currentlyShownMap.getImage());
 				mapPanel.add(graph);
-				zoom = new ImageZoom(mapPanel);
-				JLabel scaleLabel = new JLabel("Scale");
-				scaleLabel.setBounds(680, 630+15, 50, 30);
+				//zoom = new ImageZoom(mapPanel);
+				//JLabel scaleLabel = new JLabel("Scale");
+				//scaleLabel.setBounds(680, 630+15, 50, 30);
 				//uiPanel.add(scaleLabel);
 				//uiPanel.add(zoom.getZoomingSpinner());
 				//uiPanel.add(zoom.getZoomInButton());
@@ -703,13 +702,13 @@ public class EndUserGUI extends JPanel implements ActionListener{
 				}
 				mapPanel.setImage(currentlyShownMap.getImage());
 				mapPanel.add(graph);
-				zoom = new ImageZoom(mapPanel);
-				JLabel scaleLabel = new JLabel("Scale");
-				scaleLabel.setBounds(680, 630, 50, 30);
-				uiPanel.add(scaleLabel);
-				uiPanel.add(zoom.getZoomingSpinner());
-				uiPanel.add(zoom.getZoomInButton());
-				uiPanel.add(zoom.getZoomOutButton());
+				//zoom = new ImageZoom(mapPanel);
+				//JLabel scaleLabel = new JLabel("Scale");
+				//scaleLabel.setBounds(680, 630, 50, 30);
+				//uiPanel.add(scaleLabel);
+				//uiPanel.add(zoom.getZoomingSpinner());
+				//uiPanel.add(zoom.getZoomInButton());
+				//uiPanel.add(zoom.getZoomOutButton());
 				uiPanel.add(scrollMapPanel);
 				mapPanel.setPath(null);
 			}
@@ -1276,6 +1275,8 @@ public class EndUserGUI extends JPanel implements ActionListener{
 		uiPanel.setVisible(true);
 		frame.setVisible(true);
 		clear();
+		frame.revalidate();
+		frame.repaint();
 	}
 
 
