@@ -281,6 +281,7 @@ public class NodeEditor{
 
 		backButton.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e) {
+				i2 = false;
 				xCord = node.getX();
 				yCord = node.getY();
 				uiPanel.remove(xText);
@@ -299,6 +300,7 @@ public class NodeEditor{
 				typeBox.setVisible(true);
 				cancelButton.setVisible(true);
 				saveButton.setVisible(true);
+				alignButton.setVisible(true);
 				uiPanel.remove(xAlignButton);
 				uiPanel.remove(yAlignButton);
 				uiPanel.remove(backButton);
