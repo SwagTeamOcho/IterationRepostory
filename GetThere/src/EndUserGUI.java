@@ -104,7 +104,7 @@ public class EndUserGUI extends JPanel implements ActionListener{
 	private String buildingSelectedSTART;	//track which building is selected to start in.
 	private String buildingSelectedEND;		//track which building is selected to end in.
 	public ImageIcon mapIcon;
-	
+
 	//private Node hovered;
 	private JTextPane mapNumber;
 	private Integer totalMaps = 1;
@@ -112,7 +112,7 @@ public class EndUserGUI extends JPanel implements ActionListener{
 
 	private Map currentlyShownMap;
 
-	
+
 	private JButton findProf;
 	private Icon findProfIcon;
 	private JButton emergency;
@@ -140,16 +140,16 @@ public class EndUserGUI extends JPanel implements ActionListener{
 	private ToolTipManager ttManager;
 
 	private JScrollPane scrollMapPanel;
-	
+
 	private Color burgandy = new Color(74, 1, 1);
 	private Color beige = new Color(230, 224, 200);
 	int xMouse;
 	int yMouse;
 
-	
-	
+
+
 	private ImageIcon currentAboutPage;
-	
+
 	HandScrollListener scrollListener;
 
 	private LinkedList<Node> startTransitionNodes = new LinkedList<Node>();
@@ -160,7 +160,7 @@ public class EndUserGUI extends JPanel implements ActionListener{
 	@SuppressWarnings("unchecked")
 	public EndUserGUI(){
 		JSplash loadingScreen = new JSplash(LoadingScreen.class.getResource("loadingScreen.png"),
-								true, true, false, null, null, beige, burgandy);
+				true, true, false, null, null, beige, burgandy);
 		Serialize serialize = new Serialize();
 		Object tempMaps = serialize.deSerialize("MapList");
 		if(tempMaps instanceof LinkedList<?>){
@@ -269,7 +269,7 @@ public class EndUserGUI extends JPanel implements ActionListener{
 		frame.setResizable(false);
 		frame.setVisible(true);
 
-		
+
 		//Panel Operations
 		uiPanel = new JPanel();
 		frame.getContentPane().add(uiPanel);
@@ -298,7 +298,7 @@ public class EndUserGUI extends JPanel implements ActionListener{
 			}
 		});
 		uiPanel.add(scrollMapPanel);
-		
+
 		//Customizing the Title Bar
 		JPanel titleBar = new JPanel();
 		titleBar.setLayout(null);
@@ -311,7 +311,7 @@ public class EndUserGUI extends JPanel implements ActionListener{
 			@Override
 			public void mousePressed(MouseEvent e) {
 				xMouse = e.getX();
-            	yMouse = e.getY();
+				yMouse = e.getY();
 			}
 
 			@Override
@@ -322,92 +322,92 @@ public class EndUserGUI extends JPanel implements ActionListener{
 
 			@Override
 			public void mouseExited(MouseEvent e) {}
-			
+
 		});
 		titleBar.addMouseMotionListener(new MouseMotionListener() {
-            public void mouseDragged(MouseEvent me) {
-            	int x = me.getXOnScreen();
-            	int y = me.getYOnScreen();
-            	frame.setLocation(x-xMouse, y-yMouse);
-            	//System.out.println(x + y);
-            }
+			public void mouseDragged(MouseEvent me) {
+				int x = me.getXOnScreen();
+				int y = me.getYOnScreen();
+				frame.setLocation(x-xMouse, y-yMouse);
+				//System.out.println(x + y);
+			}
 
 			public void mouseMoved(MouseEvent e) {
-				
+
 			}
-			
+
 		});
 		titleBar.setBackground(beige);
 		uiPanel.add(titleBar);
-		
+
 		//About Button Operation
 		JFrame aboutFrame = new JFrame();
 		aboutFrame.setBounds(100, 70, 920, 650);
 		aboutFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		
+
 		ImageIcon aboutPg1 = new ImageIcon("IconImages/aboutPg1.jpg");
 		ImageIcon aboutPg2 = new ImageIcon("IconImages/aboutPg2.jpg");
 		ImageIcon[] aboutPages = {aboutPg1, aboutPg2};
-		
+
 		currentAboutPage = aboutPages[0];
 		JPanel aboutPanel = new JPanel();
 		aboutPanel.setBackground(beige);
 		JLabel aboutLabel = new JLabel();
 		aboutPanel.add(aboutLabel);
-    	aboutLabel.setIcon(currentAboutPage);
+		aboutLabel.setIcon(currentAboutPage);
 		aboutLabel.setBounds(50, 50, 900, 620);
 		aboutPanel.addMouseListener(new MouseListener() {
-	        public void mouseClicked(MouseEvent e) {
-	        	e.getClickCount();
-	            if(e.getClickCount() ==1){
-	            	
-	            	currentAboutPage = aboutPages[0];
-	            	//System.out.print(e.getClickCount());
-	            	aboutLabel.setIcon(currentAboutPage);
-	            	
-	            }else if(e.getClickCount() == 2){
-	            	currentAboutPage = aboutPages[1];
-	            	aboutLabel.setIcon(currentAboutPage);
-	            	//System.out.print(e.getClickCount());
-	            }
-	        }
+			public void mouseClicked(MouseEvent e) {
+				e.getClickCount();
+				if(e.getClickCount() ==1){
+
+					currentAboutPage = aboutPages[0];
+					//System.out.print(e.getClickCount());
+					aboutLabel.setIcon(currentAboutPage);
+
+				}else if(e.getClickCount() == 2){
+					currentAboutPage = aboutPages[1];
+					aboutLabel.setIcon(currentAboutPage);
+					//System.out.print(e.getClickCount());
+				}
+			}
 
 			@Override
 			public void mousePressed(MouseEvent e) {
 				// TODO Auto-generated method stub
-				
+
 			}
 
 			@Override
 			public void mouseReleased(MouseEvent e) {
 				// TODO Auto-generated method stub
-				
+
 			}
 
 			@Override
 			public void mouseEntered(MouseEvent e) {
 				// TODO Auto-generated method stub
-				
+
 			}
 
 			@Override
 			public void mouseExited(MouseEvent e) {
 				// TODO Auto-generated method stub
-				
-			}
-	    }); 
 
-		
+			}
+		}); 
+
+
 		JLabel about = new JLabel("About");
 		about.setFont(new Font("Calisto MT Bold Italic", Font.BOLD, 14));
 		about.setForeground(burgandy);
 		about.setBounds(1140, 0, 50, 24);
 		about.setCursor(new Cursor(Cursor.HAND_CURSOR));
 		about.addMouseListener(new MouseListener() {
-	        public void mouseClicked(MouseEvent e) {
+			public void mouseClicked(MouseEvent e) {
 				aboutFrame.setVisible(true);
 				aboutFrame.getContentPane().add(aboutPanel);
-	        }
+			}
 
 			@Override
 			public void mousePressed(MouseEvent e) {				
@@ -424,9 +424,9 @@ public class EndUserGUI extends JPanel implements ActionListener{
 			@Override
 			public void mouseExited(MouseEvent e) {				
 			}
-	    }); 
+		}); 
 		titleBar.add(about);
-		
+
 		JLabel closeButt = new JLabel();
 		//closeButt.setForeground(beige);
 		//closeButt.setFont(new Font("Helvetica Neue", Font.BOLD, 14));
@@ -435,75 +435,75 @@ public class EndUserGUI extends JPanel implements ActionListener{
 		closeButt.setBounds(7, 0, 24, 24);
 		closeButt.setCursor(new Cursor(Cursor.HAND_CURSOR));
 		closeButt.addMouseListener(new MouseListener() {
-	        public void mouseClicked(MouseEvent e) {
-	            // TODO Auto-generated method stub
-	        	System.exit(0);;
-	        }
+			public void mouseClicked(MouseEvent e) {
+				// TODO Auto-generated method stub
+				System.exit(0);;
+			}
 
 			@Override
 			public void mousePressed(MouseEvent e) {
 				// TODO Auto-generated method stub
-				
+
 			}
 
 			@Override
 			public void mouseReleased(MouseEvent e) {
 				// TODO Auto-generated method stub
-				
+
 			}
 
 			@Override
 			public void mouseEntered(MouseEvent e) {
 				// TODO Auto-generated method stub
-				
+
 			}
 
 			@Override
 			public void mouseExited(MouseEvent e) {
 				// TODO Auto-generated method stub
-				
+
 			}
-	    }); 
+		}); 
 		JLabel minButt = new JLabel();
 		ImageIcon minimize = new ImageIcon("IconImages/min.png");
 		minButt.setIcon(minimize);
 		minButt.setBounds(25, 5, 15, 15);
 		minButt.setCursor(new Cursor(Cursor.HAND_CURSOR));
 		minButt.addMouseListener(new MouseListener() {
-	        public void mouseClicked(MouseEvent e) {
-	            // TODO Auto-generated method stub
-	        	frame.setState(frame.ICONIFIED);
-	        }
+			public void mouseClicked(MouseEvent e) {
+				// TODO Auto-generated method stub
+				frame.setState(frame.ICONIFIED);
+			}
 
 			@Override
 			public void mousePressed(MouseEvent e) {
 				// TODO Auto-generated method stub
-				
+
 			}
 
 			@Override
 			public void mouseReleased(MouseEvent e) {
 				// TODO Auto-generated method stub
-				
+
 			}
 
 			@Override
 			public void mouseEntered(MouseEvent e) {
 				// TODO Auto-generated method stub
-				
+
 			}
 
 			@Override
 			public void mouseExited(MouseEvent e) {
 				// TODO Auto-generated method stub
-				
+
 			}
-	    }); 
-		
+		}); 
+
 		titleBar.add(minButt);
 		titleBar.add(closeButt);
-		
-//		scrollMapPanel.setBounds(5, 20+15, 750, 620);
+
+		//		scrollMapPanel.setBounds(5, 20+15, 750, 620);
 		scrollMapPanel.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);
 		scrollMapPanel.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 
@@ -796,8 +796,8 @@ public class EndUserGUI extends JPanel implements ActionListener{
 		scrollDire.setBounds(835, 210+15, 300, 420);
 		scrollDire.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 		uiPanel.add(scrollDire);
-		
-		
+
+
 		findProfIcon = new ImageIcon("IconImages/findProfIcon.png");
 		emergencyIcon = new ImageIcon("IconImages/emergencyIcon.png");
 		final Icon emergencyIconBIG = new ImageIcon("IconImages/emergencyIconBIG.png");
@@ -1031,7 +1031,7 @@ public class EndUserGUI extends JPanel implements ActionListener{
 		//uiPanel.add(findProf);
 
 
-		
+
 		findProf.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
 				javax.swing.SwingUtilities.invokeLater(new Runnable() {
