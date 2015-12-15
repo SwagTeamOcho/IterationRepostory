@@ -278,7 +278,7 @@ public class EndUserGUI extends JPanel implements ActionListener{
 		uiPanel.setBackground(beige);
 		tutView = new JLabel("",JLabel.CENTER);    
 		tutView.setLocation(0, 0);
-		tutView.setSize(1194,672);
+		tutView.setSize(1194,702);
 		uiPanel.add(tutView);
 
 		mapPanel = new ImagePanel(this);
