@@ -263,9 +263,9 @@ public class DevGUI extends JPanel{
 			uiPanel.add(btnMakeNeighbors);
 			btnMakeNeighbors.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e){
-					System.out.println("Make Neighbors Pushed");
+					System.out.println("Make Neighbors Pushed");				
 					if(nodeEditor.i)
-						nodeEditor.clear();					
+						nodeEditor.clear();
 					createNodes = false;
 					createSpecial = false;
 					createEdges = true;
@@ -587,22 +587,20 @@ public class DevGUI extends JPanel{
 					}
 					if(editNodes){
 						if(nodeIndex >= 0){
+							if(nodeEditor.i)
+								nodeEditor.clear();	
 							currentNode = nodesOnCurrentMap.get(nodeIndex);
 							nodeEditor.initialize(currentNode);
 						}
 					}
 					if(alignNodesX){
 						if(nodeIndex >= 0){
-							currentNode.setX(nodesOnCurrentMap.get(nodeIndex).getX());
-							alignNodesX = false;
-							editNodes = true;
+							nodesOnCurrentMap.get(nodeIndex).setX(currentNode.getX());
 						}
 					}
 					if(alignNodesY){
 						if(nodeIndex >= 0){
-							currentNode.setY(nodesOnCurrentMap.get(nodeIndex).getY());
-							alignNodesY = false;
-							editNodes = true;
+							nodesOnCurrentMap.get(nodeIndex).setY(currentNode.getY());
 						}
 					}
 					if (evt.getClickCount() >= 2 && (createNodes || createSpecial)) {
