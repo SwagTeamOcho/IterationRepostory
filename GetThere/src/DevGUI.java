@@ -264,6 +264,8 @@ public class DevGUI extends JPanel{
 			btnMakeNeighbors.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e){
 					System.out.println("Make Neighbors Pushed");				
+					if(nodeEditor.i)
+						nodeEditor.clear();
 					createNodes = false;
 					createSpecial = false;
 					createEdges = true;
