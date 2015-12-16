@@ -349,18 +349,18 @@ public class EndUserGUI extends JPanel implements ActionListener{
 		uiPanel.add(titleBar);
 		
 		//About Button Operation
-		JFrame aboutFrame = new JFrame();
+		final JFrame aboutFrame = new JFrame();
 		aboutFrame.setBounds(100, 70, 920, 650);
 		aboutFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		
 		ImageIcon aboutPg1 = new ImageIcon("IconImages/aboutPg1.jpg");
 		ImageIcon aboutPg2 = new ImageIcon("IconImages/aboutPg2.jpg");
-		ImageIcon[] aboutPages = {aboutPg1, aboutPg2};
+		final ImageIcon[] aboutPages = {aboutPg1, aboutPg2};
 		
 		currentAboutPage = aboutPages[0];
-		JPanel aboutPanel = new JPanel();
+		final JPanel aboutPanel = new JPanel();
 		aboutPanel.setBackground(beige);
-		JLabel aboutLabel = new JLabel();
+		final JLabel aboutLabel = new JLabel();
 		aboutPanel.add(aboutLabel);
     	aboutLabel.setIcon(currentAboutPage);
 		aboutLabel.setBounds(50, 50, 900, 620);

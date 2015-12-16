@@ -49,6 +49,7 @@ class ImagePanel extends JPanel {
 
 		int w = getWidth();
 		int h = getHeight();
+		
 
 		if(image != null){
 			int imageWidth = image.getWidth();
@@ -59,6 +60,12 @@ class ImagePanel extends JPanel {
 			at = AffineTransform.getTranslateInstance(x,y);
 			at.scale(scale, scale);
 			g2.drawRenderedImage(image, at);
+			
+			g2.setColor(Color.BLUE);
+			g2.setStroke(new BasicStroke(2));
+			for(int i = 0; i < gui.getCurrentlyShownMap().getEasyLinks().size(); i ++){
+				g2.draw(at.createTransformedShape(gui.getCurrentlyShownMap().getEasyLinks().get(i).getPoly()));
+			}
 
 			if(gui.getHistoricalNodes() != null){
 				LinkedList<Node> histNodes = gui.getHistoricalNodes();
@@ -124,12 +131,7 @@ class ImagePanel extends JPanel {
 					}
 				}
 
-			g2.setColor(Color.BLUE);
-			//g2.setTransform(at);
-			g2.setStroke(new BasicStroke(2));
-			for(int i = 0; i < gui.getCurrentlyShownMap().getEasyLinks().size(); i ++){
-				g2.draw(at.createTransformedShape(gui.getCurrentlyShownMap().getEasyLinks().get(i).getPoly()));
-			}
+			
 			}
 			if(startNode != null && gui.getCurrentlyShownMap().getMapName().equals(startNode.getMapName())){
 				Point2D before1 = new Point(), after1 = new Point(), before2 = new Point(), after2 = new Point();
