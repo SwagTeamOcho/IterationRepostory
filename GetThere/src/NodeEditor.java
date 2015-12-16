@@ -29,7 +29,9 @@ public class NodeEditor{
 	private JButton cancelButton;
 	private JButton backButton;
 	private JButton xAlignButton;
+	private JButton xDoneButton;
 	private JButton yAlignButton;
+	private JButton yDoneButton;
 	boolean i = false;
 	boolean i2 = false;
 
@@ -119,7 +121,7 @@ public class NodeEditor{
 		typeBox.setSelectedIndex(typeIndex);
 		typeBox.setBounds(762, 411, 132, 25);
 
-		alignButton = new JButton("Align Node");
+		alignButton = new JButton("Align Nodes");
 		alignButton.setBounds(762, 486, 132, 29);
 		uiPanel.add(alignButton);
 
@@ -131,9 +133,11 @@ public class NodeEditor{
 		saveButton.setBounds(762, 546, 132, 29);
 		uiPanel.add(saveButton);
 
-		xAlignButton = new JButton("X Position");
+		xAlignButton = new JButton("X Positions");
+		xDoneButton = new JButton("Done");
 
-		yAlignButton = new JButton("Y Position");
+		yAlignButton = new JButton("Y Positions");
+		yDoneButton = new JButton("Done");
 
 		backButton = new  JButton("Back");
 
@@ -164,9 +168,17 @@ public class NodeEditor{
 				xAlignButton.setBounds(762, 301, 132, 29);
 				uiPanel.add(xAlignButton);
 
-				yAlignButton.setBounds(762, 346, 132, 29);
+				xDoneButton.setBounds(787, 336, 80, 25);
+				uiPanel.add(xDoneButton);
+				xDoneButton.setVisible(false);
+				
+				yAlignButton.setBounds(762, 371, 132, 29);
 				uiPanel.add(yAlignButton);
-
+				
+				yDoneButton.setBounds(787, 406, 80, 25);
+				uiPanel.add(yDoneButton);
+				yDoneButton.setVisible(false);
+				
 				backButton.setBounds(762, 516, 132, 29);
 				uiPanel.add(backButton);
 				
@@ -276,20 +288,40 @@ public class NodeEditor{
 				devGui.setCurrentNode(node);
 				devGui.editNodes = false;
 				devGui.alignNodesX = true;
+				xDoneButton.setVisible(true);
+				yDoneButton.setVisible(false);
 			}
 		});
+		
+		xDoneButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				devGui.alignNodesX = false;
+				xDoneButton.setVisible(false);
+		}
+	});
 
 		yAlignButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				devGui.setCurrentNode(node);
 				devGui.editNodes = false;
 				devGui.alignNodesY = true;
+				yDoneButton.setVisible(true);
+				xDoneButton.setVisible(false);
+			}
+		});
+		
+		yDoneButton.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					devGui.alignNodesY = false;
+					yDoneButton.setVisible(false);
 			}
 		});
 
 		backButton.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e) {
 				i2 = false;
+				devGui.alignNodesX = false;
+				devGui.alignNodesY = false;
 				xCord = node.getX();
 				yCord = node.getY();
 				uiPanel.remove(xText);
@@ -310,7 +342,9 @@ public class NodeEditor{
 				saveButton.setVisible(true);
 				alignButton.setVisible(true);
 				uiPanel.remove(xAlignButton);
+				uiPanel.remove(xDoneButton);
 				uiPanel.remove(yAlignButton);
+				uiPanel.remove(yDoneButton);
 				uiPanel.remove(backButton);
 				uiPanel.repaint();
 				uiPanel.revalidate();
@@ -323,6 +357,7 @@ public class NodeEditor{
 			}
 		});
 	}
+	
 	public void clear(){
 		System.out.println("Node Editor cleared");
 		uiPanel.remove(nameLabel);
@@ -339,7 +374,9 @@ public class NodeEditor{
 		if(i2){
 			uiPanel.remove(backButton);
 			uiPanel.remove(xAlignButton);
+			uiPanel.remove(xDoneButton);
 			uiPanel.remove(yAlignButton);
+			uiPanel.remove(yDoneButton);
 		}
 		uiPanel.repaint();
 		uiPanel.revalidate();

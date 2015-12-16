@@ -593,16 +593,12 @@ public class DevGUI extends JPanel{
 					}
 					if(alignNodesX){
 						if(nodeIndex >= 0){
-							currentNode.setX(nodesOnCurrentMap.get(nodeIndex).getX());
-							alignNodesX = false;
-							editNodes = true;
+							nodesOnCurrentMap.get(nodeIndex).setX(currentNode.getX());
 						}
 					}
 					if(alignNodesY){
 						if(nodeIndex >= 0){
-							currentNode.setY(nodesOnCurrentMap.get(nodeIndex).getY());
-							alignNodesY = false;
-							editNodes = true;
+							nodesOnCurrentMap.get(nodeIndex).setY(currentNode.getY());
 						}
 					}
 					if (evt.getClickCount() >= 2 && (createNodes || createSpecial)) {
