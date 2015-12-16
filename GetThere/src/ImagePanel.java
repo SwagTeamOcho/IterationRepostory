@@ -99,8 +99,6 @@ class ImagePanel extends JPanel {
 				g2.draw(path);
 				g2.setColor(Color.BLUE);
 				g2.draw(path);
-				System.out.println("Start " + gui.getStartTransitionNodes().size());
-				System.out.println("End " + gui.getEndTransitionNodes().size());
 				if(gui.getStartTransitionNodes().size() > 0){
 					for(int i =0; i < gui.getStartTransitionNodes().size(); i++){
 						if(gui.getCurrentlyShownMap().getNodes().contains(gui.getStartTransitionNodes().get(i))){
