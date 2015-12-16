@@ -25,7 +25,7 @@ public class SelectImage extends JFrame {
 		return instance;
 	}
 
-	public void getImage(Node node) {
+	public void getImage(final Node node) {
 
 		setSize(500, 75);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -78,7 +78,7 @@ public class SelectImage extends JFrame {
 
 	}
 	
-	public void getImage(EasyLink easyLink) {
+	public void getImage(final EasyLink easyLink) {
 
 		setSize(500, 75);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);

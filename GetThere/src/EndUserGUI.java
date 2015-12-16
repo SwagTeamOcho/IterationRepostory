@@ -247,6 +247,9 @@ public class EndUserGUI extends JPanel implements ActionListener{
 		mapPanel.setStartNode(null);
 		mapPanel.setEndNode(null);
 		mapPanel.setPath(null);
+		leftArrow.setEnabled(false);
+		rightArrow.setEnabled(false);
+		email.setEnabled(false);
 		startTransitionNodes = new LinkedList<Node>();
 		endTransitionNodes = new LinkedList<Node>();
 
@@ -1151,6 +1154,7 @@ public class EndUserGUI extends JPanel implements ActionListener{
 			public void actionPerformed(ActionEvent e) 
 			{
 				int i;
+				email.setEnabled(true);
 				updatePath = true;
 				uiPanel.setVisible(true);
 				frame.setVisible(true);
@@ -1572,13 +1576,10 @@ public class EndUserGUI extends JPanel implements ActionListener{
 		@Override
 		public void mousePressed(MouseEvent e) {
 			if(!mousePressedFlag){
-				System.out.println("Lol what?");
-				uiPanel.setCursor(new Cursor (Cursor.HAND_CURSOR));
-				int x = e.getX();
-				int y = e.getY();
-				System.out.println(x);
-				System.out.println(y);
-				mousePressedFlag = true;
+			uiPanel.setCursor(new Cursor (Cursor.HAND_CURSOR));
+			int x = e.getX();
+			int y = e.getY();
+			mousePressedFlag = true;
 			} else{
 				mousePressedFlag = false;
 			}
