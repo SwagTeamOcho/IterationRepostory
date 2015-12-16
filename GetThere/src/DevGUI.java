@@ -564,13 +564,14 @@ public class DevGUI extends JPanel{
 										nodesOnCurrentMap.get(nodesOnCurrentMap.size() - 1).setMapName(currentMapName);
 										break;
 									case "Historical":
-										Node tempNode;
-										nodesOnCurrentMap.add(tempNode = new Node(x, y, nodeName, NodeType.HISTORICAL));
+										Node tempNode = new Node(x, y, nodeName, NodeType.HISTORICAL);
+										nodesOnCurrentMap.add(tempNode);
 										loadImage = SelectImage.getSelectImage();
 										loadImage.getImage(tempNode);
 										loadImage.setVisible(true);
 										loadImage.setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 										nodesOnCurrentMap.get(nodesOnCurrentMap.size() - 1).setMapName(currentMapName);
+										break;
 									default:
 										nodesOnCurrentMap.add(new Node(x, y, nodeName, NodeType.NOTYPE));
 										nodesOnCurrentMap.get(nodesOnCurrentMap.size() - 1).setMapName(currentMapName);

@@ -1448,16 +1448,23 @@ public class EndUserGUI extends JPanel implements ActionListener{
 			int x = e.getX();
 			int y = e.getY();
 
+			
+//			Point2D before3 = new Point(), after3 = new Point();
+//			before3.setLocation(x, y);
+//			mapPanel.getAT().transform(before3, after3);
+//			
+//			x = (int) after3.getX();
+//			y = (int) after3.getY();
 //			if(ttManager == null){
 //				ttManager = ToolTipManager.sharedInstance();
 //			}
 
 			if(nearHistoricalNode(x, y) != null){
-				Point2D before1 = new Point(), after1 = new Point();
-				before1.setLocation(nearHistoricalNode(x, y).getX(), nearHistoricalNode(x, y).getY());
-				mapPanel.getAT().transform(before1, after1);
+				Point2D before2 = new Point(), after2 = new Point();
+				before2.setLocation(nearHistoricalNode(x, y).getX(), nearHistoricalNode(x, y).getY());
+				mapPanel.getAT().transform(before2, after2);
 				specialToolTips.setIcon(nearHistoricalNode(x, y).getHistoricalImage());
-				specialToolTips.setBounds((int) after1.getX(), (int) after1.getY(), 100, 50);
+				specialToolTips.setBounds(x, y, (int) after2.getX(), (int) after2.getY());
 				specialToolTips.setVisible(true);
 				//				// + nearHistoricalNode(x, y).getName() + 
 				//				URL url = getClass().getResource("/historicalimages/" + nearHistoricalNode(x, y).getName() + ".jpg");
@@ -1547,10 +1554,10 @@ public class EndUserGUI extends JPanel implements ActionListener{
 				for(int i = 0; i < historicalNodes.size(); i++){
 					before1.setLocation(historicalNodes.get(i).getX(), historicalNodes.get(i).getY());
 					mapPanel.getAT().transform(before1, after1);
+					System.out.println("Mouse at:" + x + "," + y + " A historical node at:" + after1.getX() + "," + after1.getY());
+					System.out.println("Distance from node:" + Math.abs(y - after1.getY()) + ", " + Math.abs(x - after1.getX()));
 					if(Math.abs(y - after1.getY()) < 10){
-						System.out.println("passed first");
 						if(Math.abs(x - after1.getX()) < 10){
-							System.out.println("passed second");
 							return historicalNodes.get(i);
 						}
 					}
