@@ -568,14 +568,19 @@ public class EndUserGUI extends JPanel implements ActionListener{
 		uiPanel.add(roomEnd);
 
 		//startRoomSEL.setModel(new DefaultComboBoxModel(new String[]{}));
-		startRoomSEL.setBounds(983, 50+15, 210, 29);
+		startRoomSEL.setBounds(983, 50+15, 200, 29);
 		startRoomSEL.setEditable(false);
 		startRoomSEL.setVisible(true);
 		startRoomSEL.setName("Start");
+		startRoomSEL.setBackground(beige);
+		startRoomSEL.setForeground(burgandy);
+		startRoomSEL.setFont(new Font("Helvetica Neue", Font.PLAIN, 14));
+		startRoomSEL.setOpaque(true);		
 
 		mapNumber = new JTextPane();
 		mapNumber.setBounds(360, 634+30, 47, 20);
 		mapNumber.setEditable(false);
+		mapNumber.setBackground(beige);
 		mapNumber.setFont(new Font("Helvetica Neue", Font.BOLD, 14));
 		mapNumber.setAlignmentX(StyleConstants.ALIGN_CENTER);
 		mapNumber.setAlignmentY(StyleConstants.ALIGN_CENTER);
@@ -589,14 +594,13 @@ public class EndUserGUI extends JPanel implements ActionListener{
 
 		//Construct Combo boxes to select start point
 		startBuildingSEL = new JComboBox<String>();
-		startBuildingSEL.setBounds(755, 50+15, 232, 29);
+		startBuildingSEL.setBounds(755, 50+15, 200, 29);
 		startBuildingSEL.setEditable(false);
 		startBuildingSEL.setVisible(true);
 		
 		startBuildingSEL.setBackground(beige);
 		startBuildingSEL.setForeground(burgandy);
 		startBuildingSEL.setFont(new Font("Helvetica Neue", Font.PLAIN, 14));
-		//startBuildingSEL.
 		startBuildingSEL.setOpaque(true);
 		
 		startBuildingSEL.addActionListener(new ActionListener(){
@@ -664,16 +668,24 @@ public class EndUserGUI extends JPanel implements ActionListener{
 		}
 
 		//endRoomSEL.setModel(new DefaultComboBoxModel(new String[]{}));
-		endRoomSEL.setBounds(983, 116+15, 210, 29);
+		endRoomSEL.setBounds(983, 116+15, 200, 29);
 		endRoomSEL.setEditable(false);
 		endRoomSEL.setVisible(true);
 		endRoomSEL.setName("End");
+		endRoomSEL.setBackground(beige);
+		endRoomSEL.setForeground(burgandy);
+		endRoomSEL.setFont(new Font("Helvetica Neue", Font.PLAIN, 14));
+		endRoomSEL.setOpaque(true);
 
 		//Construct Combo boxes to select end point
 		endBuildingSEL = new JComboBox<String>();
-		endBuildingSEL.setBounds(755, 116+15, 232, 29);
+		endBuildingSEL.setBounds(755, 116+15, 200, 29);
 		endBuildingSEL.setEditable(false);
 		endBuildingSEL.setVisible(true);
+		endBuildingSEL.setBackground(beige);
+		endBuildingSEL.setForeground(burgandy);
+		endBuildingSEL.setFont(new Font("Helvetica Neue", Font.PLAIN, 14));
+		endBuildingSEL.setOpaque(true);
 		endBuildingSEL.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e) {
 				//currentMapFile = maps.get(maps.size()-1).getImage();
@@ -772,23 +784,23 @@ public class EndUserGUI extends JPanel implements ActionListener{
 
 		//Construct button and add button to uiPanel
 		searchButton = new JButton ("Search");
-		searchButton.setBounds(987, 150+15, 90, 30);
+		searchButton.setBounds(876, 150+15, 90, 30);
 		searchButton.setForeground(burgandy);
 		searchButton.setFont(new Font("Helvetica Neue", Font.BOLD, 14));
 		searchButton.setBackground(beige);
 		searchButton.setOpaque(true);
-		searchButton.setBorder(BorderFactory.createLineBorder(burgandy, 4));
+		searchButton.setBorder(BorderFactory.createLineBorder(burgandy, 2));
 		uiPanel.add(searchButton);
 		
 
 
 		clearButton = new JButton ("Clear");
-		clearButton.setBounds(853, 150+15, 90, 30);
+		clearButton.setBounds(976, 150+15, 90, 30);
 		clearButton.setForeground(burgandy);
 		clearButton.setFont(new Font("Helvetica Neue", Font.BOLD, 14));
 		clearButton.setBackground(beige);
 		clearButton.setOpaque(true);
-		clearButton.setBorder(BorderFactory.createLineBorder(burgandy, 4));
+		clearButton.setBorder(BorderFactory.createLineBorder(burgandy, 2));
 		//clearButton.setBorderPainted(true);
 		
 		uiPanel.add(clearButton);
@@ -798,7 +810,7 @@ public class EndUserGUI extends JPanel implements ActionListener{
 			  }
 
 			  public void mouseReleased(MouseEvent e) {
-				  clearButton.setBorder(BorderFactory.createLineBorder(burgandy, 4));
+				  clearButton.setBorder(BorderFactory.createLineBorder(burgandy, 2));
 			  }
 			});
 		clearButton.addActionListener(new ActionListener()  {
@@ -810,6 +822,10 @@ public class EndUserGUI extends JPanel implements ActionListener{
 
 		leftArrow = new JButton("<<");
 		leftArrow.setBounds(275, 630+30, 80, 29);
+		leftArrow.setFont(new Font("Helvetica Neue", Font.PLAIN, 14));
+		leftArrow.setBackground(beige);
+		leftArrow.setForeground(burgandy);
+		leftArrow.setOpaque(true);
 		uiPanel.add(leftArrow);
 		if(arrowCounter == 0){
 			leftArrow.setEnabled(false);
@@ -817,6 +833,10 @@ public class EndUserGUI extends JPanel implements ActionListener{
 
 		rightArrow = new JButton(">>");
 		rightArrow.setBounds(412, 630+30, 80, 29);
+		rightArrow.setFont(new Font("Helvetica Neue", Font.PLAIN, 14));
+		rightArrow.setBackground(beige);
+		rightArrow.setForeground(burgandy);
+		rightArrow.setOpaque(true);
 		uiPanel.add(rightArrow);
 		rightArrow.setEnabled(false);
 
@@ -1129,7 +1149,7 @@ public class EndUserGUI extends JPanel implements ActionListener{
 			  }
 
 			  public void mouseReleased(MouseEvent e) {
-				  searchButton.setBorder(BorderFactory.createLineBorder(burgandy, 4));
+				  searchButton.setBorder(BorderFactory.createLineBorder(burgandy, 2));
 			  }
 			});
 		//Construct buttons and add action listener
@@ -1141,7 +1161,7 @@ public class EndUserGUI extends JPanel implements ActionListener{
 				uiPanel.setVisible(true);
 				frame.setVisible(true);
 				//pathCalc = new Djikstra();
-				searchButton.setBorder(BorderFactory.createLineBorder(burgandy, 4));
+				searchButton.setBorder(BorderFactory.createLineBorder(burgandy, 2));
 				if(!startClicked && !endClicked){
 					for (i = 0; i < currentStartNodes.size(); i++){
 						if(startRoomSEL.getSelectedItem() == currentStartNodes.get(i).getName())
