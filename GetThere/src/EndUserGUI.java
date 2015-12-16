@@ -240,6 +240,8 @@ public class EndUserGUI extends JPanel implements ActionListener{
 		mapPanel.setStartNode(null);
 		mapPanel.setEndNode(null);
 		mapPanel.setPath(null);
+		startTransitionNodes = new LinkedList<Node>();
+		endTransitionNodes = new LinkedList<Node>();
 
 	}
 	/**
@@ -590,6 +592,13 @@ public class EndUserGUI extends JPanel implements ActionListener{
 		startBuildingSEL.setBounds(755, 50+15, 232, 29);
 		startBuildingSEL.setEditable(false);
 		startBuildingSEL.setVisible(true);
+		
+		startBuildingSEL.setBackground(beige);
+		startBuildingSEL.setForeground(burgandy);
+		startBuildingSEL.setFont(new Font("Helvetica Neue", Font.PLAIN, 14));
+		//startBuildingSEL.
+		startBuildingSEL.setOpaque(true);
+		
 		startBuildingSEL.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e) {
 				//currentMapFile = maps.get(maps.size()-1).getImage();
@@ -763,13 +772,18 @@ public class EndUserGUI extends JPanel implements ActionListener{
 
 		//Construct button and add button to uiPanel
 		searchButton = new JButton ("Search");
-		searchButton.setBounds(987, 150+15, 132, 30);
+		searchButton.setBounds(987, 150+15, 90, 30);
+		searchButton.setForeground(burgandy);
+		searchButton.setFont(new Font("Helvetica Neue", Font.BOLD, 14));
+		searchButton.setBackground(beige);
+		searchButton.setOpaque(true);
+		searchButton.setBorder(BorderFactory.createLineBorder(burgandy, 4));
 		uiPanel.add(searchButton);
 		
 
 
 		clearButton = new JButton ("Clear");
-		clearButton.setBounds(853, 150+15, 132, 30);
+		clearButton.setBounds(853, 150+15, 90, 30);
 		clearButton.setForeground(burgandy);
 		clearButton.setFont(new Font("Helvetica Neue", Font.BOLD, 14));
 		clearButton.setBackground(beige);
@@ -1109,6 +1123,15 @@ public class EndUserGUI extends JPanel implements ActionListener{
 				}
 			}});
 
+		searchButton.addMouseListener(new MouseAdapter() {
+			  public void mousePressed(MouseEvent e) {
+			    searchButton.setBorder(BorderFactory.createLoweredBevelBorder());
+			  }
+
+			  public void mouseReleased(MouseEvent e) {
+				  searchButton.setBorder(BorderFactory.createLineBorder(burgandy, 4));
+			  }
+			});
 		//Construct buttons and add action listener
 		searchButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) 
@@ -1118,7 +1141,7 @@ public class EndUserGUI extends JPanel implements ActionListener{
 				uiPanel.setVisible(true);
 				frame.setVisible(true);
 				//pathCalc = new Djikstra();
-
+				searchButton.setBorder(BorderFactory.createLineBorder(burgandy, 4));
 				if(!startClicked && !endClicked){
 					for (i = 0; i < currentStartNodes.size(); i++){
 						if(startRoomSEL.getSelectedItem() == currentStartNodes.get(i).getName())
@@ -1178,13 +1201,11 @@ public class EndUserGUI extends JPanel implements ActionListener{
 						}
 						else{
 							//path.transform(at);
-							if(!(startTransitionNodes.contains(listPath.get(k-1))) && !(endTransitionNodes.contains(listPath.get(k-1)))){
-								System.out.println("Adding end");
+							if(!(listPath.get(k-1).getMapName().equals(listPath.get(k).getMapName()))){
 								endTransitionNodes.add(listPath.get(k-1));
 								startTransitionNodes.add(listPath.get(k));
 
 							}
-
 							path.moveTo(listPath.get(k).getX(), listPath.get(k).getY());
 
 						}
