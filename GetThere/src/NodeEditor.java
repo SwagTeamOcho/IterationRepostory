@@ -169,6 +169,9 @@ public class NodeEditor{
 
 				backButton.setBounds(762, 516, 132, 29);
 				uiPanel.add(backButton);
+				
+				uiPanel.repaint();
+				uiPanel.revalidate();
 			}
 		});
 
@@ -240,6 +243,9 @@ public class NodeEditor{
 				uiPanel.remove(saveButton);
 				uiPanel.remove(cancelButton);
 
+				uiPanel.repaint();
+				uiPanel.revalidate();
+				
 				return;
 			}
 		});
@@ -257,6 +263,8 @@ public class NodeEditor{
 				uiPanel.remove(alignButton);
 				uiPanel.remove(saveButton);
 				uiPanel.remove(cancelButton);
+				uiPanel.repaint();
+				uiPanel.revalidate();
 				uiPanel.repaint();
 				uiPanel.revalidate();
 				return;
@@ -304,6 +312,8 @@ public class NodeEditor{
 				uiPanel.remove(xAlignButton);
 				uiPanel.remove(yAlignButton);
 				uiPanel.remove(backButton);
+				uiPanel.repaint();
+				uiPanel.revalidate();
 			}
 		});
 
@@ -314,6 +324,7 @@ public class NodeEditor{
 		});
 	}
 	public void clear(){
+		System.out.println("Node Editor cleared");
 		uiPanel.remove(nameLabel);
 		uiPanel.remove(nameText);
 		uiPanel.remove(xLabel);
@@ -330,5 +341,7 @@ public class NodeEditor{
 			uiPanel.remove(xAlignButton);
 			uiPanel.remove(yAlignButton);
 		}
+		uiPanel.repaint();
+		uiPanel.revalidate();
 	}
 }
