@@ -109,28 +109,11 @@ public class DevGUI extends JPanel{
 
 	@SuppressWarnings("unchecked")
 	public static void main(String[] args) {
-		
-		
-		serialize = new Serialize();
-		Object tempMaps = serialize.deSerialize("MapList");
-	
 
+		serialize = new Serialize();
 		if(new File("MapList.ser").canRead()){
 			System.out.println("maplist exists");
-			try{
-				if(tempMaps instanceof LinkedList<?>){
-					maps = (LinkedList<Map>) tempMaps;
-				}
-				else
-				{
-					JOptionPane.showMessageDialog(new Frame(), "Improper file format.", "Startup Error", JOptionPane.ERROR_MESSAGE);
-		        	System.exit(0);
-				}
-			}
-			catch(StackOverflowError e){
-				JOptionPane.showMessageDialog(new Frame(), "Stack overflow has occured! \nThis is likely due to many maps and/or large images files. \nTry running the program from the terminal with an increased stack size", "Startup Error", JOptionPane.ERROR_MESSAGE);
-	        	System.exit(0);
-				}
+			maps.addAll((LinkedList<Map>) serialize.deSerialize("MapList"));
 		} 
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
@@ -328,7 +311,6 @@ public class DevGUI extends JPanel{
 
 					serialize.doSerialize("MapList", maps);
 					
-					
 					for(int i = 0; i < maps.size(); i++){
 						if(!maps.contains(dropDown.getItemAt(i))){
 							dropDown.addItem(maps.get(i));
@@ -342,7 +324,7 @@ public class DevGUI extends JPanel{
 					uiPanel.revalidate();
 				}
 			}
-		);
+					);
 
 			JButton btnEasyLink = new JButton("Easy Map Link");
 			btnEasyLink.setBounds(762, 586, 132, 29);
