@@ -47,15 +47,12 @@ public class DevGUI extends JPanel{
 	private int numVertices;
 	private int easyLinkMax;
 	private Map easyLinkMap;
-	//private String[] startRooms = new String[1000];
-	//private String buildingSelectedSTART;   //track which building is selected to start in.
 	private String currentMapName;
 	private SelectMap loadMap;
 	static DevGUI window;
 	private ImageIcon currentMapFile;
 	private ImageIcon tempMapFile;
 	private ImageIcon defaultImage;
-	//private NodeType currentType;
 	private Node currentNode;
 	private NodeEditor nodeEditor;
 	
@@ -86,9 +83,6 @@ public class DevGUI extends JPanel{
 
 	//Labels on the GUI
 	private JLabel buildingStart;
-
-	//Combo Boxes on the GUI
-	//private JComboBox<String> startBuildingSEL;
 
 	/**
 	 * Create the application.

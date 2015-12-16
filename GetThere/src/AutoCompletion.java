@@ -192,13 +192,13 @@ public class AutoCompletion extends PlainDocument {
         frame.getContentPane().add(comboBox);
         frame.pack(); frame.setVisible(true);
     }
-    
-    
-    public static void main(String[] args) {
-        javax.swing.SwingUtilities.invokeLater(new Runnable() {
-            public void run() {
-                createAndShowGUI();
-            }
-        });
-    }
+//    
+//    
+//    public static void main(String[] args) {
+//        javax.swing.SwingUtilities.invokeLater(new Runnable() {
+//            public void run() {
+//                createAndShowGUI();
+//            }
+//        });
+//    }
 }

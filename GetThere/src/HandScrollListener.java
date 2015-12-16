@@ -4,8 +4,6 @@ import java.awt.Rectangle;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
-import javax.swing.JLabel;
-import javax.swing.JScrollPane;
 import javax.swing.JViewport;
 
 public class HandScrollListener extends MouseAdapter
