@@ -4,6 +4,8 @@ import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
+import java.awt.MouseInfo;
+import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
@@ -12,6 +14,7 @@ import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.awt.event.MouseWheelEvent;
 import java.awt.geom.GeneralPath;
+import java.awt.geom.Point2D;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.net.URL;
@@ -57,7 +60,7 @@ public class EndUserGUI extends JPanel implements ActionListener{
 
 	private String[] startRooms;
 	private String[] endRooms;
-	
+
 	private boolean mousePressedFlag;
 
 	//private static ImageIcon currentMapFile;
@@ -91,6 +94,8 @@ public class EndUserGUI extends JPanel implements ActionListener{
 	private XComboBox endRoomSEL;
 
 
+	private boolean moveMouseFlag = false;
+
 	//Buttons on the UI
 	private JButton searchButton;
 	private JButton clearButton;
@@ -109,7 +114,7 @@ public class EndUserGUI extends JPanel implements ActionListener{
 	private String buildingSelectedSTART;	//track which building is selected to start in.
 	private String buildingSelectedEND;		//track which building is selected to end in.
 	public ImageIcon mapIcon;
-	
+
 	//private Node hovered;
 	private JTextPane mapNumber;
 	private Integer totalMaps = 1;
@@ -134,6 +139,8 @@ public class EndUserGUI extends JPanel implements ActionListener{
 	private JButton tutorial;
 	private Icon tutIcon;
 
+	private JLabel specialToolTips;
+
 	private JButton backToCampus;
 
 	int count;
@@ -145,16 +152,16 @@ public class EndUserGUI extends JPanel implements ActionListener{
 	private ToolTipManager ttManager;
 
 	private JScrollPane scrollMapPanel;
-	
+
 	private Color burgandy = new Color(74, 1, 1);
 	private Color beige = new Color(230, 224, 200);
 	int xMouse;
 	int yMouse;
 
-	
-	
+
+
 	private ImageIcon currentAboutPage;
-	
+
 	HandScrollListener scrollListener;
 
 	private LinkedList<Node> startTransitionNodes = new LinkedList<Node>();
@@ -165,7 +172,7 @@ public class EndUserGUI extends JPanel implements ActionListener{
 	@SuppressWarnings("unchecked")
 	public EndUserGUI(){
 		JSplash loadingScreen = new JSplash(LoadingScreen.class.getResource("loadingScreen.png"),
-								true, true, false, null, null, beige, burgandy);
+				true, true, false, null, null, beige, burgandy);
 		Serialize serialize = new Serialize();
 		Object tempMaps = serialize.deSerialize("MapList");
 		if(tempMaps instanceof LinkedList<?>){
@@ -211,7 +218,7 @@ public class EndUserGUI extends JPanel implements ActionListener{
 	public void setStartClicked(boolean set){
 		startClicked = set;
 	}
-	
+
 	public MyGraphics getGraph(){
 		return this.graph;
 	}
@@ -243,6 +250,9 @@ public class EndUserGUI extends JPanel implements ActionListener{
 		leftArrow.setEnabled(false);
 		rightArrow.setEnabled(false);
 		email.setEnabled(false);
+		startTransitionNodes = new LinkedList<Node>();
+		endTransitionNodes = new LinkedList<Node>();
+
 	}
 	/**
 	 * Initialize the contents of the frame.
@@ -265,7 +275,6 @@ public class EndUserGUI extends JPanel implements ActionListener{
 		}catch(Exception e){
 			e.printStackTrace();
 		}
-
 		graph = new MyGraphics(this);
 		ttManager = ToolTipManager.sharedInstance();
 		ttManager.setEnabled(true);
@@ -280,7 +289,7 @@ public class EndUserGUI extends JPanel implements ActionListener{
 		frame.setResizable(false);
 		frame.setVisible(true);
 
-		
+
 		//Panel Operations
 		uiPanel = new JPanel();
 		frame.getContentPane().add(uiPanel);
@@ -308,7 +317,7 @@ public class EndUserGUI extends JPanel implements ActionListener{
 			}
 		});
 		uiPanel.add(scrollMapPanel);
-		
+
 		//Customizing the Title Bar
 		JPanel titleBar = new JPanel();
 		titleBar.setLayout(null);
@@ -321,7 +330,7 @@ public class EndUserGUI extends JPanel implements ActionListener{
 			@Override
 			public void mousePressed(MouseEvent e) {
 				xMouse = e.getX();
-            	yMouse = e.getY();
+				yMouse = e.getY();
 			}
 
 			@Override
@@ -332,92 +341,92 @@ public class EndUserGUI extends JPanel implements ActionListener{
 
 			@Override
 			public void mouseExited(MouseEvent e) {}
-			
+
 		});
 		titleBar.addMouseMotionListener(new MouseMotionListener() {
-            public void mouseDragged(MouseEvent me) {
-            	int x = me.getXOnScreen();
-            	int y = me.getYOnScreen();
-            	frame.setLocation(x-xMouse, y-yMouse);
-            	//System.out.println(x + y);
-            }
+			public void mouseDragged(MouseEvent me) {
+				int x = me.getXOnScreen();
+				int y = me.getYOnScreen();
+				frame.setLocation(x-xMouse, y-yMouse);
+				//System.out.println(x + y);
+			}
 
 			public void mouseMoved(MouseEvent e) {
-				
+
 			}
-			
+
 		});
 		titleBar.setBackground(beige);
 		uiPanel.add(titleBar);
-		
+
 		//About Button Operation
 		final JFrame aboutFrame = new JFrame();
 		aboutFrame.setBounds(100, 70, 920, 650);
 		aboutFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		
+
 		ImageIcon aboutPg1 = new ImageIcon("IconImages/aboutPg1.jpg");
 		ImageIcon aboutPg2 = new ImageIcon("IconImages/aboutPg2.jpg");
 		final ImageIcon[] aboutPages = {aboutPg1, aboutPg2};
-		
+
 		currentAboutPage = aboutPages[0];
 		final JPanel aboutPanel = new JPanel();
 		aboutPanel.setBackground(beige);
 		final JLabel aboutLabel = new JLabel();
 		aboutPanel.add(aboutLabel);
-    	aboutLabel.setIcon(currentAboutPage);
+		aboutLabel.setIcon(currentAboutPage);
 		aboutLabel.setBounds(50, 50, 900, 620);
 		aboutPanel.addMouseListener(new MouseListener() {
-	        public void mouseClicked(MouseEvent e) {
-	        	e.getClickCount();
-	            if(e.getClickCount() ==1){
-	            	
-	            	currentAboutPage = aboutPages[0];
-	            	//System.out.print(e.getClickCount());
-	            	aboutLabel.setIcon(currentAboutPage);
-	            	
-	            }else if(e.getClickCount() == 2){
-	            	currentAboutPage = aboutPages[1];
-	            	aboutLabel.setIcon(currentAboutPage);
-	            	//System.out.print(e.getClickCount());
-	            }
-	        }
+			public void mouseClicked(MouseEvent e) {
+				e.getClickCount();
+				if(e.getClickCount() ==1){
+
+					currentAboutPage = aboutPages[0];
+					//System.out.print(e.getClickCount());
+					aboutLabel.setIcon(currentAboutPage);
+
+				}else if(e.getClickCount() == 2){
+					currentAboutPage = aboutPages[1];
+					aboutLabel.setIcon(currentAboutPage);
+					//System.out.print(e.getClickCount());
+				}
+			}
 
 			@Override
 			public void mousePressed(MouseEvent e) {
 				// TODO Auto-generated method stub
-				
+
 			}
 
 			@Override
 			public void mouseReleased(MouseEvent e) {
 				// TODO Auto-generated method stub
-				
+
 			}
 
 			@Override
 			public void mouseEntered(MouseEvent e) {
 				// TODO Auto-generated method stub
-				
+
 			}
 
 			@Override
 			public void mouseExited(MouseEvent e) {
 				// TODO Auto-generated method stub
-				
-			}
-	    }); 
 
-		
+			}
+		}); 
+
+
 		JLabel about = new JLabel("About");
 		about.setFont(new Font("Calisto MT Bold Italic", Font.BOLD, 14));
 		about.setForeground(burgandy);
 		about.setBounds(1140, 0, 50, 24);
 		about.setCursor(new Cursor(Cursor.HAND_CURSOR));
 		about.addMouseListener(new MouseListener() {
-	        public void mouseClicked(MouseEvent e) {
+			public void mouseClicked(MouseEvent e) {
 				aboutFrame.setVisible(true);
 				aboutFrame.getContentPane().add(aboutPanel);
-	        }
+			}
 
 			@Override
 			public void mousePressed(MouseEvent e) {				
@@ -434,9 +443,9 @@ public class EndUserGUI extends JPanel implements ActionListener{
 			@Override
 			public void mouseExited(MouseEvent e) {				
 			}
-	    }); 
+		}); 
 		titleBar.add(about);
-		
+
 		JLabel closeButt = new JLabel();
 		//closeButt.setForeground(beige);
 		//closeButt.setFont(new Font("Helvetica Neue", Font.BOLD, 14));
@@ -445,75 +454,75 @@ public class EndUserGUI extends JPanel implements ActionListener{
 		closeButt.setBounds(7, 0, 24, 24);
 		closeButt.setCursor(new Cursor(Cursor.HAND_CURSOR));
 		closeButt.addMouseListener(new MouseListener() {
-	        public void mouseClicked(MouseEvent e) {
-	            // TODO Auto-generated method stub
-	        	System.exit(0);;
-	        }
+			public void mouseClicked(MouseEvent e) {
+				// TODO Auto-generated method stub
+				System.exit(0);;
+			}
 
 			@Override
 			public void mousePressed(MouseEvent e) {
 				// TODO Auto-generated method stub
-				
+
 			}
 
 			@Override
 			public void mouseReleased(MouseEvent e) {
 				// TODO Auto-generated method stub
-				
+
 			}
 
 			@Override
 			public void mouseEntered(MouseEvent e) {
 				// TODO Auto-generated method stub
-				
+
 			}
 
 			@Override
 			public void mouseExited(MouseEvent e) {
 				// TODO Auto-generated method stub
-				
+
 			}
-	    }); 
+		}); 
 		JLabel minButt = new JLabel();
 		ImageIcon minimize = new ImageIcon("IconImages/min.png");
 		minButt.setIcon(minimize);
 		minButt.setBounds(25, 5, 15, 15);
 		minButt.setCursor(new Cursor(Cursor.HAND_CURSOR));
 		minButt.addMouseListener(new MouseListener() {
-	        public void mouseClicked(MouseEvent e) {
-	            // TODO Auto-generated method stub
-	        	frame.setState(frame.ICONIFIED);
-	        }
+			public void mouseClicked(MouseEvent e) {
+				// TODO Auto-generated method stub
+				frame.setState(frame.ICONIFIED);
+			}
 
 			@Override
 			public void mousePressed(MouseEvent e) {
 				// TODO Auto-generated method stub
-				
+
 			}
 
 			@Override
 			public void mouseReleased(MouseEvent e) {
 				// TODO Auto-generated method stub
-				
+
 			}
 
 			@Override
 			public void mouseEntered(MouseEvent e) {
 				// TODO Auto-generated method stub
-				
+
 			}
 
 			@Override
 			public void mouseExited(MouseEvent e) {
 				// TODO Auto-generated method stub
-				
+
 			}
-	    }); 
-		
+		}); 
+
 		titleBar.add(minButt);
 		titleBar.add(closeButt);
-		
-//		scrollMapPanel.setBounds(5, 20+15, 750, 620);
+
+		//		scrollMapPanel.setBounds(5, 20+15, 750, 620);
 		scrollMapPanel.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);
 		scrollMapPanel.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 
@@ -521,6 +530,10 @@ public class EndUserGUI extends JPanel implements ActionListener{
 		scrollListener = new HandScrollListener(mapPanel);
 		scrollMapPanel.getViewport().addMouseMotionListener(scrollListener);
 		scrollMapPanel.getViewport().addMouseListener(scrollListener);
+
+		specialToolTips = new JLabel();
+		uiPanel.add(specialToolTips);
+		specialToolTips.setVisible(false);
 
 		//uiPanel.add(zoom.getUIPanel());
 		//uiPanel.add(mapPanel);
@@ -592,6 +605,13 @@ public class EndUserGUI extends JPanel implements ActionListener{
 		startBuildingSEL.setBounds(755, 50+15, 232, 29);
 		startBuildingSEL.setEditable(false);
 		startBuildingSEL.setVisible(true);
+		
+		startBuildingSEL.setBackground(beige);
+		startBuildingSEL.setForeground(burgandy);
+		startBuildingSEL.setFont(new Font("Helvetica Neue", Font.PLAIN, 14));
+		//startBuildingSEL.
+		startBuildingSEL.setOpaque(true);
+		
 		startBuildingSEL.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e) {
 				//currentMapFile = maps.get(maps.size()-1).getImage();
@@ -610,6 +630,7 @@ public class EndUserGUI extends JPanel implements ActionListener{
 				//currentStartEdges = maps.get(indexOfCurrentMap).getEdges();
 				//currentMapFile = maps.get(indexOfCurrentMap).getImage();
 				currentlyShownMap = maps.get(indexOfCurrentMap);
+				scrollListener.setCounterX(0);
 				if (!currentlyShownMap.getMapName().equals("WPI Campus Map")){
 					backToCampus.setEnabled(true);
 				} else{
@@ -685,6 +706,7 @@ public class EndUserGUI extends JPanel implements ActionListener{
 				//currentendEdges = maps.get(indexOfCurrentMap).getEdges();
 				//currentMapFile = maps.get(indexOfCurrentMap).getImage();
 				currentlyShownMap = maps.get(indexOfCurrentMap);
+				scrollListener.setCounterX(0);
 				if (!currentlyShownMap.getMapName().equals("WPI Campus Map")){
 					backToCampus.setEnabled(true);
 				} else{
@@ -765,30 +787,35 @@ public class EndUserGUI extends JPanel implements ActionListener{
 
 		//Construct button and add button to uiPanel
 		searchButton = new JButton ("Search");
-		searchButton.setBounds(987, 150+15, 132, 30);
+		searchButton.setBounds(987, 150+15, 90, 30);
+		searchButton.setForeground(burgandy);
+		searchButton.setFont(new Font("Helvetica Neue", Font.BOLD, 14));
+		searchButton.setBackground(beige);
+		searchButton.setOpaque(true);
+		searchButton.setBorder(BorderFactory.createLineBorder(burgandy, 4));
 		uiPanel.add(searchButton);
-		
+
 
 
 		clearButton = new JButton ("Clear");
-		clearButton.setBounds(853, 150+15, 132, 30);
+		clearButton.setBounds(853, 150+15, 90, 30);
 		clearButton.setForeground(burgandy);
 		clearButton.setFont(new Font("Helvetica Neue", Font.BOLD, 14));
 		clearButton.setBackground(beige);
 		clearButton.setOpaque(true);
 		clearButton.setBorder(BorderFactory.createLineBorder(burgandy, 4));
 		//clearButton.setBorderPainted(true);
-		
+
 		uiPanel.add(clearButton);
 		clearButton.addMouseListener(new MouseAdapter() {
-			  public void mousePressed(MouseEvent e) {
-			    clearButton.setBorder(BorderFactory.createLoweredBevelBorder());
-			  }
+			public void mousePressed(MouseEvent e) {
+				clearButton.setBorder(BorderFactory.createLoweredBevelBorder());
+			}
 
-			  public void mouseReleased(MouseEvent e) {
-				  clearButton.setBorder(BorderFactory.createLineBorder(burgandy, 4));
-			  }
-			});
+			public void mouseReleased(MouseEvent e) {
+				clearButton.setBorder(BorderFactory.createLineBorder(burgandy, 4));
+			}
+		});
 		clearButton.addActionListener(new ActionListener()  {
 			public void actionPerformed(ActionEvent e)
 			{
@@ -827,8 +854,8 @@ public class EndUserGUI extends JPanel implements ActionListener{
 		scrollDire.setBounds(835, 210+15, 300, 420);
 		scrollDire.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
 		uiPanel.add(scrollDire);
-		
-		
+
+
 		findProfIcon = new ImageIcon("IconImages/findProfIcon.png");
 		emergencyIcon = new ImageIcon("IconImages/emergencyIcon.png");
 		final Icon emergencyIconBIG = new ImageIcon("IconImages/emergencyIconBIG.png");
@@ -1007,6 +1034,7 @@ public class EndUserGUI extends JPanel implements ActionListener{
 						}
 						//currentMapFile = mapsForPaths.getFirst().getImage();
 						currentlyShownMap = mapsForPaths.getFirst();
+						scrollListener.setCounterX(0);
 						if(!currentlyShownMap.getMapName().equals("WPI Campus Map")){
 							backToCampus.setEnabled(true);
 						} else{
@@ -1062,7 +1090,7 @@ public class EndUserGUI extends JPanel implements ActionListener{
 		//uiPanel.add(findProf);
 
 
-		
+
 		findProf.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
 				javax.swing.SwingUtilities.invokeLater(new Runnable() {
@@ -1095,6 +1123,7 @@ public class EndUserGUI extends JPanel implements ActionListener{
 					}
 					//currentMapFile = mapsForPaths.getFirst().getImage();
 					currentlyShownMap = mapsForPaths.getFirst();
+					scrollListener.setCounterX(0);
 					if(!currentlyShownMap.getMapName().equals("WPI Campus Map")){
 						backToCampus.setEnabled(true);
 					} else{
@@ -1111,6 +1140,15 @@ public class EndUserGUI extends JPanel implements ActionListener{
 				}
 			}});
 
+		searchButton.addMouseListener(new MouseAdapter() {
+			  public void mousePressed(MouseEvent e) {
+			    searchButton.setBorder(BorderFactory.createLoweredBevelBorder());
+			  }
+
+			  public void mouseReleased(MouseEvent e) {
+				  searchButton.setBorder(BorderFactory.createLineBorder(burgandy, 4));
+			  }
+			});
 		//Construct buttons and add action listener
 		searchButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) 
@@ -1121,7 +1159,7 @@ public class EndUserGUI extends JPanel implements ActionListener{
 				uiPanel.setVisible(true);
 				frame.setVisible(true);
 				//pathCalc = new Djikstra();
-
+				searchButton.setBorder(BorderFactory.createLineBorder(burgandy, 4));
 				if(!startClicked && !endClicked){
 					for (i = 0; i < currentStartNodes.size(); i++){
 						if(startRoomSEL.getSelectedItem() == currentStartNodes.get(i).getName())
@@ -1154,6 +1192,7 @@ public class EndUserGUI extends JPanel implements ActionListener{
 						}
 						//currentMapFile = mapsForPaths.getFirst().getImage();
 						currentlyShownMap = mapsForPaths.getFirst();
+						scrollListener.setCounterX(0);
 						if(!currentlyShownMap.getMapName().equals("WPI Campus Map")){
 							backToCampus.setEnabled(true);
 						} else{
@@ -1181,13 +1220,11 @@ public class EndUserGUI extends JPanel implements ActionListener{
 						}
 						else{
 							//path.transform(at);
-							if(!(startTransitionNodes.contains(listPath.get(k-1))) && !(endTransitionNodes.contains(listPath.get(k-1)))){
-								System.out.println("Adding end");
+							if(!(listPath.get(k-1).getMapName().equals(listPath.get(k).getMapName()))){
 								endTransitionNodes.add(listPath.get(k-1));
 								startTransitionNodes.add(listPath.get(k));
 
 							}
-
 							path.moveTo(listPath.get(k).getX(), listPath.get(k).getY());
 
 						}
@@ -1230,6 +1267,7 @@ public class EndUserGUI extends JPanel implements ActionListener{
 				for(int i = 0; i < maps.size(); i++){
 					if(maps.get(i).getMapName().equals("WPI Campus Map")){
 						currentlyShownMap = maps.get(i);
+						scrollListener.setCounterX(0);
 						mapPanel.setImage(currentlyShownMap.getImage());
 						mapPanel.setPath(null);
 						mapPanel.revalidate();
@@ -1275,6 +1313,7 @@ public class EndUserGUI extends JPanel implements ActionListener{
 					mapNumber.setText(String.valueOf(arrowCounter + 1) + " of " + String.valueOf(totalMaps));
 					//currentMapFile = mapsForPaths.get(arrowCounter).getImage();
 					currentlyShownMap = mapsForPaths.get(arrowCounter);
+					scrollListener.setCounterX(0);
 					if(!currentlyShownMap.getMapName().equals("WPI Campus Map")){
 						backToCampus.setEnabled(true);
 					} else{
@@ -1294,6 +1333,7 @@ public class EndUserGUI extends JPanel implements ActionListener{
 					mapNumber.setText(String.valueOf(arrowCounter + 1) + " of " + String.valueOf(totalMaps));
 					//currentMapFile = mapsForPaths.get(arrowCounter).getImage();
 					currentlyShownMap = mapsForPaths.get(arrowCounter);
+					scrollListener.setCounterX(0);
 					if(!currentlyShownMap.getMapName().equals("WPI Campus Map")){
 						backToCampus.setEnabled(true);
 					} else{
@@ -1326,10 +1366,7 @@ public class EndUserGUI extends JPanel implements ActionListener{
 			addMouseMotionListener(this);
 			addMouseListener(this);
 
-			if(scrollMapPanel != null){
-				scrollMapPanel.getViewport().addMouseMotionListener(scrollListener);
-				scrollMapPanel.getViewport().addMouseListener(scrollListener);
-			}
+
 			addMouseListener(new MouseAdapter(){
 
 
@@ -1342,8 +1379,9 @@ public class EndUserGUI extends JPanel implements ActionListener{
 						for(int i = 0; i < maps.size(); i++){
 							if(maps.get(i).getEasyLinks().size() > 0){
 								for(int j = 0; j < maps.get(i).getEasyLinks().size(); j++){
-									if(maps.get(i).getEasyLinks().get(j).getPoly().contains(x, y)){
+									if(mapPanel.getAT().createTransformedShape(getCurrentlyShownMap().getEasyLinks().get(j).getPoly()).contains(x + scrollListener.getCounterX(), y)){
 										currentlyShownMap = maps.get(i).getEasyLinks().get(j).getMap();
+										scrollListener.setCounterX(0);
 										mapPanel.setImage(currentlyShownMap.getImage());
 										mapPanel.setPath(null);
 									}
@@ -1391,6 +1429,25 @@ public class EndUserGUI extends JPanel implements ActionListener{
 							mapPanel.scale += delta;
 							mapPanel.revalidate();
 							mapPanel.repaint();
+
+							//							uiPanel.remove(scrollMapPanel);
+							//							scrollMapPanel = new JScrollPane(mapPanel);
+							//							System.out.println("New scale " + mapPanel.scale);
+							//							scrollMapPanel.setBounds(5, 20+7, 750, 620);
+							//							scrollMapPanel.setBackground(burgandy);
+							//							if(scrollMapPanel != null){
+							//								scrollMapPanel.getViewport().addMouseMotionListener(scrollListener);
+							//								scrollMapPanel.getViewport().addMouseListener(scrollListener);
+							//							}
+							//							//uiPanel.add(zoom.getUIPanel());
+							//							//uiPanel.add(mapPanel);
+							//
+							//							scrollMapPanel.getViewport().addChangeListener(new ChangeListener(){
+							//								@Override
+							//								public void stateChanged(ChangeEvent e) {
+							//								}
+							//							});
+							//							uiPanel.add(scrollMapPanel);
 						}
 					}
 				}
@@ -1469,27 +1526,50 @@ public class EndUserGUI extends JPanel implements ActionListener{
 
 		@Override
 		public void mouseMoved(MouseEvent e) {
-			int x = e.getX();
-			int y = e.getY();
+			if(moveMouseFlag){
+				moveMouseFlag = false;
+				int x = e.getX();
+				int y = e.getY();
 
-			if(ttManager == null){
-				ttManager = ToolTipManager.sharedInstance();
-			}
 
-			if(nearHistoricalNode(x, y) != null){
-				// + nearHistoricalNode(x, y).getName() + 
-				URL url = getClass().getResource("/historicalimages/" + nearHistoricalNode(x, y).getName() + ".jpg");
-				if(url == null){
-					url = getClass().getResource("/historicalimages/default.jpg");
+				//			Point2D before3 = new Point(), after3 = new Point();
+				//			before3.setLocation(x, y);
+				//			mapPanel.getAT().transform(before3, after3);
+				//			
+				//			x = (int) after3.getX();
+				//			y = (int) after3.getY();
+				//			if(ttManager == null){
+				//				ttManager = ToolTipManager.sharedInstance();
+				//			}
+				if(nearHistoricalNode(x, y) != null){
+					System.out.println("YO");
+					Point2D before2 = new Point(), after2 = new Point();
+					before2.setLocation(nearHistoricalNode(x, y).getX(), nearHistoricalNode(x, y).getY());
+					mapPanel.getAT().transform(before2, after2);
+					specialToolTips.setIcon(nearHistoricalNode(x, y).getHistoricalImage());
+					specialToolTips.setBounds((int) (MouseInfo.getPointerInfo().getLocation().getX() - frame.getLocationOnScreen().getX()), ((int) (MouseInfo.getPointerInfo().getLocation().getY() - frame.getLocationOnScreen().getY()) - 75), 500, 500);
+					specialToolTips.setVisible(true);
+					//				// + nearHistoricalNode(x, y).getName() + 
+					//				URL url = getClass().getResource("/historicalimages/" + nearHistoricalNode(x, y).getName() + ".jpg");
+					//				if(url == null){
+					//					url = getClass().getResource("/historicalimages/default.jpg");
+					//				}
+					//				String tt = "<html><body><img src='" + url + "'></body></html>";
+					//				System.out.println(tt);
+					//				setToolTipText(tt);
+					//				ttManager.setEnabled(true);
+				} else if(insideEasyLink(x, y) != null){
+					specialToolTips.setIcon(insideEasyLink(x, y).getStreetViewImage());
+					specialToolTips.setBounds((int) (MouseInfo.getPointerInfo().getLocation().getX() - frame.getLocationOnScreen().getX()), ((int) (MouseInfo.getPointerInfo().getLocation().getY() - frame.getLocationOnScreen().getY()) - 75), 500, 500);
+					specialToolTips.setVisible(true);
+				} else{
+					//				if(ttManager.isEnabled()){
+					//					ttManager.setEnabled(false);
+					//				}
+					specialToolTips.setVisible(false);
 				}
-				String tt = "<html><body><img src='" + url + "'></body></html>";
-				System.out.println(tt);
-				setToolTipText(tt);
-				ttManager.setEnabled(true);
 			} else{
-				if(ttManager.isEnabled()){
-					ttManager.setEnabled(false);
-				}
+				scrollListener.moveMouse(e);
 			}
 		}
 
@@ -1504,7 +1584,7 @@ public class EndUserGUI extends JPanel implements ActionListener{
 				mousePressedFlag = false;
 			}
 			if(scrollMapPanel.contains(e.getX(), e.getY())){
-//				uiPanel.setCursor(new Cursor (Cursor.HAND_CURSOR));
+				//				uiPanel.setCursor(new Cursor (Cursor.HAND_CURSOR));
 				scrollListener.mousePressed(e);
 			}
 
@@ -1559,11 +1639,17 @@ public class EndUserGUI extends JPanel implements ActionListener{
 	}
 
 	public Node nearHistoricalNode(int x, int y){
+		Point2D before1 = new Point(), after1 = new Point();
 		if(historicalNodes != null){
 			if(historicalNodes.size() > 0){
 				for(int i = 0; i < historicalNodes.size(); i++){
-					if(((x - historicalNodes.get(i).getX()) < 6) && ((y - historicalNodes.get(i).getY()) < 6)){
-						if(((historicalNodes.get(i).getX() - x) < 6) && ((historicalNodes.get(i).getY() - y) < 6)){
+					before1.setLocation(historicalNodes.get(i).getX(), historicalNodes.get(i).getY());
+					mapPanel.getAT().transform(before1, after1);
+					System.out.println("Mouse at:" + x + "," + y + " A historical node at:" + after1.getX() + "," + after1.getY());
+					System.out.println("Distance from node:" + Math.abs(y - after1.getY()) + ", " + Math.abs(x - after1.getX()));
+					if(Math.abs(y - after1.getY()) < 10){
+						if(Math.abs(x - after1.getX()) < 10){
+							System.out.println("Near "+ historicalNodes.get(i).getName());
 							return historicalNodes.get(i);
 						}
 					}
@@ -1571,6 +1657,26 @@ public class EndUserGUI extends JPanel implements ActionListener{
 			}
 		}
 		return null;
+	}
+
+	public EasyLink insideEasyLink(int x, int y){
+		for(int i = 0; i < maps.size(); i++){
+			if(maps.get(i).getMapName().equals(currentlyShownMap.getMapName())){
+				if(maps.get(i).getEasyLinks() != null){
+					for(int j = 0; j < maps.get(i).getEasyLinks().size(); j++){
+						if(mapPanel.getAT().createTransformedShape(getCurrentlyShownMap().getEasyLinks().get(j).getPoly()).contains(x, y)){
+							return maps.get(i).getEasyLinks().get(j);
+						}
+					}
+				}
+			}
+		}
+		return null;
+	}
+
+	public void moveMouse(MouseEvent e){
+		moveMouseFlag = true;
+		graph.mouseMoved(e);
 	}
 
 }
