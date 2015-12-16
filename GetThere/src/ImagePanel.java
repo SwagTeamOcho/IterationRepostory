@@ -28,6 +28,7 @@ class ImagePanel extends JPanel {
 	Node startNode;
 	Node endNode;
 	private EndUserGUI gui;
+	AffineTransform at;
 	private boolean draggable = false;
 
 	private static ImageIcon startIcon = new ImageIcon("IconImages/startIcon.png");
@@ -40,6 +41,10 @@ class ImagePanel extends JPanel {
 		this.gui = gui;
 		scale = 1.0;
 		setBackground(new Color(74, 1, 1));
+	}
+
+	public AffineTransform getAT(){
+		return this.at;
 	}
 
 	protected void paintComponent(Graphics g)
@@ -58,7 +63,7 @@ class ImagePanel extends JPanel {
 			int imageHeight = image.getHeight();
 			double x = (w - scale * imageWidth)/2;
 			double y = (h - scale * imageHeight)/2;
-			AffineTransform at;
+
 			at = AffineTransform.getTranslateInstance(x,y);
 			at.scale(scale, scale);
 			g2.drawRenderedImage(image, at);

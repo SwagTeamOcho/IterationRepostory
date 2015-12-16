@@ -1,6 +1,12 @@
 
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.LinkedList;
+
+import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
 
 public class Node implements Serializable{
 
@@ -17,6 +23,7 @@ public class Node implements Serializable{
 	private LinkedList<Edge> EdgesList;
 	private int priority;
 	private int ID;
+	private ImageIcon historicalImage;
 	// private double distance;  //heuristic
 
 	public Node(int x, int y) {
@@ -71,7 +78,22 @@ public class Node implements Serializable{
 	public void setID(int id){
 		this.ID = id;
 	}
+	
+	public void setHistoricalImage(String path){
+		BufferedImage img = null;
+		try {
+		    img = ImageIO.read(new File(path));
+		} catch (IOException e) {
+			e.printStackTrace();
+			throw new RuntimeException(e);
+		}
+		this.historicalImage = new ImageIcon(img, "History");
+	}
 
+	public ImageIcon getHistoricalImage(){
+		return historicalImage;
+	}
+	
 	public int getID(){
 		return this.ID;
 	}
