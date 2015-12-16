@@ -633,6 +633,20 @@ public class DevGUI extends JPanel{
 							nodesOnCurrentMap.get(nodeIndex).setY(currentNode.getY());
 						}
 					}
+					if (evt.getClickCount() >= 2){
+						for(int i = 0; i < maps.size(); i++){
+							if(maps.get(i).getMapName().equals(selectedMap.getMapName())){
+								if(maps.get(i).getEasyLinks() != null){
+									for(int j = 0; j < maps.get(i).getEasyLinks().size(); j++){
+										if(maps.get(i).getEasyLinks().get(j).getPoly().contains(x, y)){
+											maps.get(i).getEasyLinks().remove(j);
+											//return maps.get(i).getEasyLinks().get(j);
+										}
+									}
+								}
+							}
+						}
+					}
 					if (evt.getClickCount() >= 2 && (createNodes || createSpecial)) {
 
 						LinkedList<Edge> tempList = new LinkedList<Edge>();
