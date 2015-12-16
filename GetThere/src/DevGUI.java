@@ -58,6 +58,8 @@ public class DevGUI extends JPanel{
 	//private NodeType currentType;
 	private Node currentNode;
 	private NodeEditor nodeEditor;
+	
+	private SelectImage loadImage;
 
 	// //error1 
 	private Map selectedMap;
@@ -503,6 +505,10 @@ public class DevGUI extends JPanel{
 									mapNames, mapNames[0]);
 							easyLinkMap = maps.get(maps.indexOf(connectingMap));
 							link = new EasyLink(poly, easyLinkMap);
+							loadImage = SelectImage.getSelectImage();
+							loadImage.getImage(link);
+							loadImage.setVisible(true);
+							loadImage.setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 							selectedMap.addEasyLink(link);
 							numVertices = 0;
 							createEasyLink = false;
@@ -576,8 +582,14 @@ public class DevGUI extends JPanel{
 										nodesOnCurrentMap.get(nodesOnCurrentMap.size() - 1).setMapName(currentMapName);
 										break;
 									case "Historical":
-										nodesOnCurrentMap.add(new Node(x, y, nodeName, NodeType.HISTORICAL));
+										Node tempNode = new Node(x, y, nodeName, NodeType.HISTORICAL);
+										nodesOnCurrentMap.add(tempNode);
+										loadImage = SelectImage.getSelectImage();
+										loadImage.getImage(tempNode);
+										loadImage.setVisible(true);
+										loadImage.setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 										nodesOnCurrentMap.get(nodesOnCurrentMap.size() - 1).setMapName(currentMapName);
+										break;
 									default:
 										nodesOnCurrentMap.add(new Node(x, y, nodeName, NodeType.NOTYPE));
 										nodesOnCurrentMap.get(nodesOnCurrentMap.size() - 1).setMapName(currentMapName);
