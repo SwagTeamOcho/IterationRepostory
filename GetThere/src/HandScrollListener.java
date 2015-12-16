@@ -22,19 +22,23 @@ public class HandScrollListener extends MouseAdapter
     {
     	JViewport vport;
     	if(e.getSource().getClass().getSimpleName().equals("MyGraphics")){
-    	EndUserGUI.MyGraphics mygraph = (EndUserGUI.MyGraphics) e.getSource();
-        vport = (JViewport) mygraph.getGui().getScrollMapPanel().getViewport();
+    		EndUserGUI.MyGraphics mygraph = (EndUserGUI.MyGraphics) e.getSource();
+    		vport = (JViewport) mygraph.getGui().getScrollMapPanel().getViewport();
+    		//mygraph.mousePressed(e);
     	}
     	
     	else{
-    	vport = (JViewport) e.getSource();
+    		return;
+    		//vport = (JViewport) e.getSource();
     	}
         Point cp = e.getPoint();
         Point vp = vport.getViewPosition();
+        System.out.println("BEFORE : X = " + vp.x + "Y = " + vp.y);
         
         vp.translate(pp.x-cp.x, pp.y-cp.y);
+        System.out.println("AFTER : X = " + vp.x + "Y = " + vp.y);
         image.scrollRectToVisible(new Rectangle(vp, vport.getSize()));
-        pp.setLocation(cp);
+        //pp.setLocation(cp);
     }
 
     public void mousePressed(MouseEvent e)

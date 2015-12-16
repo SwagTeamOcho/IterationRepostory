@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedList;
 
+import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
@@ -55,6 +56,8 @@ public class EndUserGUI extends JPanel implements ActionListener{
 
 	private String[] startRooms;
 	private String[] endRooms;
+	
+	private boolean mousePressedFlag;
 
 	//private static ImageIcon currentMapFile;
 
@@ -112,8 +115,7 @@ public class EndUserGUI extends JPanel implements ActionListener{
 	private int arrowCounter = 0;
 
 	private Map currentlyShownMap;
-
-
+	private MyGraphics graph;
 	private JButton findProf;
 	private Icon findProfIcon;
 	private JButton emergency;
@@ -209,6 +211,10 @@ public class EndUserGUI extends JPanel implements ActionListener{
 	public void setStartClicked(boolean set){
 		startClicked = set;
 	}
+	
+	public MyGraphics getGraph(){
+		return this.graph;
+	}
 
 	public void setEndClicked(boolean set){
 		endClicked = set;
@@ -258,7 +264,7 @@ public class EndUserGUI extends JPanel implements ActionListener{
 			e.printStackTrace();
 		}
 
-		final MyGraphics graph = new MyGraphics(this);
+		graph = new MyGraphics(this);
 		ttManager = ToolTipManager.sharedInstance();
 		ttManager.setEnabled(true);
 
@@ -343,18 +349,17 @@ public class EndUserGUI extends JPanel implements ActionListener{
 		uiPanel.add(titleBar);
 
 		//About Button Operation
-		JFrame aboutFrame = new JFrame();
+		final JFrame aboutFrame = new JFrame();
 		aboutFrame.setBounds(100, 70, 920, 650);
 		aboutFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
 		ImageIcon aboutPg1 = new ImageIcon("IconImages/aboutPg1.jpg");
 		ImageIcon aboutPg2 = new ImageIcon("IconImages/aboutPg2.jpg");
 		ImageIcon[] aboutPages = {aboutPg1, aboutPg2};
-
 		currentAboutPage = aboutPages[0];
-		JPanel aboutPanel = new JPanel();
+		final JPanel aboutPanel = new JPanel();
 		aboutPanel.setBackground(beige);
-		JLabel aboutLabel = new JLabel();
+		final JLabel aboutLabel = new JLabel();
 		aboutPanel.add(aboutLabel);
 		aboutLabel.setIcon(currentAboutPage);
 		aboutLabel.setBounds(50, 50, 900, 620);
@@ -764,10 +769,28 @@ public class EndUserGUI extends JPanel implements ActionListener{
 		searchButton = new JButton ("Search");
 		searchButton.setBounds(987, 150+15, 132, 30);
 		uiPanel.add(searchButton);
+		
+
 
 		clearButton = new JButton ("Clear");
 		clearButton.setBounds(853, 150+15, 132, 30);
+		clearButton.setForeground(burgandy);
+		clearButton.setFont(new Font("Helvetica Neue", Font.BOLD, 14));
+		clearButton.setBackground(beige);
+		clearButton.setOpaque(true);
+		clearButton.setBorder(BorderFactory.createLineBorder(burgandy, 4));
+		//clearButton.setBorderPainted(true);
+		
 		uiPanel.add(clearButton);
+		clearButton.addMouseListener(new MouseAdapter() {
+			  public void mousePressed(MouseEvent e) {
+			    clearButton.setBorder(BorderFactory.createLoweredBevelBorder());
+			  }
+
+			  public void mouseReleased(MouseEvent e) {
+				  clearButton.setBorder(BorderFactory.createLineBorder(burgandy, 4));
+			  }
+			});
 		clearButton.addActionListener(new ActionListener()  {
 			public void actionPerformed(ActionEvent e)
 			{
@@ -796,12 +819,15 @@ public class EndUserGUI extends JPanel implements ActionListener{
 		directions = new JTextArea();
 		directions.setBounds(762, 210+15, 255, 420);
 		directions.setFont(new Font("Helvetica Neue", Font.PLAIN, 13));
+		directions.setBackground(beige);
+		directions.setBorder(BorderFactory.createEtchedBorder(burgandy, beige));
+		//directions.setBorder(BorderFactory.createDashedBorder(burgandy, 10, 10));
 		directions.setLineWrap(true);
 		directions.setEditable(false);
 		directions.setForeground(burgandy);
 		JScrollPane scrollDire = new JScrollPane(directions);
 		scrollDire.setBounds(835, 210+15, 300, 420);
-		scrollDire.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+		scrollDire.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
 		uiPanel.add(scrollDire);
 
 
@@ -1435,7 +1461,7 @@ public class EndUserGUI extends JPanel implements ActionListener{
 		public void mouseDragged(MouseEvent e) {
 			int x = e.getX();
 			int y = e.getY();
-			if(mapPanel.contains(x, y)){
+			if(scrollMapPanel.contains(x, y)){
 				scrollListener.mouseDragged(e);
 			}
 
@@ -1469,11 +1495,19 @@ public class EndUserGUI extends JPanel implements ActionListener{
 
 		@Override
 		public void mousePressed(MouseEvent e) {
-
+			if(!mousePressedFlag){
+			System.out.println("Lol what?");
+			uiPanel.setCursor(new Cursor (Cursor.HAND_CURSOR));
 			int x = e.getX();
 			int y = e.getY();
-			if(mapPanel.contains(x, y)){
-				uiPanel.setCursor(new Cursor (Cursor.HAND_CURSOR));
+			System.out.println(x);
+			System.out.println(y);
+			mousePressedFlag = true;
+			} else{
+				mousePressedFlag = false;
+			}
+			if(scrollMapPanel.contains(e.getX(), e.getY())){
+//				uiPanel.setCursor(new Cursor (Cursor.HAND_CURSOR));
 				scrollListener.mousePressed(e);
 			}
 
