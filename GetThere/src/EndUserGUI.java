@@ -231,7 +231,9 @@ public class EndUserGUI extends JPanel implements ActionListener{
 		mapPanel.setStartNode(null);
 		mapPanel.setEndNode(null);
 		mapPanel.setPath(null);
-
+		leftArrow.setEnabled(false);
+		rightArrow.setEnabled(false);
+		email.setEnabled(false);
 	}
 	/**
 	 * Initialize the contents of the frame.
@@ -1084,6 +1086,7 @@ public class EndUserGUI extends JPanel implements ActionListener{
 			public void actionPerformed(ActionEvent e) 
 			{
 				int i;
+				email.setEnabled(true);
 				updatePath = true;
 				uiPanel.setVisible(true);
 				frame.setVisible(true);
