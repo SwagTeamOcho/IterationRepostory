@@ -599,8 +599,11 @@ public class EndUserGUI extends JPanel implements ActionListener{
 		mapNumber.setAlignmentY(StyleConstants.ALIGN_CENTER);
 		uiPanel.add(mapNumber);
 
-		backToCampus = new JButton("Back to Campus");
-		backToCampus.setBounds(100, 630 +30, 150, 29);
+		ImageIcon campusIcon = new ImageIcon("IconImages/campus.png");
+		backToCampus = new JButton();
+		backToCampus.setBounds(755 + 35, 150+15, 40, 40);
+		backToCampus.setIcon(campusIcon);
+		backToCampus.setToolTipText("Back to Campus!");
 		uiPanel.add(backToCampus);
 		backToCampus.setEnabled(true);
 
@@ -799,7 +802,7 @@ public class EndUserGUI extends JPanel implements ActionListener{
 
 		//Construct button and add button to uiPanel
 		searchButton = new JButton ("Search");
-		searchButton.setBounds(876, 150+15, 90, 30);
+		searchButton.setBounds(865, 150+15, 90, 30);
 		searchButton.setForeground(burgandy);
 		searchButton.setFont(new Font("Helvetica Neue", Font.BOLD, 14));
 		searchButton.setBackground(beige);
@@ -810,7 +813,7 @@ public class EndUserGUI extends JPanel implements ActionListener{
 
 
 		clearButton = new JButton ("Clear");
-		clearButton.setBounds(976, 150+15, 90, 30);
+		clearButton.setBounds(983, 150+15, 90, 30);
 		clearButton.setForeground(burgandy);
 		clearButton.setFont(new Font("Helvetica Neue", Font.BOLD, 14));
 		clearButton.setBackground(beige);
@@ -878,7 +881,7 @@ public class EndUserGUI extends JPanel implements ActionListener{
 		uiPanel.add(scrollDire);
 
 
-		findProfIcon = new ImageIcon("IconImages/findProfIcon.png");
+		findProfIcon = new ImageIcon("IconImages/professor.png");
 		emergencyIcon = new ImageIcon("IconImages/emergencyIcon.png");
 		final Icon emergencyIconBIG = new ImageIcon("IconImages/emergencyIconBIG.png");
 		emergency = new JButton();
@@ -1107,9 +1110,9 @@ public class EndUserGUI extends JPanel implements ActionListener{
 		findProf.setToolTipText("Find Professor");
 		findProf.setIcon(findProfIcon);
 
-		findProf.setBounds(1100, 632, 40, 40);
+		findProf.setBounds(983+90+35, 150+15, 40, 40);
 
-		//uiPanel.add(findProf);
+		uiPanel.add(findProf);
 
 
 
@@ -1404,6 +1407,7 @@ public class EndUserGUI extends JPanel implements ActionListener{
 									if(mapPanel.getAT().createTransformedShape(getCurrentlyShownMap().getEasyLinks().get(j).getPoly()).contains(x + scrollListener.getCounterX(), y)){
 										currentlyShownMap = maps.get(i).getEasyLinks().get(j).getMap();
 										scrollListener.setCounterX(0);
+										backToCampus.setEnabled(true);
 										mapPanel.setImage(currentlyShownMap.getImage());
 										mapPanel.setPath(null);
 									}
@@ -1445,8 +1449,6 @@ public class EndUserGUI extends JPanel implements ActionListener{
 				public void mouseWheelMoved(MouseWheelEvent e) {
 					if(scrollMapPanel.contains(e.getX(), e.getY())){
 						double delta = 0.03f * e.getWheelRotation();
-						System.out.println(delta);
-						System.out.println(mapPanel.scale);
 						if((mapPanel.scale > 0.5 && mapPanel.scale < 1.5) || (mapPanel.scale < 0.5 && delta > 0) || (mapPanel.scale > 1.5 && delta < 0)){
 							mapPanel.scale += delta;
 							mapPanel.revalidate();
@@ -1564,12 +1566,12 @@ public class EndUserGUI extends JPanel implements ActionListener{
 				//				ttManager = ToolTipManager.sharedInstance();
 				//			}
 				if(nearHistoricalNode(x, y) != null){
-					System.out.println("YO");
 					Point2D before2 = new Point(), after2 = new Point();
 					before2.setLocation(nearHistoricalNode(x, y).getX(), nearHistoricalNode(x, y).getY());
 					mapPanel.getAT().transform(before2, after2);
 					specialToolTips.setIcon(nearHistoricalNode(x, y).getHistoricalImage());
-					specialToolTips.setBounds((int) (MouseInfo.getPointerInfo().getLocation().getX() - frame.getLocationOnScreen().getX()), ((int) (MouseInfo.getPointerInfo().getLocation().getY() - frame.getLocationOnScreen().getY()) - 75), 500, 500);
+					//CHRISWIDTH
+					specialToolTips.setBounds(200, 100, 467, 583);
 					specialToolTips.setVisible(true);
 					//				// + nearHistoricalNode(x, y).getName() + 
 					//				URL url = getClass().getResource("/historicalimages/" + nearHistoricalNode(x, y).getName() + ".jpg");
@@ -1582,7 +1584,7 @@ public class EndUserGUI extends JPanel implements ActionListener{
 					//				ttManager.setEnabled(true);
 				} else if(insideEasyLink(x, y) != null){
 					specialToolTips.setIcon(insideEasyLink(x, y).getStreetViewImage());
-					specialToolTips.setBounds((int) (MouseInfo.getPointerInfo().getLocation().getX() - frame.getLocationOnScreen().getX()), ((int) (MouseInfo.getPointerInfo().getLocation().getY() - frame.getLocationOnScreen().getY()) - 75), 500, 500);
+					specialToolTips.setBounds(200, 100, 700, 471);
 					specialToolTips.setVisible(true);
 				} else{
 					//				if(ttManager.isEnabled()){
@@ -1667,11 +1669,8 @@ public class EndUserGUI extends JPanel implements ActionListener{
 				for(int i = 0; i < historicalNodes.size(); i++){
 					before1.setLocation(historicalNodes.get(i).getX(), historicalNodes.get(i).getY());
 					mapPanel.getAT().transform(before1, after1);
-					System.out.println("Mouse at:" + x + "," + y + " A historical node at:" + after1.getX() + "," + after1.getY());
-					System.out.println("Distance from node:" + Math.abs(y - after1.getY()) + ", " + Math.abs(x - after1.getX()));
 					if(Math.abs(y - after1.getY()) < 10){
 						if(Math.abs(x - after1.getX()) < 10){
-							System.out.println("Near "+ historicalNodes.get(i).getName());
 							return historicalNodes.get(i);
 						}
 					}

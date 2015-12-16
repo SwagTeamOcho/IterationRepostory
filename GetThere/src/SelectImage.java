@@ -33,7 +33,7 @@ public class SelectImage extends JFrame {
 		Container c = getContentPane();
 		c.setLayout(new FlowLayout());
 
-		JButton openButton = new JButton("Open");
+		JButton openButton = new JButton("Open Image");
 		JButton importButton = new JButton("Import");
 
 
@@ -42,7 +42,7 @@ public class SelectImage extends JFrame {
 			public void actionPerformed(ActionEvent ae) {
 				JFileChooser chooser = new JFileChooser();
 
-				FileNameExtensionFilter filter = new FileNameExtensionFilter("JPG", "jpg");
+				FileNameExtensionFilter filter = new FileNameExtensionFilter("JPG", "jpg", "jpeg");
 
 				chooser.setFileFilter(filter);
 				chooser.setAcceptAllFileFilterUsed(false);
@@ -86,7 +86,7 @@ public class SelectImage extends JFrame {
 		Container c = getContentPane();
 		c.setLayout(new FlowLayout());
 
-		JButton openButton = new JButton("Open");
+		JButton openButton = new JButton("Open Image");
 		JButton importButton = new JButton("Import");
 
 
@@ -95,7 +95,7 @@ public class SelectImage extends JFrame {
 			public void actionPerformed(ActionEvent ae) {
 				JFileChooser chooser = new JFileChooser();
 
-				FileNameExtensionFilter filter = new FileNameExtensionFilter("JPG", "jpg");
+				FileNameExtensionFilter filter = new FileNameExtensionFilter("JPG", "jpg", "jpeg");
 
 				chooser.setFileFilter(filter);
 				chooser.setAcceptAllFileFilterUsed(false);
