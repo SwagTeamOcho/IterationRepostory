@@ -28,6 +28,7 @@ class ImagePanel extends JPanel {
 	Node startNode;
 	Node endNode;
 	private EndUserGUI gui;
+	private boolean draggable = false;
 
 	private static ImageIcon startIcon = new ImageIcon("IconImages/startIcon.png");
 	private static ImageIcon endIcon = new ImageIcon("IconImages/endIcon.png");
@@ -162,6 +163,17 @@ class ImagePanel extends JPanel {
 		}
 	}
 
+	public void setDraggable(boolean draggable){
+		this.draggable = draggable;
+	}
+	
+	public EndUserGUI getGUI(){
+		return this.gui;
+	}
+	
+	public boolean isDraggable(){
+		return this.draggable;
+	}
 	public BufferedImage getImage(){
 		return this.image;
 	}
