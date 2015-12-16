@@ -35,6 +35,7 @@ class ImagePanel extends JPanel {
 	private static ImageIcon endIcon = new ImageIcon("IconImages/endIcon.png");
 	private static ImageIcon startTransitionIcon = new ImageIcon("IconImages/startTransitionIcon.png");
 	private static ImageIcon endTransitionIcon = new ImageIcon("IconImages/endTransitionIcon.png");
+	private static ImageIcon historicalIcon = new ImageIcon("IconImages/HistoricalIcon.png");
 	
 	public ImagePanel(EndUserGUI gui)
 	{
@@ -86,10 +87,7 @@ class ImagePanel extends JPanel {
 						before2.setLocation(n.getX()-CircleDiam/2, n.getY()-CircleDiam/2);
 						at.transform(before1, after1);
 						at.transform(before2, after2);
-						g.setColor(Color.BLACK);
-						g.fillOval((int)after1.getX(), (int)after1.getY(), CircleDiam+3, CircleDiam+3);
-						g.setColor(Color.YELLOW);
-						g.fillOval((int)after2.getX(), (int)after2.getY(), CircleDiam, CircleDiam);
+						g.drawImage(historicalIcon.getImage(), (int)after1.getX(), (int)after1.getY(), this);
 					}
 				}
 			}
