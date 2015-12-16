@@ -34,7 +34,7 @@ public class SendEmail {
     	this.userName = "wpigetthere@gmail.com";
     	this.password = "softenglife888$$%";
     	this.subject = "Your GetThere Directions";
-    	this.message = "Here are your directions: \n" + message;
+    	this.message = "Here are your directions: \n\n" + message + "Get There safe.\n Team Ocho Software Engineering";
         this.properties = new Properties();
         this.toAddress = toAddress;
         this.attachFiles = attachFiles;
