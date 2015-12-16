@@ -136,12 +136,9 @@ public class EndUserGUI extends JPanel implements ActionListener{
 
 	private JButton tutorial;
 	private Icon tutIcon;
-<<<<<<< HEAD
-=======
 
 	private JLabel specialToolTips;
 
->>>>>>> fd78e471677e15222b4e5fc493b499af57846947
 	private JButton backToCampus;
 	int count;
 
@@ -370,12 +367,9 @@ public class EndUserGUI extends JPanel implements ActionListener{
 
 		ImageIcon aboutPg1 = new ImageIcon("IconImages/aboutPg1.jpg");
 		ImageIcon aboutPg2 = new ImageIcon("IconImages/aboutPg2.jpg");
-<<<<<<< HEAD
-		ImageIcon[] aboutPages = {aboutPg1, aboutPg2};
-=======
+
 		final ImageIcon[] aboutPages = {aboutPg1, aboutPg2};
 
->>>>>>> fd78e471677e15222b4e5fc493b499af57846947
 		currentAboutPage = aboutPages[0];
 		final JPanel aboutPanel = new JPanel();
 		aboutPanel.setBackground(beige);
@@ -471,22 +465,12 @@ public class EndUserGUI extends JPanel implements ActionListener{
 		}); 
 		
 		closeButt.addMouseListener(new MouseListener() {
-<<<<<<< HEAD
-			public void mouseClicked(MouseEvent e) {				
-=======
 			public void mouseClicked(MouseEvent e) {
-				// TODO Auto-generated method stub
->>>>>>> fd78e471677e15222b4e5fc493b499af57846947
 				System.exit(0);;
 			}
 
 			@Override
 			public void mousePressed(MouseEvent e) {
-<<<<<<< HEAD
-=======
-				// TODO Auto-generated method stub
-
->>>>>>> fd78e471677e15222b4e5fc493b499af57846947
 			}
 
 			@Override
@@ -513,12 +497,7 @@ public class EndUserGUI extends JPanel implements ActionListener{
 		minButt.setBounds(25, 5, 15, 15);
 		minButt.addMouseListener(new MouseListener() {
 			public void mouseClicked(MouseEvent e) {
-				// TODO Auto-generated method stub
-<<<<<<< HEAD
 				frame.setState(Frame.ICONIFIED);
-=======
-				frame.setState(frame.ICONIFIED);
->>>>>>> fd78e471677e15222b4e5fc493b499af57846947
 			}
 
 			@Override
@@ -908,11 +887,7 @@ public class EndUserGUI extends JPanel implements ActionListener{
 		uiPanel.add(scrollDire);
 
 
-<<<<<<< HEAD
-		findProfIcon = new ImageIcon("IconImages/findProfIcon.png");
-=======
 		findProfIcon = new ImageIcon("IconImages/professor.png");
->>>>>>> fd78e471677e15222b4e5fc493b499af57846947
 		emergencyIcon = new ImageIcon("IconImages/emergencyIcon.png");
 		final Icon emergencyIconBIG = new ImageIcon("IconImages/emergencyIconBIG.png");
 		emergency = new JButton();
@@ -1144,13 +1119,6 @@ public class EndUserGUI extends JPanel implements ActionListener{
 		findProf.setBounds(983+90+35, 150+15, 40, 40);
 
 		uiPanel.add(findProf);
-
-
-
-<<<<<<< HEAD
-
-=======
->>>>>>> fd78e471677e15222b4e5fc493b499af57846947
 		findProf.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
 				javax.swing.SwingUtilities.invokeLater(new Runnable() {
