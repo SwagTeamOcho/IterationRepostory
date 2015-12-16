@@ -1496,12 +1496,9 @@ public class EndUserGUI extends JPanel implements ActionListener{
 		@Override
 		public void mousePressed(MouseEvent e) {
 			if(!mousePressedFlag){
-			System.out.println("Lol what?");
 			uiPanel.setCursor(new Cursor (Cursor.HAND_CURSOR));
 			int x = e.getX();
 			int y = e.getY();
-			System.out.println(x);
-			System.out.println(y);
 			mousePressedFlag = true;
 			} else{
 				mousePressedFlag = false;
