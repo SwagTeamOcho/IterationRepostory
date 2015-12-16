@@ -3,6 +3,7 @@ import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.Frame;
 import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -128,9 +129,7 @@ public class EndUserGUI extends JPanel implements ActionListener{
 
 	private JButton tutorial;
 	private Icon tutIcon;
-
 	private JButton backToCampus;
-
 	int count;
 
 	private String emailDirections;
@@ -151,6 +150,9 @@ public class EndUserGUI extends JPanel implements ActionListener{
 	private ImageIcon currentAboutPage;
 
 	HandScrollListener scrollListener;
+	
+	//Loading Screen Variables
+	JSplash loadingScreen;
 
 	private LinkedList<Node> startTransitionNodes = new LinkedList<Node>();
 	private LinkedList<Node> endTransitionNodes = new LinkedList<Node>();
@@ -159,6 +161,7 @@ public class EndUserGUI extends JPanel implements ActionListener{
 	 */
 	@SuppressWarnings("unchecked")
 	public EndUserGUI(){
+		@SuppressWarnings("unused")
 		JSplash loadingScreen = new JSplash(LoadingScreen.class.getResource("loadingScreen.png"),
 				true, true, false, null, null, beige, burgandy);
 		Serialize serialize = new Serialize();
@@ -240,7 +243,7 @@ public class EndUserGUI extends JPanel implements ActionListener{
 
 	private void initialize() {
 		try{
-			JSplash loadingScreen = new JSplash(LoadingScreen.class.getResource("loadingScreen.png"), true, true, false, null, 
+			loadingScreen = new JSplash(LoadingScreen.class.getResource("loadingScreen.png"), true, true, false, null, 
 					null, beige, burgandy);
 			loadingScreen.splashOn();
 			loadingScreen.setProgress(30);
@@ -401,7 +404,6 @@ public class EndUserGUI extends JPanel implements ActionListener{
 		about.setFont(new Font("Calisto MT Bold Italic", Font.BOLD, 14));
 		about.setForeground(burgandy);
 		about.setBounds(1140, 0, 50, 24);
-		about.setCursor(new Cursor(Cursor.HAND_CURSOR));
 		about.addMouseListener(new MouseListener() {
 			public void mouseClicked(MouseEvent e) {
 				aboutFrame.setVisible(true);
@@ -432,17 +434,24 @@ public class EndUserGUI extends JPanel implements ActionListener{
 		ImageIcon close = new ImageIcon("IconImages/close.png");
 		closeButt.setIcon(close);
 		closeButt.setBounds(7, 0, 24, 24);
-		closeButt.setCursor(new Cursor(Cursor.HAND_CURSOR));
-		closeButt.addMouseListener(new MouseListener() {
-			public void mouseClicked(MouseEvent e) {
+		closeButt.addMouseMotionListener(new MouseMotionListener() {
+			@Override
+			public void mouseDragged(MouseEvent e) {
 				// TODO Auto-generated method stub
+			}
+
+			@Override
+			public void mouseMoved(MouseEvent e) {
+			}
+		}); 
+		
+		closeButt.addMouseListener(new MouseListener() {
+			public void mouseClicked(MouseEvent e) {				
 				System.exit(0);;
 			}
 
 			@Override
 			public void mousePressed(MouseEvent e) {
-				// TODO Auto-generated method stub
-
 			}
 
 			@Override
@@ -467,11 +476,10 @@ public class EndUserGUI extends JPanel implements ActionListener{
 		ImageIcon minimize = new ImageIcon("IconImages/min.png");
 		minButt.setIcon(minimize);
 		minButt.setBounds(25, 5, 15, 15);
-		minButt.setCursor(new Cursor(Cursor.HAND_CURSOR));
 		minButt.addMouseListener(new MouseListener() {
 			public void mouseClicked(MouseEvent e) {
 				// TODO Auto-generated method stub
-				frame.setState(frame.ICONIFIED);
+				frame.setState(Frame.ICONIFIED);
 			}
 
 			@Override
@@ -1283,7 +1291,6 @@ public class EndUserGUI extends JPanel implements ActionListener{
 	public class MyGraphics extends JComponent implements MouseMotionListener, MouseListener{
 
 		private static final long serialVersionUID = 1L;
-		private static final int SquareWidth = 5;
 		private EndUserGUI gui;
 
 

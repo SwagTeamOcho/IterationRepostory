@@ -1,9 +1,5 @@
 
-import java.awt.Color;
-
 import java.awt.EventQueue;
-
-
 
 public class EndUserMain {
 
