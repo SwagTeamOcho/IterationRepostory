@@ -44,6 +44,10 @@ class ImagePanel extends JPanel {
 		return this.at;
 	}
 	
+	public EndUserGUI getGUI(){
+		return this.gui;
+	}
+	
 	protected void paintComponent(Graphics g)
 	{
 		super.paintComponent(g);

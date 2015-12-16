@@ -1302,10 +1302,7 @@ public class EndUserGUI extends JPanel implements ActionListener{
 			addMouseMotionListener(this);
 			addMouseListener(this);
 
-			if(scrollMapPanel != null){
-				scrollMapPanel.getViewport().addMouseMotionListener(scrollListener);
-				scrollMapPanel.getViewport().addMouseListener(scrollListener);
-			}
+			
 			addMouseListener(new MouseAdapter(){
 
 
@@ -1365,8 +1362,29 @@ public class EndUserGUI extends JPanel implements ActionListener{
 						System.out.println(mapPanel.scale);
 						if((mapPanel.scale > 0.5 && mapPanel.scale < 1.5) || (mapPanel.scale < 0.5 && delta > 0) || (mapPanel.scale > 1.5 && delta < 0)){
 							mapPanel.scale += delta;
-							mapPanel.revalidate();
-							mapPanel.repaint();
+							System.out.println("Scale is " + mapPanel.scale);
+					
+							scrollMapPanel.revalidate();
+							scrollMapPanel.repaint();
+							
+//							uiPanel.remove(scrollMapPanel);
+//							scrollMapPanel = new JScrollPane(mapPanel);
+//							System.out.println("New scale " + mapPanel.scale);
+//							scrollMapPanel.setBounds(5, 20+7, 750, 620);
+//							scrollMapPanel.setBackground(burgandy);
+//							if(scrollMapPanel != null){
+//								scrollMapPanel.getViewport().addMouseMotionListener(scrollListener);
+//								scrollMapPanel.getViewport().addMouseListener(scrollListener);
+//							}
+//							//uiPanel.add(zoom.getUIPanel());
+//							//uiPanel.add(mapPanel);
+//
+//							scrollMapPanel.getViewport().addChangeListener(new ChangeListener(){
+//								@Override
+//								public void stateChanged(ChangeEvent e) {
+//								}
+//							});
+//							uiPanel.add(scrollMapPanel);
 						}
 					}
 				}
@@ -1458,8 +1476,9 @@ public class EndUserGUI extends JPanel implements ActionListener{
 //			if(ttManager == null){
 //				ttManager = ToolTipManager.sharedInstance();
 //			}
-
+			System.out.println("X --> " + x + "Y --> " + y);
 			if(nearHistoricalNode(x, y) != null){
+				System.out.println("YO");
 				Point2D before2 = new Point(), after2 = new Point();
 				before2.setLocation(nearHistoricalNode(x, y).getX(), nearHistoricalNode(x, y).getY());
 				mapPanel.getAT().transform(before2, after2);
@@ -1558,6 +1577,7 @@ public class EndUserGUI extends JPanel implements ActionListener{
 					System.out.println("Distance from node:" + Math.abs(y - after1.getY()) + ", " + Math.abs(x - after1.getX()));
 					if(Math.abs(y - after1.getY()) < 10){
 						if(Math.abs(x - after1.getX()) < 10){
+							System.out.println("Near "+ historicalNodes.get(i).getName());
 							return historicalNodes.get(i);
 						}
 					}

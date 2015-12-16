@@ -31,6 +31,7 @@ public class HandScrollListener extends MouseAdapter
     	else{
     	vport = (JViewport) e.getSource();
     	}
+    	System.out.println(" X ::: " + vport.getViewPosition().getX() + "Y::: " + vport.getViewPosition().getY());
         Point cp = e.getPoint();
         Point vp = vport.getViewPosition();
         
