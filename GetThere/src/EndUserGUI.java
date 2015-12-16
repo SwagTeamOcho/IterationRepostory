@@ -1407,6 +1407,7 @@ public class EndUserGUI extends JPanel implements ActionListener{
 									if(mapPanel.getAT().createTransformedShape(getCurrentlyShownMap().getEasyLinks().get(j).getPoly()).contains(x + scrollListener.getCounterX(), y)){
 										currentlyShownMap = maps.get(i).getEasyLinks().get(j).getMap();
 										scrollListener.setCounterX(0);
+										backToCampus.setEnabled(true);
 										mapPanel.setImage(currentlyShownMap.getImage());
 										mapPanel.setPath(null);
 									}
@@ -1570,7 +1571,7 @@ public class EndUserGUI extends JPanel implements ActionListener{
 					mapPanel.getAT().transform(before2, after2);
 					specialToolTips.setIcon(nearHistoricalNode(x, y).getHistoricalImage());
 					//CHRISWIDTH
-					specialToolTips.setBounds((int) (MouseInfo.getPointerInfo().getLocation().getX() - frame.getLocationOnScreen().getX()), ((int) (MouseInfo.getPointerInfo().getLocation().getY() - frame.getLocationOnScreen().getY()) - 75), 500, 500);
+					specialToolTips.setBounds(200, 100, 467, 583);
 					specialToolTips.setVisible(true);
 					//				// + nearHistoricalNode(x, y).getName() + 
 					//				URL url = getClass().getResource("/historicalimages/" + nearHistoricalNode(x, y).getName() + ".jpg");
@@ -1583,7 +1584,7 @@ public class EndUserGUI extends JPanel implements ActionListener{
 					//				ttManager.setEnabled(true);
 				} else if(insideEasyLink(x, y) != null){
 					specialToolTips.setIcon(insideEasyLink(x, y).getStreetViewImage());
-					specialToolTips.setBounds((int) (MouseInfo.getPointerInfo().getLocation().getX() - frame.getLocationOnScreen().getX()), ((int) (MouseInfo.getPointerInfo().getLocation().getY() - frame.getLocationOnScreen().getY()) - 75), 500, 500);
+					specialToolTips.setBounds(200, 100, 700, 471);
 					specialToolTips.setVisible(true);
 				} else{
 					//				if(ttManager.isEnabled()){

@@ -69,12 +69,12 @@ class ImagePanel extends JPanel {
 			at.scale(scale, scale);
 			g2.drawRenderedImage(image, at);
 			
-			g2.setColor(Color.BLUE);
+			g2.setColor(Color.RED);
 			g2.setStroke(new BasicStroke(2));
 			if(gui.getCurrentlyShownMap().getEasyLinks() != null){
-			for(int i = 0; i < gui.getCurrentlyShownMap().getEasyLinks().size(); i++){
-				g2.draw(at.createTransformedShape(gui.getCurrentlyShownMap().getEasyLinks().get(i).getPoly()));
-			}
+				for(int i = 0; i < gui.getCurrentlyShownMap().getEasyLinks().size(); i++){
+					g2.draw(at.createTransformedShape(gui.getCurrentlyShownMap().getEasyLinks().get(i).getPoly()));
+				}
 			}
 
 			if(gui.getHistoricalNodes() != null){
